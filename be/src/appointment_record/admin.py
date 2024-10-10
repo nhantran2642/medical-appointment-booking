@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import AppointmentRecord
+
+
+@admin.register(AppointmentRecord)
+class AppointmentRecordAdmin(admin.ModelAdmin):
+    list_display = []
+    search_fields = []

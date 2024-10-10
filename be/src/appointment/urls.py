@@ -1,7 +1,6 @@
-from rest_framework.routers import SimpleRouter
-
 from django.urls import include
 from django.urls import re_path as url
+from rest_framework.routers import SimpleRouter
 
 from .views import AppointmentViewSet
 
