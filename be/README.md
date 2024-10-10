@@ -23,3 +23,52 @@
     ├── manage.py                           - manager project
 ├── README.md
 ├── requirements.txt                        - package
+```
+
+## Requirements
+
+- Python 3.12
+- Django (rest framework)
+- Postgres
+
+## Environments
+
+```bash
+cd src
+cp .env.example .env
+```
+
+## Add new package
+
+```bash
+pip install package_name
+
+pip freeze > requirements.txt
+```
+
+## Formatter
+
+```bash
+pre-commit run --all-files
+```
+
+## Command
+
+```bash
+cd src
+
+# create app
+python manage.py startapp app
+
+# create supper user
+python manage.py createsuperuser
+
+# make migrations
+python manage.py makemigrations
+
+# apply migrations
+python manage.py migrate
+
+# run server
+python manage.py runserver
+```
