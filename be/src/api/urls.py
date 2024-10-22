@@ -15,11 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from api import settings
+from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from rest_framework.routers import re_path
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -33,20 +36,21 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
+if settings.DEBUG:
+    schema_api_docs = [
+        path(
+            "",
+            schema_view.with_ui("swagger", cache_timeout=0),
+            name="Schema Swagger UI",
+        ),
+        path(
+            "redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+        ),
+    ]
+
+ver = settings.VERSION
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path(
-        "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
-    ),
-    path(
-        "swagger/",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
-    ),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-    path(
-        "",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="Schema Swagger UI",
-    ),
-]
+    re_path(f"api/{ver}/auth/", include("authentication.urls")),
+] + schema_api_docs
