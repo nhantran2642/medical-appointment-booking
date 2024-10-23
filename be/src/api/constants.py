@@ -10,3 +10,7 @@ USER_ROLE = {
     "STAFF": 3,
     "USER": 4,
 }
+
+REGEX_CHECK_FORMAT_PASSWORD = (
+    "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+)

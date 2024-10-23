@@ -1,12 +1,7 @@
-from datetime import date, datetime
-
-from api import constants, settings
+from api import settings
 from authentication.models import User, UserVerifyCode
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 def send_mail(subject, template, emails, merge_data={}):

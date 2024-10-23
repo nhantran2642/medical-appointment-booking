@@ -4,6 +4,9 @@ from api import constants, settings
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed, NotFound, ValidationError
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import RefreshToken
+from utilities.validate import validate_password
 
 from .models import Role, User, UserVerifyCode
 
@@ -51,7 +54,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
-        role_id = attrs.get("role_id", None)
+        role_id = attrs["role_id"]
         try:
             role = Role.objects.get(id=role_id)
         except Role.DoesNotExist:
@@ -79,11 +82,11 @@ class VerifyEmailSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
 
         current_time = timezone.now()
-        if current_time > attrs.get("expired_at", None):
+        if current_time > attrs["expired_at"]:
             raise NotFound("Mail is outdated")
 
         try:
-            user = User.objects.get(email=attrs.get("email", None))
+            user = User.objects.get(email=attrs["email"])
             user.is_verified = True
             user.save()
         except User.DoesNotExist:
@@ -103,8 +106,8 @@ class VerifyCodeSerializer(serializers.ModelSerializer):
         fields = ["code", "email", "refresh", "access"]
 
     def validate(self, attrs):
-        code = attrs.get("code", None)
-        email = attrs.get("email", None)
+        code = attrs["code"]
+        email = attrs["email"]
 
         try:
             user = User.objects.get(email=email)
@@ -141,8 +144,8 @@ class LoginSerializer(serializers.ModelSerializer):
         fields = ["email", "password"]
 
     def validate(self, attrs):
-        email = attrs.get("email", "")
-        password = attrs.get("password", "")
+        email = attrs["email"]
+        password = attrs["password"]
 
         try:
             user = User.objects.get(email=email)
@@ -170,3 +173,58 @@ class UserVerifySerializer(serializers.ModelSerializer):
         user_verify_user = UserVerifyCode.objects.create(**validated_data)
 
         return user_verify_user
+
+
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
+    default_error_message = {"message": "Token is expired or invalid"}
+
+    def validate(self, attrs):
+        self.token = attrs["refresh"]
+        return attrs
+
+    def save(self, **kwargs):
+        try:
+            token = RefreshToken(self.token)
+            RefreshToken(self.token).blacklist()
+        except TokenError:
+            pass
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate_old_password(self, value):
+        user = self.context["request"].user
+        if not user.check_password(value):
+            raise ValidationError(
+                "Your old password was entered incorrectly. Please enter it again."
+            )
+        return value
+
+    def validate(self, attrs):
+        new_password = attrs["new_password"]
+        confirm_password = attrs["confirm_password"]
+        if new_password != confirm_password:
+            raise ValidationError("New password and confirmation password do not match")
+
+        validate_password(new_password)
+        return super().validate(attrs)
+
+    def save(self, **kwargs):
+        password = self.validated_data["new_password"]
+        user = self.context["request"].user
+        user.set_password(password)
+        user.save()
+        return user
+
+
+class ResetPasswordRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(write_only=True)
+    redirect_url = serializers.CharField(write_only=True)
+
+    class Meta:
+        fields = ["email"]

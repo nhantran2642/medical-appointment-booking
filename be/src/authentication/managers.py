@@ -1,6 +1,7 @@
 from cfgv import ValidationError
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.validators import validate_email
+from utilities.validate import validate_password
 
 
 class UserManager(BaseUserManager):
@@ -9,6 +10,9 @@ class UserManager(BaseUserManager):
             validate_email(email)
         except ValidationError:
             raise ValidationError("Invalid email")
+
+    def password_validator(self, password):
+        validate_password(password)
 
     def create_user(
         self,
@@ -24,7 +28,12 @@ class UserManager(BaseUserManager):
             email = self.normalize_email(email)
             self.email_validator(email)
         else:
-            raise ValueError("Users should have a mmail")
+            raise ValueError("Users must have a mail")
+
+        if password:
+            self.password_validator(password)
+        else:
+            raise ValueError("Users must have a password")
 
         user = self.model(
             username=email,

@@ -6,13 +6,16 @@ from api import constants, settings
 from authentication.service import gen_verify_code
 from django.utils import timezone
 from rest_framework import generics, status, views, viewsets
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
 from utilities.email.mailer import send_verify_email, send_verify_login
+from utilities.permission import IsAuthenticated
 
-from .models import User, UserVerifyCode
+from .models import User
 from .serializers import (
+    ChangePasswordSerializer,
     LoginSerializer,
+    LogoutSerializer,
     RegisterSerializer,
     UserSerializer,
     VerifyCodeSerializer,
@@ -137,4 +140,50 @@ class VerifyCodeAPIView(views.APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class LogoutAPIView(views.APIView):
+    serializer_class = LogoutSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ResendCodeAPIView(views.APIView):
+
+    def post(self, request, *args, **kwargs):
+        if not request.data.get("email", None):
+            raise ValidationError("Please enter email.")
+        try:
+            user = User.objects.get(email=request.data["email"])
+        except User.DoesNotExist:
+            raise NotFound("Invalid email")
+
+        verify_code = gen_verify_code(user)
+
+        send_verify_login(user, verify_code)
+        return Response(
+            {
+                "is_send_code": True,
+                "message": "Send code verify for mail success",
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class ChangePasswordAPIView(generics.GenericAPIView):
+    serializer_class = ChangePasswordSerializer
+    permissions_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
