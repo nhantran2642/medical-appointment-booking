@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style></style>
+  </head>
+  <body>
+    <p>Chào {{ full_name }},</p>
+    <p>
+      Để bảo vệ tài khoản của bạn, chúng tôi đã kích hoạt xác thực hai lớp
+      (2FA). Bạn cần nhập mã xác thực bên dưới để hoàn tất quá trình đăng nhập:
+    </p>
+    <strong> Mã xác thực của bạn: {{ code }}</strong>
+
+    <p>Mã xác thực này sẽ hết hạn sau {{ expire_time }} phút.</p>
+
+    <p>Trân trọng, <br />[MEDICAL TEAM]</p>
+  </body>
+</html>
