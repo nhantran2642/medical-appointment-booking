@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";  // Đảm bảo đã import Link từ react-router-dom
+import { APP_ROUTER } from "../constants/appRouter";
+
 
 const Navbar = () => {
     const [hover, setHover] = useState(false);
@@ -80,26 +83,57 @@ const Navbar = () => {
     return (
         <nav style={navbarStyle}>
             <ul style={navListStyle}>
-                {["Trang chủ", "Dịch vụ", "Bác sĩ", "Tin tức", "Liên hệ"].map((item) => (
-                    <li key={item} style={navItemStyle}>
-                        <a
-                            href="home"
-                            style={navLinkStyle}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.backgroundColor = "white";
-                                e.currentTarget.style.color = "#1F2B6C";
-                                e.currentTarget.style.border = "2px solid #1F2B6C";
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.backgroundColor = "transparent";
-                                e.currentTarget.style.color = "#fcfefeff";
-                                e.currentTarget.style.border = "none";
-                            }}
-                        >
-                            {item}
-                        </a>
-                    </li>
-                ))}
+                {/* Danh sách các mục navbar với các liên kết tương ứng */}
+                <li style={navItemStyle}>
+                    <Link
+                        to={APP_ROUTER.HOME} // Điều hướng đến trang chủ
+                        style={navLinkStyle}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.backgroundColor = "white";
+                            e.currentTarget.style.color = "#1F2B6C";
+                            e.currentTarget.style.border = "2px solid #1F2B6C";
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                            e.currentTarget.style.color = "#fcfefeff";
+                            e.currentTarget.style.border = "none";
+                        }}
+                    >
+                        Trang chủ
+                    </Link>
+                </li>
+                <li style={navItemStyle}>
+                    <Link
+                        to={APP_ROUTER.SERVICE}
+                        style={navLinkStyle}
+                    >
+                        Dịch vụ
+                    </Link>
+                </li>
+                <li style={navItemStyle}>
+                    <Link
+                        to={APP_ROUTER.HOME}
+                        style={navLinkStyle}
+                    >
+                        Giới thiệu
+                    </Link>
+                </li>
+                <li style={navItemStyle}>
+                    <Link
+                        to={APP_ROUTER.ABOUT}
+                        style={navLinkStyle}
+                    >
+                        Tin tức
+                    </Link>
+                </li>
+                <li style={navItemStyle}>
+                    <Link
+                        to={APP_ROUTER.CONTACT}
+                        style={navLinkStyle}
+                    >
+                        Liên hệ
+                    </Link>
+                </li>
             </ul>
             <div style={searchContainerStyle}>
                 <div

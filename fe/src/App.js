@@ -1,18 +1,36 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, BrowserRouter } from "react-router-dom";
 import Home from "./components/Home";
 import LoginPage from "./components/LoginPage";
 import Register from "./components/RegisterPage";
+import AboutPage from "./pages/aboutpage";
+import { APP_ROUTER } from "./constants/appRouter";
+import HomeLayout from "./layOuts/homeLayout";
+import AppointmentPage from "./pages/bookappointmentpage";
+// eslint-disable-next-line
+
+
 
 const Main = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
-      </Routes>
-    </Router>
+    <BrowserRouter>
+      <div className="App">
+        <Routes>
+          {/* Default Layout */}
+          <Route path={APP_ROUTER.LOGIN} element={<LoginPage />} />
+
+
+          <Route path="/" element={<HomeLayout />}>
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/bookappointment" element={<AppointmentPage />} />
+
+          </Route>
+        </Routes>
+
+      </div>
+    </BrowserRouter>
   );
 };
 
