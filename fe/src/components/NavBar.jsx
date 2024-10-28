@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";  // Đảm bảo đã import Link từ react-router-dom
+import { Link } from "react-router-dom";
 import { APP_ROUTER } from "../constants/appRouter";
 
 
@@ -86,7 +86,7 @@ const Navbar = () => {
                 {/* Danh sách các mục navbar với các liên kết tương ứng */}
                 <li style={navItemStyle}>
                     <Link
-                        to={APP_ROUTER.HOME} // Điều hướng đến trang chủ
+                        to={APP_ROUTER.HOME}
                         style={navLinkStyle}
                         onMouseOver={(e) => {
                             e.currentTarget.style.backgroundColor = "white";
@@ -106,6 +106,16 @@ const Navbar = () => {
                     <Link
                         to={APP_ROUTER.SERVICE}
                         style={navLinkStyle}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.backgroundColor = "white";
+                            e.currentTarget.style.color = "#1F2B6C";
+                            e.currentTarget.style.border = "2px solid #1F2B6C";
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                            e.currentTarget.style.color = "#fcfefeff";
+                            e.currentTarget.style.border = "none";
+                        }}
                     >
                         Dịch vụ
                     </Link>
@@ -114,14 +124,34 @@ const Navbar = () => {
                     <Link
                         to={APP_ROUTER.HOME}
                         style={navLinkStyle}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.backgroundColor = "white";
+                            e.currentTarget.style.color = "#1F2B6C";
+                            e.currentTarget.style.border = "2px solid #1F2B6C";
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                            e.currentTarget.style.color = "#fcfefeff";
+                            e.currentTarget.style.border = "none";
+                        }}
                     >
-                        Giới thiệu
+                        Đội ngũ
                     </Link>
                 </li>
                 <li style={navItemStyle}>
                     <Link
                         to={APP_ROUTER.ABOUT}
                         style={navLinkStyle}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.backgroundColor = "white";
+                            e.currentTarget.style.color = "#1F2B6C";
+                            e.currentTarget.style.border = "2px solid #1F2B6C";
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                            e.currentTarget.style.color = "#fcfefeff";
+                            e.currentTarget.style.border = "none";
+                        }}
                     >
                         Tin tức
                     </Link>
@@ -130,6 +160,16 @@ const Navbar = () => {
                     <Link
                         to={APP_ROUTER.CONTACT}
                         style={navLinkStyle}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.backgroundColor = "white";
+                            e.currentTarget.style.color = "#1F2B6C";
+                            e.currentTarget.style.border = "2px solid #1F2B6C";
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                            e.currentTarget.style.color = "#fcfefeff";
+                            e.currentTarget.style.border = "none";
+                        }}
                     >
                         Liên hệ
                     </Link>

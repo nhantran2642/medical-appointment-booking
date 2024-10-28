@@ -211,7 +211,7 @@ const RegisterPage = () => {
                 <div style={styles.linkContainer}>
                     <span style={styles.haveAccount}>Đã có tài khoản?</span>
                     <Link
-                        to="/"
+                        to="/login"
                         style={{
                             ...styles.signIn,
                             ...(isHoveringSignIn ? styles.signInHover : {}),
