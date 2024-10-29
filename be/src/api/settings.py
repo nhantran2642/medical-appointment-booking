@@ -58,8 +58,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "rest_framework_swagger",
     "drf_yasg",
-    # app
     "authentication",
+    "doctor"
 ]
 
 MIDDLEWARE = [
