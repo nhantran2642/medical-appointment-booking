@@ -3,6 +3,7 @@ from base64 import urlsafe_b64decode, urlsafe_b64encode
 from datetime import datetime, timedelta
 
 from api import constants, settings
+from api.constants import USER_ROLE
 from authentication.service import gen_verify_code
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
@@ -84,12 +85,8 @@ class RegisterUserView(generics.GenericAPIView):
         email_encode = urlsafe_b64encode(json_str.encode()).decode("utf-8")
 
         url = f"{settings.WEBSITE_URL}?p={email_encode}"
-        # api = (
-        #     f"{settings.API_URL}/api/{settings.VERSION}/auth/verify/?p={email_encode}/"
-        # )
 
         send_verify_email(user, url)
-
         return Response(
             {"user": user_data, "code": email_encode}, status=status.HTTP_201_CREATED
         )
@@ -125,9 +122,10 @@ class LoginAPIView(views.APIView):
         except User.DoesNotExist:
             raise NotFound("Invalid email")
 
-        if not user.last_login or user.last_login > timezone.now() + timedelta(
-            days=settings.TWO_FA_EXPIRE
-        ):
+        if (
+            not user.last_login
+            or user.last_login > timezone.now() + timedelta(days=settings.TWO_FA_EXPIRE)
+        ) and user.role == USER_ROLE["USER"]:
             verify_code = gen_verify_code(user)
 
             send_verify_login(user, verify_code)
@@ -199,7 +197,9 @@ class ChangePasswordAPIView(generics.GenericAPIView):
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(
+            {"message: Change password succesfully"}, status=status.HTTP_200_OK
+        )
 
 
 class ResetPasswordAPIView(views.APIView):
@@ -228,17 +228,20 @@ class ResetPasswordAPIView(views.APIView):
         )
 
 
-class PasswordTokenCheckAPI(generics.GenericAPIView):
+class PasswordTokenCheckAPI(views.APIView):
+
     def get(self, request, uidb64, token, *args, **kwargs):
         try:
             id_auto_gen = smart_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(id=id_auto_gen)
 
             if not PasswordResetTokenGenerator().check_token(user, token):
-                return HttpResponseRedirect(settings.WEBSITE_URL + "?token_valid=False")
+                return HttpResponseRedirect(
+                    settings.WEBSITE_URL + "/password-reset?token_valid=False"
+                )
             return HttpResponseRedirect(
                 settings.WEBSITE_URL
-                + "?token_valid=True&message=Credentials Valid&uidb64="
+                + "/password-reset?token_valid=True&message=Credentials Valid&uidb64="
                 + uidb64
                 + "&token="
                 + token
