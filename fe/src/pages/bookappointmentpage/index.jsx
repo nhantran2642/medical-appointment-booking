@@ -1,11 +1,14 @@
 import React from "react";
 import { Form, Input, Button, Select, Row, Col, DatePicker, TimePicker } from "antd";
-import { PhoneOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, HomeOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import "./style.scss"; // Import SCSS
+import { Color } from "antd/es/color-picker";
+import { Link } from "react-router-dom";
 
 const { Option } = Select;
 
 const AppointmentPage = () => {
+
     return (
         <div className="appointment-container">
             <Row gutter={16}>
@@ -83,10 +86,13 @@ const AppointmentPage = () => {
                             </Form.Item>
 
                             <Form.Item>
-                                <Button type="primary" htmlType="submit" className="submit-button">
-                                    Submit
-                                </Button>
+                                <Link to="/detailappointment">
+                                    <Button type="primary" htmlType="submit" className="submit-button" >
+                                        Submit
+                                    </Button>
+                                </Link>
                             </Form.Item>
+
                         </Form>
                     </div>
                 </Col>
@@ -124,10 +130,16 @@ const AppointmentPage = () => {
                         loading="lazy"
                     />
                 </div>
+                <div className="slogan">
+                    <h1>Get in touch</h1>
+                    <a>Contact</a>
+                </div>
+
                 <div className="contact-info">
                     <Row gutter={16}>
                         <Col xs={24} md={6}>
                             <div className="contact-item">
+                                <PhoneOutlined />
                                 <h3>Emergency</h3>
                                 <p>(237) 681-812-255</p>
                                 <p>(237) 666-331-894</p>
@@ -135,6 +147,7 @@ const AppointmentPage = () => {
                         </Col>
                         <Col xs={24} md={6}>
                             <div className="contact-item">
+                                <HomeOutlined />
                                 <h3>Location</h3>
                                 <p>0373 Some place</p>
                                 <p>9876 Some country</p>
@@ -142,6 +155,7 @@ const AppointmentPage = () => {
                         </Col>
                         <Col xs={24} md={6}>
                             <div className="contact-item">
+                                <MailOutlined />
                                 <h3>Email</h3>
                                 <p>fildineesoe@gmail.com</p>
                                 <p>myebstudio@gmail.com</p>
@@ -149,6 +163,7 @@ const AppointmentPage = () => {
                         </Col>
                         <Col xs={24} md={6}>
                             <div className="contact-item">
+                                <ClockCircleOutlined />
                                 <h3>Working Hours</h3>
                                 <p>Mon-Sat: 08:00 - 20:00</p>
                                 <p>Sunday: Emergency only</p>
@@ -157,6 +172,7 @@ const AppointmentPage = () => {
                     </Row>
                 </div>
             </div>
+
         </div>
     );
 };

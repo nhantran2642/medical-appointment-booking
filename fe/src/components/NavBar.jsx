@@ -120,7 +120,7 @@ const Navbar = () => {
                 </li>
                 <li style={navItemStyle}>
                     <Link
-                        to={APP_ROUTER.ABOUT}
+                        to={APP_ROUTER.BLOG}
                         style={navLinkStyle}
                     >
                         Tin tức
@@ -128,7 +128,7 @@ const Navbar = () => {
                 </li>
                 <li style={navItemStyle}>
                     <Link
-                        to={APP_ROUTER.CONTACT}
+                        to={APP_ROUTER.ABOUT}
                         style={navLinkStyle}
                     >
                         Liên hệ
@@ -155,13 +155,15 @@ const Navbar = () => {
                         style={inputStyle}
                     />
                 </div>
-                <button
-                    style={appointmentButtonStyle}
-                    onMouseEnter={() => setHover(true)}
-                    onMouseLeave={() => setHover(false)}
-                >
-                    Đặt lịch
-                </button>
+                <Link to="bookappointment">
+                    <button
+                        style={appointmentButtonStyle}
+                        onMouseEnter={() => setHover(true)}
+                        onMouseLeave={() => setHover(false)}
+                    >
+                        Đặt lịch
+                    </button>
+                </Link>
             </div>
         </nav>
     );

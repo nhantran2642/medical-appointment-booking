@@ -6,4 +6,6 @@ export const APP_ROUTER = {
     CONTACT: '/contact',
     LOGIN: '/login',
     BOOKAPOINT: '/bookappointment',
+    DETAILAPOINT: '/detailappointment',
+    BLOG: '/blogspage',
 };

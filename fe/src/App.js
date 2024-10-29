@@ -7,6 +7,8 @@ import AboutPage from "./pages/aboutpage";
 import { APP_ROUTER } from "./constants/appRouter";
 import HomeLayout from "./layOuts/homeLayout";
 import AppointmentPage from "./pages/bookappointmentpage";
+import AppointmentDetails from "./pages/detailappointmentpage";
+import BlogPage from "./pages/blogpage";
 // eslint-disable-next-line
 
 
@@ -25,6 +27,10 @@ const Main = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />
             <Route path="/bookappointment" element={<AppointmentPage />} />
+            <Route path="/detailappointment" element={<AppointmentDetails />} />
+            <Route path="/blogspage" element={<BlogPage />} />
+
+
 
           </Route>
         </Routes>

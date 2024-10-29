@@ -109,4 +109,35 @@
             }
         }
     }
+
+    .slogan {
+        text-align: center;
+        /* Căn giữa nội dung */
+        margin: 10px 0;
+        /* Khoảng cách trên dưới nếu cần */
+
+        h1 {
+            color: #5c7cfa;
+            /* Màu xanh cho chữ "Get in touch" */
+            font-size: 22px;
+            /* Điều chỉnh kích thước chữ nếu cần */
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        a {
+            /* Màu cho link "Contact" */
+            color: #002060;
+            font-size: 24px;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            /* Loại bỏ gạch chân link */
+
+            &:hover {
+                text-decoration: underline;
+                /* Hiệu ứng gạch chân khi hover */
+            }
+        }
+    }
+
+
 }
