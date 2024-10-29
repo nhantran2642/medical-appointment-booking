@@ -32,3 +32,20 @@ def send_verify_login(user: User, verify_code: UserVerifyCode):
         subject, "emails/templates/send_code_login.html", [user.email], merge_data
     )
     return True
+
+
+def send_password_reset_email(user, current_site, relative_link):
+    subject = "Làm mới mật khẩu"
+    link = "http://" + current_site + relative_link
+    print(link)
+    merge_data = {
+        "link": link,
+        "fullname": user.get_full_name(),
+    }
+    send_mail(
+        subject,
+        "emails/templates/password_reset_confirm.html",
+        [user.email],
+        merge_data,
+    )
+    return True

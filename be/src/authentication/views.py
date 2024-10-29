@@ -4,12 +4,23 @@ from datetime import datetime, timedelta
 
 from api import constants, settings
 from authentication.service import gen_verify_code
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponseRedirect
 from django.utils import timezone
+from django.utils.encoding import smart_bytes, smart_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, status, views, viewsets
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
-from utilities.email.mailer import send_verify_email, send_verify_login
+from rest_framework.reverse import reverse
+from utilities.email.mailer import (
+    send_password_reset_email,
+    send_verify_email,
+    send_verify_login,
+)
 from utilities.permission import IsAuthenticated
+from yaml import serialize
 
 from .models import User
 from .serializers import (
@@ -17,6 +28,8 @@ from .serializers import (
     LoginSerializer,
     LogoutSerializer,
     RegisterSerializer,
+    ResetPasswordRequestSerializer,
+    SetNewPasswordSerializer,
     UserSerializer,
     VerifyCodeSerializer,
     VerifyEmailSerializer,
@@ -187,3 +200,61 @@ class ChangePasswordAPIView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ResetPasswordAPIView(views.APIView):
+    serializer_class = ResetPasswordRequestSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = User.objects.get(email=request.data["email"])
+
+        token_generator = PasswordResetTokenGenerator()
+        token = token_generator.make_token(user)
+        uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
+
+        current_site = get_current_site(request=request).domain
+        relative_link = reverse(
+            "password-reset-confirm",
+            kwargs={"uidb64": uidb64, "token": token},
+        )
+        send_password_reset_email(user, current_site, relative_link)
+
+        return Response(
+            {"message": "We have sent you a link to reset your password"},
+            status=status.HTTP_200_OK,
+        )
+
+
+class PasswordTokenCheckAPI(generics.GenericAPIView):
+    def get(self, request, uidb64, token, *args, **kwargs):
+        try:
+            id_auto_gen = smart_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(id=id_auto_gen)
+
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                return HttpResponseRedirect(settings.WEBSITE_URL + "?token_valid=False")
+            return HttpResponseRedirect(
+                settings.WEBSITE_URL
+                + "?token_valid=True&message=Credentials Valid&uidb64="
+                + uidb64
+                + "&token="
+                + token
+            )
+        except Exception as e:
+            print(e)
+            return HttpResponseRedirect(settings.WEBSITE_URL + "?token_valid=False")
+
+
+class SetNewPasswordAPIView(generics.GenericAPIView):
+    serializer_class = SetNewPasswordSerializer
+
+    def put(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(
+            {"success": True, "message": "Password reset success"},
+            status=status.HTTP_200_OK,
+        )
