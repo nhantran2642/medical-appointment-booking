@@ -1,0 +1,112 @@
+.appointment-container {
+    padding: 40px;
+    background-color: #f7f8fa;
+
+    .appointment-form,
+    .schedule-info {
+        background-color: #002060;
+        padding: 30px;
+        color: #ffffff;
+        border-radius: 8px;
+
+        h2 {
+            color: #ffffff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        p {
+            color: #c7c7c7;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .submit-button {
+            width: 100%;
+            background-color: #5c7cfa;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            border-radius: 4px;
+
+            &:hover {
+                background-color: #4a69f1;
+            }
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+                margin-bottom: 10px;
+                font-size: 16px;
+                font-family: 'Montserrat', sans-serif;
+            }
+        }
+
+        .emergency-info {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+
+            svg {
+                margin-right: 10px;
+                font-size: 24px;
+                color: #ffffff;
+            }
+
+            h3 {
+                font-size: 18px;
+                color: #ffffff;
+                margin-bottom: 0;
+            }
+
+            p {
+                font-size: 16px;
+                color: #c7c7c7;
+                margin-bottom: 0;
+                font-family: 'Montserrat', sans-serif;
+            }
+        }
+    }
+
+    .map-contact-section {
+        margin-top: 40px;
+
+        .map {
+            margin-bottom: 20px;
+
+            iframe {
+                border: none;
+            }
+        }
+
+        .contact-info {
+            background-color: #f7f8fa;
+            padding: 20px;
+            border-radius: 8px;
+
+            .contact-item {
+                background-color: #002060;
+                color: #ffffff;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+
+                h3 {
+                    color: #ffffff;
+                    font-family: 'Montserrat', sans-serif;
+                }
+
+                p {
+                    color: #c7c7c7;
+                    margin: 0;
+                    font-family: 'Montserrat', sans-serif;
+                }
+            }
+        }
+    }
+}
