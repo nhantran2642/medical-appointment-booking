@@ -59,7 +59,15 @@ INSTALLED_APPS = [
     "rest_framework_swagger",
     "drf_yasg",
     "authentication",
-    "doctor"
+    "doctor",
+    "appointment",
+    "patient",
+    "medical_record",
+    "department",
+    "notification",
+    "specialty",
+    "staff",
+    "time_slot",
 ]
 
 MIDDLEWARE = [
