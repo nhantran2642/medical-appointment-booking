@@ -56,5 +56,5 @@ urlpatterns = (
         re_path(f"api/{ver}/auth/", include("authentication.urls")),
     ]
     + schema_api_docs
-    + staticfiles_urlpatterns
+    + staticfiles_urlpatterns()
 )
