@@ -36,6 +36,7 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
+schema_api_docs = []
 if settings.DEBUG:
     schema_api_docs = [
         path(
