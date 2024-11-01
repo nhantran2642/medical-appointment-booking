@@ -41,7 +41,7 @@ packaging==24.1
 platformdirs==4.3.6
 pre_commit==4.0.0
 prompt_toolkit==3.0.48
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.10
 pycodestyle==2.12.1
 pyflakes==3.2.0
 PyJWT==2.9.0
