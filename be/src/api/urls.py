@@ -18,6 +18,7 @@ Including another URLconf
 from api import settings
 from django.conf.urls import include
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -49,7 +50,11 @@ schema_api_docs = [
 
 ver = settings.VERSION
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    re_path(f"api/{ver}/auth/", include("authentication.urls")),
-] + schema_api_docs
+urlpatterns = (
+    [
+        path("admin/", admin.site.urls),
+        re_path(f"api/{ver}/auth/", include("authentication.urls")),
+    ]
+    + schema_api_docs
+    + staticfiles_urlpatterns
+)
