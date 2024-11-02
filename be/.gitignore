@@ -4,8 +4,6 @@ __pycache__/
 *.pyc
 *.py[cod]
 *$py.class
-static/
-staticfiles/
 # C extensions
 *.so
 
