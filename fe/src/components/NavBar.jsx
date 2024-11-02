@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { APP_ROUTER } from "../constants/appRouter";
 
 
 const Navbar = () => {
     const [hover, setHover] = useState(false);
+    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState("");
     const [showInput, setShowInput] = useState(false);
 
@@ -122,7 +123,7 @@ const Navbar = () => {
                 </li>
                 <li style={navItemStyle}>
                     <Link
-                        to={APP_ROUTER.HOME}
+                        to={APP_ROUTER.DOCTOR}
                         style={navLinkStyle}
                         onMouseOver={(e) => {
                             e.currentTarget.style.backgroundColor = "white";
@@ -140,7 +141,7 @@ const Navbar = () => {
                 </li>
                 <li style={navItemStyle}>
                     <Link
-                        to={APP_ROUTER.ABOUT}
+                        to={APP_ROUTER.BLOG}
                         style={navLinkStyle}
                         onMouseOver={(e) => {
                             e.currentTarget.style.backgroundColor = "white";
@@ -199,6 +200,7 @@ const Navbar = () => {
                     style={appointmentButtonStyle}
                     onMouseEnter={() => setHover(true)}
                     onMouseLeave={() => setHover(false)}
+                    onClick={() => navigate('/book-appointment')}
                 >
                     Đặt lịch
                 </button>

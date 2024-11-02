@@ -1,27 +1,9 @@
 import React, { useState } from "react";
 import "./style.scss";
 import OurDoctors from "../../components/OurDoctors";
+import { contactDetails, specialties, cardData, articles, doctors } from "../../mock";
 
-const cardData = [
-    {
-        text: "Đặt Lịch Hẹn",
-        color: "#1f2b6c",
-        textColor: "#fcfefeff",
-        icon: require("../../assets/img/Calendar.png"),
-    },
-    {
-        text: "Đội Ngũ Chúng Tôi",
-        color: "#bfd2f8ff",
-        textColor: "#1f2b6cff",
-        icon: require("../../assets/img/Team.png"),
-    },
-    {
-        text: "Quản Lý Thanh Toán",
-        color: "#159eecff",
-        textColor: "#fcfefeff",
-        icon: require("../../assets/img/Cash.png"),
-    },
-];
+
 
 const AppointmentCards = () => {
     const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -175,20 +157,7 @@ const Services = () => {
 };
 
 const SpecialtiesGrid = () => {
-    const specialties = [
-        { name: 'Khoa Thần Kinh' },
-        { name: 'Khoa Mắt' },
-        { name: 'Khoa Tiêu Hóa' },
-        { name: 'Khoa Ung Bướu' },
-        { name: 'Khoa Tim Mạch' },
-        { name: 'Khoa Tiết Niệu' },
-        { name: 'Khoa Cơ Xương Khớp' },
-        { name: 'Khoa Hô Hấp' },
-        { name: 'Khoa Da Liễu' },
-        { name: 'Khoa Tai Mũi Họng' },
-        { name: 'Khoa Thận' },
-        { name: 'Khoa Phụ Khoa' },
-    ];
+
 
     return (
         <div className="specialties-grid">
@@ -205,50 +174,7 @@ const SpecialtiesGrid = () => {
         </div>
     );
 };
-const articles = [
-    {
-        date: "Monday 05, September 2021 | By Author",
-        title: "This Article’s Title goes Here, but not too long.",
-        image: require('../../assets/img/news.png'),
-        views: 68,
-        likes: 86
-    },
-    {
-        date: "Monday 05, September 2021 | By Author",
-        title: "This Article’s Title goes Here, but not too long.",
-        image: require('../../assets/img/news.png'),
-        views: 68,
-        likes: 86
-    },
-    {
-        date: "Monday 05, September 2021 | By Author",
-        title: "This Article’s Title goes Here, but not too long.",
-        image: require('../../assets/img/news.png'),
-        views: 68,
-        likes: 86
-    },
-    {
-        date: "Monday 05, September 2021 | By Author",
-        title: "This Article’s Title goes Here, but not too long.",
-        image: require('../../assets/img/news.png'),
-        views: 68,
-        likes: 86
-    },
-    {
-        date: "Monday 05, September 2021 | By Author",
-        title: "This Article’s Title goes Here, but not too long.",
-        image: require('../../assets/img/news.png'),
-        views: 68,
-        likes: 86
-    },
-    {
-        date: "Monday 05, September 2021 | By Author",
-        title: "This Article’s Title goes Here, but not too long.",
-        image: require('../../assets/img/news.png'),
-        views: 68,
-        likes: 86
-    }
-];
+
 
 const NewsSection = () => {
     const [currentPage, setCurrentPage] = useState(0);
@@ -301,36 +227,7 @@ const NewsSection = () => {
         </div>
     );
 };
-const contactDetails = [
-    {
-        title: "Khẩn cấp",
-        info: ["(237) 681-812-255", "(237) 666-331-894"],
-        icon: require('../../assets/img/group-188-2.png'),
-        bgColor: '#BFD2F8',
-        textColor: '#1F2B6C'
-    },
-    {
-        title: "Địa chỉ",
-        info: ["0123 Hải Phòng", "9876 Lê Duẩn"],
-        icon: require('../../assets/img/letter.png'),
-        bgColor: '#BFD2F8',
-        textColor: '#1F2B6C'
-    },
-    {
-        title: "Email",
-        info: ["meddical@gmail.com"],
-        icon: require('../../assets/img/group-178-2.png'),
-        bgColor: '#BFD2F8',
-        textColor: '#1F2B6C'
-    },
-    {
-        title: "Giờ làm việc",
-        info: ["Từ thứ hai đến thứ bảy lúc 09:00-20:00", "Chỉ khẩn cấp vào Chủ nhật"],
-        icon: require('../../assets/img/group-177-2.png'),
-        bgColor: '#BFD2F8',
-        textColor: '#1F2B6C'
-    }
-];
+
 
 const ContactsSection = () => {
     return (
@@ -339,7 +236,7 @@ const ContactsSection = () => {
                 <h2 className="sub-title">Hãy liên lạc</h2>
                 <h1 className="main-title">Liên hệ</h1>
             </div>
-            <div className="contact-cards">
+            <div className="contact-cards-home">
                 {contactDetails.map((contact, index) => (
                     <div
                         className="contact-card"

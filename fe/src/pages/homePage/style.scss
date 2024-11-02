@@ -88,7 +88,6 @@
   
     .title {
       color: #159eecff;
-      font-family: 'Work Sans', sans-serif;
       font-weight: 700;
       font-size: 18px;
       letter-spacing: 2.88px;
@@ -134,7 +133,6 @@
         .name,
         .specialty {
           color: #1f2b6cff;
-          font-family: 'Work Sans', sans-serif;
           font-size: 18px;
         }
   
@@ -430,6 +428,7 @@
 
         .name {
             font-size: 16px;
+            font-weight: 700;
             color: #1e2a78; 
             transition: color 0.3s ease;
         }
@@ -613,7 +612,8 @@
       }
     }
   
-    .contact-cards {
+    .contact-cards-home {
+
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap;
@@ -622,8 +622,8 @@
     }
   
     .contact-card {
-      width: 233px;
-      height: 233px;
+      width: 230px;
+      height: 230px;
       border-radius: 8px;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -651,6 +651,7 @@
         font-size: 16px;
         line-height: 22.4px;
         text-align: center;
+        margin: 5px;
       }
     }
   }

@@ -6,13 +6,14 @@ const ServicesPage = () => {
     return (
         <div className="services-page">
             <div className="header-banner">
-
+                <div className="title-head"> <a href="/">Home</a> / <a href="/service">Service</a>/ <a href="/service">Read more</a></div>
+                <h2>Our Services</h2>
             </div>
 
             <div className="services-section">
                 <div className="services-menu">
                     <div className="main-service">
-                        <div className="sidebar">
+                        <div className="sidebar-service">
                             <ul className="list">
                                 {["Khám miễn phí", "Điện tâm đồ", "Xét nghiệm DNA", "Ngân hàng máu", "Da liễu"].map((text, index) => (
                                     <li
