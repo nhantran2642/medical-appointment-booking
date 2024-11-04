@@ -15,7 +15,7 @@ const Services = () => {
     return (
         <div className="services">
             <div className="services-header" style={{ backgroundImage: `url(${require('../../assets/img/banner-service.png')})` }}>
-                <span>Home / Services</span>
+                <div className="title-head"> <a href="/">Home</a> / <a href="/service">Service</a></div>
                 <h2>Our Services</h2>
             </div>
             <div className="services-grid">

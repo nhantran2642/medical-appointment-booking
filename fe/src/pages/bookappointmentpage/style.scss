@@ -1,112 +1,196 @@
-.appointment-container {
-    padding: 40px;
-    background-color: #f7f8fa;
+.appointment-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
 
-    .appointment-form,
-    .schedule-info {
-        background-color: #002060;
-        padding: 30px;
-        color: #ffffff;
-        border-radius: 8px;
+    .appointment-header {
+        width: 100%;
+        height: 300px;
+        background-size: cover;
+        text-align: center;
+        color: #1F2B6C;
+        display: flex;
+        justify-content: flex-start;
+
+        .title-head {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            padding-left: 200px;
+
+            .title-link a {
+                color: #1F2B6C;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
 
         h2 {
-            color: #ffffff;
-            font-size: 24px;
-            margin-bottom: 20px;
-            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            margin: 0;
+        }
+    }
+
+    .appointment-page-container {
+        display: flex;
+        max-width: 1200px;
+        margin-top: 20px;
+        gap: 20px;
+    }
+
+    .appointment-page-left {
+        flex: 2;
+        padding: 20px;
+        color: #1F2B6C;
+        border-radius: 8px;
+
+        h3 {
+            font-size: 2em;
+            margin-bottom: 10px;
         }
 
         p {
-            color: #c7c7c7;
-            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 20px;
+            font-size: 1em;
         }
 
-        .submit-button {
-            width: 100%;
-            background-color: #5c7cfa;
-            border: none;
-            padding: 10px;
-            font-size: 16px;
-            font-family: 'Montserrat', sans-serif;
-            border-radius: 4px;
+        .appointment-page-form {
+            form {
+                display: flex;
+                flex-direction: column;
+                background-color: #1F2B6C;
+                padding: 20px;
+                border-radius: 8px;
 
-            &:hover {
-                background-color: #4a69f1;
-            }
-        }
+                .form-group {
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+                    input,
+                    select,
+                    textarea {
+                        flex: 1;
+                        min-width: 200px;
+                        padding: 10px;
+                        background-color: #1F2B6C;
+                        border: 0.1px solid transparent; 
+                        border-radius: 5px;
+                        color: white;
 
-            li {
-                margin-bottom: 10px;
-                font-size: 16px;
-                font-family: 'Montserrat', sans-serif;
-            }
-        }
+                        &::placeholder { 
+                            color: white; 
+                        }
 
-        .emergency-info {
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
+                        &:focus {
+                            border: none; 
+                            outline: none; 
+                        }
+                    }
+                }
 
-            svg {
-                margin-right: 10px;
-                font-size: 24px;
-                color: #ffffff;
-            }
+                button {
+                    padding: 10px;
+                    background-color: #BFD2F8;
+                    color: #1F2B6C;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 1em;
+                    margin-top: 20px;
 
-            h3 {
-                font-size: 18px;
-                color: #ffffff;
-                margin-bottom: 0;
-            }
-
-            p {
-                font-size: 16px;
-                color: #c7c7c7;
-                margin-bottom: 0;
-                font-family: 'Montserrat', sans-serif;
+                    &:hover {
+                        background-color: #a3aee9;
+                        color: #fff;
+                    }
+                }
             }
         }
     }
 
-    .map-contact-section {
-        margin-top: 40px;
+    .appointment-page-info {
+        flex: 1;
+        background: #002855;
+        color: #BFD2F8;
+        padding: 20px;
+        border-radius: 8px;
 
-        .map {
-            margin-bottom: 20px;
+        .appointment-page-hours {
+            text-align: center;
 
-            iframe {
-                border: none;
-            }
-        }
-
-        .contact-info {
-            background-color: #f7f8fa;
-            padding: 20px;
-            border-radius: 8px;
-
-            .contact-item {
-                background-color: #002060;
-                color: #ffffff;
-                padding: 20px;
-                border-radius: 8px;
+            h3 {
+                font-size: 2em;
                 margin-bottom: 20px;
+                font-weight: bold;
+            }
 
-                h3 {
-                    color: #ffffff;
-                    font-family: 'Montserrat', sans-serif;
+            ul {
+                list-style: none;
+                padding: 0;
+
+                li {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 8px;
+                    font-size: 1em;
+                    padding: 10px;
+
+                    span {
+                        &:first-child {
+                            font-weight: bold;
+                        }
+                    }
+
+                    hr {
+                        height: 0;
+                        width: 20px;
+                        border: 1px solid #BFD2F8;
+                        margin-right: 40px;
+                    }
                 }
+            }
+
+            .line {
+                width: 100%;
+                height: 2px;
+                background-color: #BFD2F8;
+                margin: 20px 0;
+            }
+
+            .emergency {
+                margin-top: 20px;
+                font-weight: bold;
+                text-align: center;
 
                 p {
-                    color: #c7c7c7;
                     margin: 0;
-                    font-family: 'Montserrat', sans-serif;
+
+                    &:first-of-type {
+                        font-size: 1em;
+                    }
+
+                    &:last-of-type {
+                        font-size: 1.2em;
+                        color: #BFD2F8;
+                    }
                 }
             }
         }
+    }
+
+    .map {
+        width: 80%;
+        height: 400px;
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
     }
 }

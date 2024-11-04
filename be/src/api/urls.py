@@ -55,6 +55,7 @@ urlpatterns = (
     [
         path("admin/", admin.site.urls),
         re_path(f"api/{ver}/auth/", include("authentication.urls")),
+        re_path(f"api/{ver}/doctor/", include("doctor.urls")),
     ]
     + schema_api_docs
     + staticfiles_urlpatterns()
