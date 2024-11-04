@@ -2,21 +2,11 @@ import React from 'react';
 import './style.scss';
 
 import subheadDoctor from '../../assets/img/SubHead-doctor.png';
-import doctorImage1 from '../../assets/img/doctor-1.png';
-import doctorImage2 from '../../assets/img/doctor-2.png';
-import doctorImage3 from '../../assets/img/doctor-3.png';
 import linkedinIcon from '../../assets/img/linkedin-1.png';
 import instagramIcon from '../../assets/img/instagram-1.png';
 import otherIcon from '../../assets/img/facebook-1.png';
+import { doctors } from '../../mock';
 
-const doctors = [
-    { id: 1, name: "Doctor's Name", specialty: "NEUROLOGY", image: doctorImage1, linkedin: '#', instagram: '#', other: '#' },
-    { id: 2, name: "Doctor's Name", specialty: "NEUROLOGY", image: doctorImage2, linkedin: '#', instagram: '#', other: '#' },
-    { id: 3, name: "Doctor's Name", specialty: "NEUROLOGY", image: doctorImage3, linkedin: '#', instagram: '#', other: '#' },
-    { id: 4, name: "Doctor's Name", specialty: "NEUROLOGY", image: doctorImage1, linkedin: '#', instagram: '#', other: '#' },
-    { id: 5, name: "Doctor's Name", specialty: "NEUROLOGY", image: doctorImage2, linkedin: '#', instagram: '#', other: '#' },
-    { id: 6, name: "Doctor's Name", specialty: "NEUROLOGY", image: doctorImage3, linkedin: '#', instagram: '#', other: '#' },
-];
 
 const DoctorsGrid = () => {
     return (

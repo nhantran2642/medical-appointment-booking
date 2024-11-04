@@ -1,0 +1,121 @@
+.sidebar {
+    width: 290px;
+    height: 100%;
+    flex: 1;
+    border: none;
+    background-color: #fff;
+    padding-right: 10px;
+    .search-bar {
+        margin-bottom: 20px;
+
+        .input-group {
+            display: flex;
+            align-items: center;
+
+            input {
+                color: #fff;
+                height: 50px;
+                background-color: #1F2B6C;
+                border: none; 
+                outline: none;
+                padding: 0 10px;
+
+                ::placeholder{
+                    color: #fff;
+                }
+                
+            }
+
+            .search-button {
+                height: 50px;
+                background-color: #1F2B6C;
+                color: #fff;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+        }
+    }
+
+    .recent-posts, .categories {
+        width: 250px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 10px 0;
+        h3 {
+            padding: 5px;
+            font-size: 22px;
+            color: #1F2B6C;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .post-item {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
+
+            .post-image {
+                width: 60px;
+                height: 60px;
+                border-radius: 5px;
+                margin-right: 10px;
+                object-fit: cover;
+            }
+
+            .post-date {
+                font-size: 12px;
+                color: #777;
+            }
+
+            .post-title {
+                font-size: 16px;
+                color: #007bff;
+                font-weight: 600;
+                text-decoration: none;
+
+                &:hover {
+                    color: #0056b3;
+                }
+            }
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            color: #007bff;
+            text-decoration: none;
+            padding: 5px 0;
+            transition: color 0.3s;
+
+            &:hover {
+                color: #0056b3;
+            }
+
+            .badge {
+                background-color: #007bff;
+                color: #fff;
+                font-size: 14px;
+                border-radius: 12px;
+                padding: 2px 8px;
+                margin-left: auto;
+            }
+        }
+    }
+}

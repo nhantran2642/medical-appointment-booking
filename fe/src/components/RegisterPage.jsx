@@ -24,13 +24,13 @@ const styles = {
     welcome: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 700,
-        fontSize: '48px',
+        fontSize: '70px',
         color: '#1f2b6c',
     },
     register: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 700,
-        fontSize: '36px',
+        fontSize: '50px',
         color: '#1f2b6c',
     },
     illustration: {
@@ -64,7 +64,7 @@ const styles = {
         borderRadius: '8px',
         border: '1px solid #d3e0fe',
         fontFamily: 'Raleway, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#1f2b6c',
         outline: 'none',
     },
@@ -81,14 +81,14 @@ const styles = {
         borderRadius: '8px',
         border: '1px solid #d3e0fe',
         fontFamily: 'Raleway, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#1f2b6c',
         outline: 'none',
     },
     label: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 500,
-        fontSize: '20px',
+        fontSize: '24px',
         color: '#1f2b6c',
         marginBottom: '5px',
     },
@@ -114,11 +114,42 @@ const styles = {
         cursor: 'pointer',
         transition: 'background-color 0.3s, transform 0.3s',
     },
+    buttonHover: {
+        backgroundColor: '#0056b3',
+        transform: 'scale(1.05)',
+    },
     buttonLabel: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 600,
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#fff',
+    },
+    googleButton: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '300px',
+        padding: '10px 0',
+        backgroundColor: '#fff',
+        borderRadius: '8px',
+        border: '1px solid #d3e0fe',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s, transform 0.3s',
+        marginTop: '15px',
+    },
+    googleIcon: {
+        width: '20px',
+        height: '20px',
+        marginRight: '10px',
+    },
+    googleButtonLabel: {
+        fontFamily: 'Raleway, sans-serif',
+        fontWeight: 600,
+        fontSize: '20px',
+        color: '#1f2b6c',
+    },
+    googleButtonHover: {
+        transform: 'scale(1.05)',
     },
     linkContainer: {
         display: 'flex',
@@ -143,17 +174,70 @@ const styles = {
     signInHover: {
         color: '#0056b3',
     },
+    errorMessage: {
+        color: 'red',
+        fontSize: '16px',
+    },
 };
 
 const RegisterPage = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isHoveringSignIn, setIsHoveringSignIn] = useState(false);
+    const [isHoveringGoogleButton, setIsHoveringGoogleButton] = useState(false);
+    const [isHoveringButton, setIsHoveringButton] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [phone, setPhone] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
 
     const togglePasswordVisibility = () => {
-        setIsPasswordVisible(!isPasswordVisible);
+        setIsPasswordVisible(prevState => !prevState);
+    };
+
+    const validateEmail = () => {
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        if (!emailRegex.test(email)) {
+            setEmailError('Email không hợp lệ');
+            return false;
+        }
+        setEmailError('');
+        return true;
+    };
+
+    const validatePassword = () => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            setPasswordError('Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt');
+            return false;
+        }
+        setPasswordError('');
+        return true;
+    };
+
+    const validatePhone = () => {
+        const phoneRegex = /^[0-9]{10,11}$/;
+        if (!phoneRegex.test(phone)) {
+            setPhoneError('Số điện thoại không hợp lệ');
+            return false;
+        }
+        setPhoneError('');
+        return true;
+    };
+
+    const handleRegister = () => {
+        const isEmailValid = validateEmail();
+        const isPasswordValid = validatePassword();
+        const isPhoneValid = validatePhone();
+        if (isEmailValid && isPasswordValid && isPhoneValid) {
+            console.log("Đăng ký thành công!");
+            // Thêm xử lý đăng ký ở đây
+        }
     };
 
     const eyeIcon = isPasswordVisible ? require('../assets/img/Eye.png') : require('../assets/img/Eye-1.png');
+    const googleIcon = require('../assets/img/icon-google.png');
 
     return (
         <div style={styles.container}>
@@ -171,12 +255,15 @@ const RegisterPage = () => {
             <div style={styles.rightColumn}>
                 <div style={styles.inputWrapper}>
                     <div style={styles.inputBox}>
-                        <span style={styles.label}>Họ và tên</span>
-                        <input type="text" style={styles.inputField} placeholder="Nhập họ và tên" />
-                    </div>
-                    <div style={styles.inputBox}>
-                        <span style={styles.label}>Số điện thoại</span>
-                        <input type="text" style={styles.inputField} placeholder="Nhập số điện thoại" />
+                        <span style={styles.label}>Email</span>
+                        <input
+                            type="text"
+                            style={styles.inputField}
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            onBlur={validateEmail}
+                        />
+                        {emailError && <span style={styles.errorMessage}>{emailError}</span>}
                     </div>
                     <div style={styles.inputBox}>
                         <span style={styles.label}>Mật khẩu</span>
@@ -184,34 +271,56 @@ const RegisterPage = () => {
                             <input
                                 type={isPasswordVisible ? 'text' : 'password'}
                                 style={styles.inputFieldWithIcon}
-                                placeholder="Nhập mật khẩu"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                onBlur={validatePassword}
                             />
                             <img
                                 src={eyeIcon}
-                                alt={isPasswordVisible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                                style={styles.icon}
+                                alt="Toggle Password Visibility"
                                 onClick={togglePasswordVisibility}
+                                style={styles.icon}
                             />
                         </div>
+                        {passwordError && <span style={styles.errorMessage}>{passwordError}</span>}
+                    </div>
+                    <div style={styles.inputBox}>
+                        <span style={styles.label}>Số điện thoại</span>
+                        <input
+                            type="text"
+                            style={styles.inputField}
+                            value={phone}
+                            onChange={e => setPhone(e.target.value)}
+                            onBlur={validatePhone}
+                        />
+                        {phoneError && <span style={styles.errorMessage}>{phoneError}</span>}
                     </div>
                 </div>
                 <button
-                    style={styles.button}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#0056b3';
-                        e.currentTarget.style.transform = 'scale(1.05)';
+                    style={{
+                        ...styles.button,
+                        ...(isHoveringButton ? styles.buttonHover : {}),
                     }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#1f2b6c';
-                        e.currentTarget.style.transform = 'scale(1)';
-                    }}
+                    onMouseEnter={() => setIsHoveringButton(true)}
+                    onMouseLeave={() => setIsHoveringButton(false)}
+                    onClick={handleRegister}
                 >
                     <span style={styles.buttonLabel}>Đăng ký</span>
                 </button>
+                <div
+                    style={{
+                        ...styles.googleButton,
+                        ...(isHoveringGoogleButton ? styles.googleButtonHover : {}),
+                    }}
+                    onMouseEnter={() => setIsHoveringGoogleButton(true)}
+                    onMouseLeave={() => setIsHoveringGoogleButton(false)}
+                >
+                    <img src={googleIcon} alt="Google" style={styles.googleIcon} />
+                    <span style={styles.googleButtonLabel}>Đăng nhập bằng Google</span>
+                </div>
                 <div style={styles.linkContainer}>
-                    <span style={styles.haveAccount}>Đã có tài khoản?</span>
-                    <Link
-                        to="/login"
+                    <span style={styles.haveAccount}>Bạn đã có tài khoản?</span>
+                    <span
                         style={{
                             ...styles.signIn,
                             ...(isHoveringSignIn ? styles.signInHover : {}),
@@ -219,8 +328,8 @@ const RegisterPage = () => {
                         onMouseEnter={() => setIsHoveringSignIn(true)}
                         onMouseLeave={() => setIsHoveringSignIn(false)}
                     >
-                        Đăng nhập
-                    </Link>
+                        <Link to="/login">Đăng nhập</Link>
+                    </span>
                 </div>
             </div>
         </div>

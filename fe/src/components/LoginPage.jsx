@@ -24,13 +24,13 @@ const styles = {
     welcome: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 700,
-        fontSize: '48px',
+        fontSize: '70px',
         color: '#1f2b6c',
     },
     login: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 700,
-        fontSize: '36px',
+        fontSize: '50px',
         color: '#1f2b6c',
     },
     illustration: {
@@ -48,8 +48,7 @@ const styles = {
     inputWrapper: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '15px',
-        marginBottom: '20px',
+        gap: '10px',
     },
     inputBox: {
         width: '500px',
@@ -64,7 +63,7 @@ const styles = {
         borderRadius: '8px',
         border: '1px solid #d3e0fe',
         fontFamily: 'Raleway, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#1f2b6c',
         outline: 'none',
     },
@@ -81,14 +80,14 @@ const styles = {
         borderRadius: '8px',
         border: '1px solid #d3e0fe',
         fontFamily: 'Raleway, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#1f2b6c',
         outline: 'none',
     },
     label: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 500,
-        fontSize: '20px',
+        fontSize: '24px',
         color: '#1f2b6c',
         marginBottom: '5px',
     },
@@ -104,6 +103,7 @@ const styles = {
     },
     button: {
         width: '300px',
+        height: '50px',
         padding: '10px',
         backgroundColor: '#1f2b6c',
         borderRadius: '8px',
@@ -117,8 +117,32 @@ const styles = {
     buttonLabel: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 600,
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#fff',
+    },
+    googleButton: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '300px',
+        padding: '10px 0',
+        backgroundColor: '#fff',
+        borderRadius: '8px',
+        border: '1px solid #d3e0fe',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s, transform 0.3s',
+        marginTop: '15px',
+    },
+    googleIcon: {
+        width: '20px',
+        height: '20px',
+        marginRight: '10px',
+    },
+    googleButtonLabel: {
+        fontFamily: 'Raleway, sans-serif',
+        fontWeight: 600,
+        fontSize: '20px',
+        color: '#1f2b6c',
     },
     linkContainer: {
         display: 'flex',
@@ -143,6 +167,14 @@ const styles = {
     signUpHover: {
         color: '#0056b3',
     },
+    link: {
+        width: '500px',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingBottom: '20px',
+    }
 };
 
 const LoginPage = () => {
@@ -154,6 +186,7 @@ const LoginPage = () => {
     };
 
     const eyeIcon = isPasswordVisible ? require('../assets/img/Eye.png') : require('../assets/img/Eye-1.png');
+    const googleIcon = require('../assets/img/icon-google.png');
 
     return (
         <div style={styles.container}>
@@ -172,7 +205,7 @@ const LoginPage = () => {
                 <div style={styles.inputWrapper}>
                     <div style={styles.inputBox}>
                         <span style={styles.label}>Số điện thoại</span>
-                        <input type="text" style={styles.inputField} placeholder="Nhập số điện thoại" />
+                        <input type="text" style={styles.inputField} />
                     </div>
                     <div style={styles.inputBox}>
                         <span style={styles.label}>Mật khẩu</span>
@@ -180,7 +213,7 @@ const LoginPage = () => {
                             <input
                                 type={isPasswordVisible ? 'text' : 'password'}
                                 style={styles.inputFieldWithIcon}
-                                placeholder="Nhập mật khẩu"
+
                             />
                             <img
                                 src={eyeIcon}
@@ -189,6 +222,25 @@ const LoginPage = () => {
                                 onClick={togglePasswordVisibility}
                             />
                         </div>
+                    </div>
+                </div>
+                <div style={styles.link}>
+                    <div style={styles.linkContainer}>
+                        <Link to="/forgot-password" style={styles.signUp}>Quên mật khẩu?</Link>
+                    </div>
+                    <div style={styles.linkContainer}>
+                        <span style={styles.noAccount}>Bạn chưa có tài khoản?</span>
+                        <Link
+                            to="/register"
+                            style={{
+                                ...styles.signUp,
+                                ...(isHoveringSignUp ? styles.signUpHover : {}),
+                            }}
+                            onMouseEnter={() => setIsHoveringSignUp(true)}
+                            onMouseLeave={() => setIsHoveringSignUp(false)}
+                        >
+                            Đăng ký
+                        </Link>
                     </div>
                 </div>
                 <button
@@ -204,19 +256,19 @@ const LoginPage = () => {
                 >
                     <span style={styles.buttonLabel}>Đăng nhập</span>
                 </button>
-                <div style={styles.linkContainer}>
-                    <span style={styles.noAccount}>Bạn chưa có tài khoản?</span>
-                    <Link
-                        to="/register"
-                        style={{
-                            ...styles.signUp,
-                            ...(isHoveringSignUp ? styles.signUpHover : {}),
-                        }}
-                        onMouseEnter={() => setIsHoveringSignUp(true)}
-                        onMouseLeave={() => setIsHoveringSignUp(false)}
-                    >
-                        Đăng ký
-                    </Link>
+                <div
+                    style={styles.googleButton}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#f1f3f4';
+                        e.currentTarget.style.transform = 'scale(1.05)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#fff';
+                        e.currentTarget.style.transform = 'scale(1)';
+                    }}
+                >
+                    <img src={googleIcon} alt="Google Icon" style={styles.googleIcon} />
+                    <span style={styles.googleButtonLabel}>Đăng nhập bằng Google</span>
                 </div>
             </div>
         </div>
