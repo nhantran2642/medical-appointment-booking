@@ -1,0 +1,65 @@
+.doctor-list-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.doctor-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.doctor-list-header h2 {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+    font-weight: bold;
+}
+
+.search-bar {
+    width: 300px;
+}
+
+.doctor-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.doctor-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-card h3 {
+    font-size: 18px;
+    color: #333;
+    margin: 10px 0 5px;
+}
+
+.doctor-card p {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.doctor-rating {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}

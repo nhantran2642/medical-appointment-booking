@@ -1,0 +1,71 @@
+/* CalendarLayout.scss */
+
+.site-layout-sider {
+    background: #f0f2f5;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3a3a3a;
+    margin-bottom: 16px;
+}
+
+.compact-calendar {
+    width: 100%;
+    border-radius: 5px;
+    background: #ffffff;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.calendar-menu {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.site-layout-header {
+    background: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.header-title {
+    margin: 0;
+}
+
+.site-layout-content {
+    padding: 20px;
+    background: #ffffff;
+}
+
+.list-item {
+    padding: 10px;
+    background-color: #fafafa;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.booking-button {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    transition: all 0.3s;
+
+    position: fixed;
+    right: 50px;
+    top: 20px;
+
+    &:hover {
+        background-color: #45A049;
+        border-color: #45A049;
+    }
+}

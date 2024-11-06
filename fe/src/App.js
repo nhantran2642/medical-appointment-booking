@@ -9,6 +9,13 @@ import HomeLayout from "./layOuts/homeLayout";
 import AppointmentPage from "./pages/bookappointmentpage";
 import AppointmentDetails from "./pages/detailappointmentpage";
 import BlogPage from "./pages/blogpage";
+import Dashboard from "./pages/adminDashboard";
+
+import CalendarLayout from "./pages/calendarpage";
+import AdLayout from "./layOuts/addashboardLayout";
+import DoctorList from "./pages/doctorPage";
+import DepartmentList from "./pages/medicaldepartmentpage";
+
 // eslint-disable-next-line
 
 
@@ -20,9 +27,16 @@ const Main = () => {
         <Routes>
           {/* Default Layout */}
           <Route path={APP_ROUTER.LOGIN} element={<LoginPage />} />
+          <Route path="/calendar" element={<CalendarLayout />} />
+          <Route path="/admin" element={<AdLayout />}>
+            <Route path="/admin/calendar" element={<CalendarLayout />} />
+            <Route path="/admin/doctor" element={<DoctorList />} />
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/department" element={<DepartmentList />} />
 
-
+          </Route>
           <Route path="/" element={<HomeLayout />}>
+
             <Route path="/about" element={<AboutPage />} />
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />

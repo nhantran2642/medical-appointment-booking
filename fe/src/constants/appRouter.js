@@ -8,4 +8,8 @@ export const APP_ROUTER = {
     BOOKAPOINT: '/bookappointment',
     DETAILAPOINT: '/detailappointment',
     BLOG: '/blogspage',
+    ADDASHBOARD: '/admin/dashboard',
+    CALENDAR: '/admin/calendar',
+    DOCTOR: '/admin/doctor',
+    DEPARTMENT: '/admin/department',
 };

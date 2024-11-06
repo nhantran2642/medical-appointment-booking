@@ -1,0 +1,66 @@
+.dashboard-container {
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #F5F5F5;
+
+    .logo {
+        font-size: 30px;
+        font-weight: bold;
+        color: #007bff;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .ant-menu {
+        border-right: none;
+        font-size: 20px;
+    }
+
+    .logout {
+        color: #dc3545 !important;
+    }
+}
+
+.content {
+    flex: 1;
+    padding: 30px;
+    background-color: #eef2fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+
+    .info-cards {
+        display: flex;
+        gap: 20px;
+
+        .card {
+            width: 250px;
+            text-align: center;
+
+            .icon {
+                font-size: 24px;
+                color: #007bff;
+                margin-bottom: 10px;
+            }
+
+            h3 {
+                margin: 0;
+                font-size: 16px;
+                color: #212529;
+                font-weight: 500;
+            }
+
+            p {
+                font-size: 20px;
+                font-weight: bold;
+                color: #007bff;
+            }
+        }
+    }
+}
