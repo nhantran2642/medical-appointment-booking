@@ -157,12 +157,16 @@ const styles = {
         fontSize: '20px',
         color: '#1f2b6c',
     },
+    linkContainer: {
+        fontSize: '20px',
+        padding: '10px',
+    }
 
 };
 const RegisterPage = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isHoveringButton, setIsHoveringButton] = useState(false);
-    const [isHoveringGoogleButton, setIsHoveringGoogleButton] = useState(false);
+    // const [isHoveringGoogleButton, setIsHoveringGoogleButton] = useState(false);
     const [isHoveringSignIn, setIsHoveringSignIn] = useState(false);
 
     const [email, setEmail] = useState('');
@@ -308,14 +312,14 @@ const RegisterPage = () => {
                 >
                     <span style={styles.buttonLabel}>Đăng ký</span>
                 </button>
-                <div
+                {/* <div
                     style={isHoveringGoogleButton ? { ...styles.googleButton, ...styles.googleButtonHover } : styles.googleButton}
                     onMouseEnter={() => setIsHoveringGoogleButton(true)}
                     onMouseLeave={() => setIsHoveringGoogleButton(false)}
                 >
                     <img src={googleIcon} alt="Google" style={styles.googleIcon} />
                     <span style={styles.googleButtonLabel}>Đăng nhập bằng Google</span>
-                </div>
+                </div> */}
                 <div style={styles.linkContainer}>
                     <span style={styles.haveAccount}>Bạn đã có tài khoản?</span>
                     <span
