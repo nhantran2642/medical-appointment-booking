@@ -1,6 +1,6 @@
 from appointment.models import Appointment
+from authentication.models import User
 from django.db import models
-from patient.models import Patient
 from utilities.base import BaseModel
 
 
@@ -10,7 +10,7 @@ class Notification(BaseModel):
     appointment = models.ForeignKey(
         Appointment, to_field="id", on_delete=models.CASCADE
     )
-    patient = models.ForeignKey(Patient, to_field="id", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, to_field="id", on_delete=models.CASCADE, null=True)
 
     class Meta:
         db_table = "notification"

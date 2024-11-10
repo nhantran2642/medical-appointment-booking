@@ -1,15 +1,24 @@
+from authentication.models import User
 from django.db import models
 from doctor.models import Doctor
-from patient.models import Patient
 from utilities.base import BaseModel
 
 
+class AppointmentStatus(models.TextChoices):
+    SCHEDULED = "Scheduled", "Scheduled"
+    COMPLETED = "Completed", "Completed"
+    CANCELLED = "Cancelled", "Cancelled"
+
+
 class Appointment(BaseModel):
-    appointment_date = models.DateField()
-    appointment_time = models.TimeField()
+    appointment_date = models.DateTimeField()
     status = models.CharField(max_length=255)
-    patient = models.ForeignKey(Patient, to_field="id", on_delete=models.CASCADE)
-    doctor = models.ForeignKey(Doctor, to_field="id", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, related_name="appointments", on_delete=models.DO_NOTHING, null=True
+    )
+    doctor = models.ForeignKey(
+        Doctor, to_field="id", related_name="appointments", on_delete=models.CASCADE
+    )
 
     class Meta:
         ordering = ["-id"]
