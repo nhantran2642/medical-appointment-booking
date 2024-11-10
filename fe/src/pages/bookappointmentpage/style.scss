@@ -116,7 +116,7 @@
     }
 
     .appointment-page-info {
-        flex: 1;
+     
         background: #002855;
         color: #BFD2F8;
         padding: 20px;
@@ -141,6 +141,7 @@
                     margin-bottom: 8px;
                     font-size: 1em;
                     padding: 10px;
+                    gap: 10px;
 
                     span {
                         &:first-child {

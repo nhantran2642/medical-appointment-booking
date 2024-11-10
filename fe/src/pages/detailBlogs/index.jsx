@@ -34,7 +34,7 @@ const BlogPostDetail = () => {
         <div className="blog-post-detail">
             <div className="header" style={{ backgroundImage: `url(${require('../../assets/img/SubHead-detailblog.png')})` }}>
                 <div className="title-head">
-                    <Link to="/">Home</Link> / <Link to="/blogspage">News</Link> / Health Care
+                    <Link to="/">Trang chủ</Link> / <Link to="/blogspage">Tin tức</Link> / Health Care
                 </div>
                 <h1>{currentPost.title}</h1>
                 <p className="meta-info">

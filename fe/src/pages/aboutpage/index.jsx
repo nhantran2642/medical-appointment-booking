@@ -8,9 +8,9 @@ const AboutPage = () => {
         <div className="contact-section">
             <div className="contact-header" style={{ backgroundImage: `url(${require('../../assets/img/SubHead-contact.png')})` }}>
                 <div className="title-head">
-                    <Link to="/">Home</Link> / <Link to="/contact">Contact</Link>
+                    <Link to="/">Trang chủ</Link> / <Link to="/contact">Liên hệ</Link>
                 </div>
-                <h2>Our Contacts</h2>
+                <h2>Liên hệ</h2>
             </div>
 
             <div className="map-container">
@@ -20,23 +20,23 @@ const AboutPage = () => {
 
             <div className="contact-info">
                 <div className="contact-form">
-                    <h2>GET IN TOUCH</h2>
-                    <h3>Contact</h3>
+                    <h2>LIÊN HỆ</h2>
+                    <h3>Hãy liên hệ với chúng tôi</h3>
                     <form>
                         <div className="form-group">
-                            <input type="text" placeholder="Name" required />
+                            <input type="text" placeholder="Họ và tên" required />
                             <hr style={{ height: '61.6px' }} />
                             <input type="email" placeholder="Email" required />
                         </div>
                         <hr style={{ width: '100%' }} />
                         <div className="form-group">
-                            <input type="text" placeholder="Subject" required />
+                            <input type="text" placeholder="Chủ đề" required />
                         </div>
                         <hr style={{ width: '100%' }} />
                         <div className="form-group">
-                            <textarea placeholder="Message" required></textarea>
+                            <textarea placeholder="Tin nhắn" required></textarea>
                         </div>
-                        <button type="submit">Submit</button>
+                        <button type="submit">Gửi</button>
                     </form>
                 </div>
 

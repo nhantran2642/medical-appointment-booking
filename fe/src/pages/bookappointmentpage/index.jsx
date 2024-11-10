@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './style.scss';
-import { doctors } from '../../mock/index.js';
+import { doctors, hours } from '../../mock/index.js';
 
 
 
@@ -35,32 +35,32 @@ const AppointmentPage = () => {
             >
                 <div className="title-head">
                     <div className="title-link">
-                        <Link to="/">Home</Link> / <Link to="/appointment">Book an Appointment</Link>
+                        <Link to="/">Trang chủ</Link> / <Link to="/appointment">Đặt lịch</Link>
                     </div>
-                    <h2>Book an Appointment</h2>
+                    <h2>Đặt lịch</h2>
                 </div>
             </div>
 
             <div className="appointment-page-container">
                 <div className="appointment-page-left">
-                    <h3>Book an Appointment</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare...</p>
+                    <h3>Đặt lịch</h3>
+                    <p>Hãy chọn các thông tin cần thiết</p>
                     <div className="appointment-page-form">
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <input type="text" name="name" placeholder="Name" onChange={handleChange} />
+                                <input type="text" name="name" placeholder="Họ và tên" onChange={handleChange} />
                                 <hr />
                                 <select name="gender" onChange={handleChange}>
-                                    <option value="">Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                                    <option value="">Giới tính</option>
+                                    <option value="male">Nam</option>
+                                    <option value="female">Nữ</option>
                                 </select>
                             </div>
                             <hr style={{ width: '100%' }} />
                             <div className="form-group">
                                 <input type="email" name="email" placeholder="Email" onChange={handleChange} />
                                 <hr />
-                                <input type="text" name="phone" placeholder="Phone" onChange={handleChange} />
+                                <input type="text" name="phone" placeholder="Số điện thoại" onChange={handleChange} />
                             </div>
                             <hr style={{ width: '100%' }} />
 
@@ -73,7 +73,7 @@ const AppointmentPage = () => {
 
                             <div className="form-group">
                                 <select name="doctor" onChange={handleChange}>
-                                    <option value="">Doctor</option>
+                                    <option value="">Bác sĩ</option>
                                     {doctors.map((doctor) => (
                                         <option key={doctor.id} value={doctor.name}>
                                             {doctor.name} - {doctor.specialty}
@@ -82,14 +82,16 @@ const AppointmentPage = () => {
                                 </select>
                                 <hr />
                                 <select name="department" onChange={handleChange}>
-                                    <option value="">Department</option>
-                                    {/* Add options for departments */}
+                                    <option value="">Khung giờ</option>
+                                    {hours.map((hour, index) => (
+                                        <option key={index} value={hour}>{hour}</option>
+                                    ))}
                                 </select>
                             </div>
                             <hr style={{ width: '100%' }} />
 
                             <textarea name="message" placeholder="Message" onChange={handleChange}></textarea>
-                            <button type="submit">Submit</button>
+                            <button type="submit">Đặt lịch</button>
                         </form>
                     </div>
                 </div>
@@ -98,18 +100,18 @@ const AppointmentPage = () => {
                     <div className="appointment-page-hours">
                         <h3>Schedule Hours</h3>
                         <ul>
-                            <li><span>Monday</span><hr /><span>08:00 AM - 07:00 PM</span></li>
-                            <li><span>Tuesday</span><hr /><span>08:00 AM - 07:00 PM</span></li>
-                            <li><span>Wednesday</span><hr /><span>08:00 AM - 07:00 PM</span></li>
-                            <li><span>Thursday</span><hr /><span>08:00 AM - 07:00 PM</span></li>
-                            <li><span>Friday</span><hr /><span>08:00 AM - 07:00 PM</span></li>
-                            <li><span>Saturday</span><hr /><span>08:00 AM - 07:00 PM</span></li>
-                            <li><span>Sunday</span><hr style={{ marginRight: '140px' }} /><span>Closed</span></li>
+                            <li><span>Monday</span><hr /><span>08:00 SA - 07:00 CH</span></li>
+                            <li><span>Tuesday</span><hr /><span>08:00 SA - 07:00 CH</span></li>
+                            <li><span>Wednesday</span><hr /><span>08:00 SA - 07:00 CH</span></li>
+                            <li><span>Thursday</span><hr /><span>08:00 SA - 07:00 CH</span></li>
+                            <li><span>Friday</span><hr /><span>08:00 SA - 07:00 CH</span></li>
+                            <li><span>Saturday</span><hr /><span>08:00 SA - 07:00 CH</span></li>
+                            <li><span>Sunday</span><hr style={{ marginRight: '140px' }} /><span>Đóng cửa</span></li>
                         </ul>
                         <div className='line'></div>
 
                         <div className="emergency">
-                            <p>Emergency</p>
+                            <p>CẤP CỨU</p>
                             <p>(237) 681-812-255</p>
                         </div>
                     </div>

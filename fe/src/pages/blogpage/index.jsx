@@ -12,9 +12,9 @@ const BlogPage = () => {
         <div className="blog-posts">
             <div className="blog-header" style={{ backgroundImage: `url(${require('../../assets/img/SubHead-news.png')})` }}>
                 <div className="title-head">
-                    <Link to="/">Home</Link> / <Link to="/blogspage">Blog Posts</Link>
+                    <Link to="/">Trang chủ</Link> / <Link to="/blogspage">Tin tức</Link>
                 </div>
-                <h2>Blog Posts</h2>
+                <h2>Tin tức</h2>
             </div>
             <div className="blog-content">
                 <div className="posts">
@@ -26,7 +26,7 @@ const BlogPage = () => {
                             <div className="post-content">
                                 <h3>{post.title}</h3>
                                 <p>{post.description}</p>
-                                <Link to={`/blogspage/${post.id}`} className="read-more">Read More</Link>
+                                <Link to={`/blogspage/${post.id}`} className="read-more">Xem chi tiết</Link>
                             </div>
                         </div>
                     ))}

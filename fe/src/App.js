@@ -16,6 +16,10 @@ import BlogPage from "./pages/blogpage";
 import BlogPostDetail from "./pages/detailBlogs";
 import ScrollToTop from "./components/ScrollToTop";
 import ForgotPassword from "./components/Forgot-password";
+import ProfileInfo from "./pages/infoPage";
+import NotificationList from "./pages/notificationPage";
+import Schedule from "./pages/schedulePage";
+import SingleDoctor from "./pages/singleDoctor";
 
 const Main = () => {
   return (
@@ -35,10 +39,15 @@ const Main = () => {
             <Route path="/service" element={<Services />} />
             <Route path="/service/:id" element={<SingleServicePage />} />
             <Route path="/doctor" element={<DoctorsGrid />} />
+            <Route path="/singledoctor/:doctorId" element={<SingleDoctor />} />
             <Route path="/book-appointment" element={<BookAppointmentPage />} />
             <Route path="/detailappointment" element={<AppointmentDetails />} />
             <Route path="/blogspage" element={<BlogPage />} />
             <Route path="/blogspage/:id" element={<BlogPostDetail />} />
+            <Route path="/profile" element={<ProfileInfo />} />
+            <Route path="/notifications" element={<NotificationList />} />
+            <Route path="/schedule" element={<Schedule />} />
+
 
           </Route>
         </Routes>

@@ -1,22 +1,15 @@
 import React from 'react';
 import './style.scss';
 import { Link } from 'react-router-dom';
+import { services } from '../../mock';
 
-const services = [
-    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
-    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
-    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
-    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
-    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
-    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
-];
 
 const Services = () => {
     return (
         <div className="services">
             <div className="services-header" style={{ backgroundImage: `url(${require('../../assets/img/banner-service.png')})` }}>
-                <div className="title-head"> <a href="/">Home</a> / <a href="/service">Service</a></div>
-                <h2>Our Services</h2>
+                <div className="title-head"> <a href="/">Trang chủ</a> / <a href="/service">Dịch vụ</a></div>
+                <h2>Dịch vụ của chúng tôi</h2>
             </div>
             <div className="services-grid">
                 {services.map((service, index) => (
@@ -32,7 +25,7 @@ const Services = () => {
                         <div className="service-content">
                             <h3>{service.title}</h3>
                             <p>{service.description}</p>
-                            <Link to={`/service/${service.id}`} className="learn-more">Learn More →</Link>
+                            <Link to={`/service/${service.id}`} className="learn-more">Xem thêm →</Link>
                         </div>
                     </div>
                 ))}

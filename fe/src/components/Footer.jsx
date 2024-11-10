@@ -74,12 +74,12 @@ const Footer = () => {
                         onMouseEnter={() => setHovered('description')}
                         onMouseLeave={() => setHovered(null)}
                     >
-                        Leading the Way in Medical Excellence, Trusted Care.
+                        Dẫn đầu về chất lượng y tế xuất sắc, dịch vụ chăm sóc đáng tin cậy.
                     </p>
                 </div>
                 <div style={sectionStyle}>
-                    <h3 style={titleStyle}>Important Links</h3>
-                    {['Appointment', 'Doctors', 'Services', 'About Us'].map((link) => (
+                    <h3 style={titleStyle}>Thông tin</h3>
+                    {['Đặt lịch', 'Bác sĩ', 'Dịch vụ', 'Giới thiệu về chúng tôi'].map((link) => (
                         <p
                             key={link}
                             style={{ ...textStyle, ...(hovered === link ? hoverStyle : {}) }}
@@ -91,12 +91,12 @@ const Footer = () => {
                     ))}
                 </div>
                 <div style={sectionStyle}>
-                    <h3 style={titleStyle}>Contact Us</h3>
+                    <h3 style={titleStyle}>Liên hệ</h3>
                     {[
-                        'Call: (237) 681-812-255',
-                        'Email: fildineesoe@gmail.com',
-                        'Address: 0123 Some place',
-                        'Some country',
+                        'Số điện thoại: (237) 681-812-255',
+                        'Email: meddical@gmail.com',
+                        'Địa chỉ: 0123 Hải Phòng',
+                        'Đà Nẵng',
                     ].map((info) => (
                         <p
                             key={info}
@@ -109,7 +109,7 @@ const Footer = () => {
                     ))}
                 </div>
                 <div style={sectionStyle}>
-                    <h3 style={titleStyle}>Newsletter</h3>
+                    <h3 style={titleStyle}>Nhận thông báo</h3>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <div style={{ display: 'flex', flex: '1' }}>
                             <input
@@ -140,7 +140,7 @@ const Footer = () => {
             </div>
             <div style={dividerStyle}></div>
             <p>
-                © 2024 Hospital’s name All Rights Reserved by PNTEC-LTD
+                © 2024 Hospital’s name All Rights Reserved by NguLinh
             </p>
             <div>
                 <img src={SocialIcon1} alt="Social Icon 1" style={{ margin: '0 5px' }} />

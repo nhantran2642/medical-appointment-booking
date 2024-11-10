@@ -1,0 +1,70 @@
+.single-doctor-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    .doctor-profile {
+        width: 100%;
+        max-width: 600px;
+        text-align: center;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        .doctor-photo {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .doctor-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .doctor-specialty {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .doctor-bio {
+            font-size: 16px;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+
+            a img {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        .appointment-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #1f2b6c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+
+            &:hover {
+                background-color: #0056b3;
+            }
+        }
+    }
+}
