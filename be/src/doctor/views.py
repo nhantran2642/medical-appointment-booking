@@ -5,6 +5,8 @@ from .serializers import DoctorSerializer
 
 
 class DoctorViewSet(viewsets.ModelViewSet):
+    serializer_class = DoctorSerializer
+
     def get_serializer_class(self):
         if self.action == "create":
             return DoctorSerializer

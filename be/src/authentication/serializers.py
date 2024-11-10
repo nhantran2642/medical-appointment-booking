@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from api import constants, settings
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.validators import validate_email
@@ -133,7 +131,7 @@ class VerifyCodeSerializer(serializers.ModelSerializer):
             raise NotFound("Code is outdated")
 
         UserVerifyCode.objects.filter(user_id=user.id).delete()
-        user.last_login = timezone.now() + timedelta(days=settings.TWO_FA_EXPIRE)
+        user.last_login = timezone.now()
         user.save()
         refresh = user.tokens()
         return {"email": user.email, **refresh}

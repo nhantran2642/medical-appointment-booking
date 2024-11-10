@@ -8,7 +8,6 @@ from authentication.service import gen_verify_code
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
-from django.utils import timezone
 from django.utils.encoding import smart_bytes, smart_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, status, views, viewsets
@@ -21,7 +20,6 @@ from utilities.email.mailer import (
     send_verify_login,
 )
 from utilities.permission import IsAuthenticated
-from yaml import serialize
 
 from .models import User
 from .serializers import (
@@ -122,10 +120,7 @@ class LoginAPIView(views.APIView):
         except User.DoesNotExist:
             raise NotFound("Invalid email")
 
-        if (
-            not user.last_login
-            or user.last_login > timezone.now() + timedelta(days=settings.TWO_FA_EXPIRE)
-        ) and user.role == USER_ROLE["USER"]:
+        if not user.last_login and user.role == USER_ROLE["USER"]:
             verify_code = gen_verify_code(user)
 
             send_verify_login(user, verify_code)
