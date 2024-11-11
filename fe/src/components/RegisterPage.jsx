@@ -169,6 +169,7 @@ const RegisterPage = () => {
     // const [isHoveringGoogleButton, setIsHoveringGoogleButton] = useState(false);
     const [isHoveringSignIn, setIsHoveringSignIn] = useState(false);
 
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
@@ -216,11 +217,33 @@ const RegisterPage = () => {
         const isEmailValid = validateEmail();
         const isPasswordValid = validatePassword();
         const isPhoneValid = validatePhone();
+
         if (isEmailValid && isPasswordValid && isPhoneValid) {
-            console.log("Đăng ký thành công!");
-            // Thêm xử lý đăng ký ở đây
+            const response = {
+                status: "success",
+                message: "Đăng ký thành công!",
+                data: {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    phone: phone
+                }
+            };
+            console.log(response.data);
+        } else {
+            const response = {
+                status: "error",
+                message: "Thông tin đăng ký không hợp lệ",
+                errors: {
+                    email: isEmailValid ? null : "Email không hợp lệ",
+                    password: isPasswordValid ? null : "Mật khẩu không hợp lệ",
+                    phone: isPhoneValid ? null : "Số điện thoại không hợp lệ"
+                }
+            };
+            console.log(response.message);
         }
     };
+
 
     return (
         <div style={styles.container}>
