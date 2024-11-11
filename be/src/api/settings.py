@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     "rest_framework_swagger",
     "drf_yasg",
     "authentication",
-    "doctor",
+    "corsheaders" "doctor",
     "appointment",
     "patient",
     "medical_record",
@@ -71,6 +71,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -84,8 +86,8 @@ AUTH_USER_MODEL = "authentication.User"
 
 VERSION = os.environ.get("VERSION", "v1")
 
-CORS_ORIGIN_WHITELIST = os.environ.get(
-    "CORS_ORIGIN_WHITELIST", "http://localhost:3000"
+CORS_ALLOWED_ORIGINS = os.environ.get(
+    "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
 ).split(",")
 
 ROOT_URLCONF = "api.urls"
