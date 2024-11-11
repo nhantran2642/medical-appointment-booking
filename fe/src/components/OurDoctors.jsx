@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { doctors } from '../mock';
+import { useNavigate } from 'react-router-dom';
 
 const OurDoctors = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const doctorsPerPage = 3;
     const totalPages = Math.ceil(doctors.length / doctorsPerPage);
+    const navigate = useNavigate();
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
@@ -12,6 +14,10 @@ const OurDoctors = () => {
 
     const startIndex = currentPage * doctorsPerPage;
     const displayedDoctors = doctors.slice(startIndex, startIndex + doctorsPerPage);
+
+    const handleProfileClick = (id) => {
+        navigate(`/singledoctor/${id}`);
+    };
 
     const containerStyle = {
         textAlign: 'center',
@@ -110,11 +116,11 @@ const OurDoctors = () => {
                     <div
                         key={index}
                         style={cardStyle}
-                        onMouseEnter={e => {
+                        onMouseEnter={(e) => {
                             e.currentTarget.style.transform = 'scale(1.05)';
                             e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)';
                         }}
-                        onMouseLeave={e => {
+                        onMouseLeave={(e) => {
                             e.currentTarget.style.transform = 'scale(1)';
                             e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
                         }}
@@ -128,7 +134,12 @@ const OurDoctors = () => {
                                     <img key={i} src={icon} alt="Social Icon" />
                                 ))}
                             </div>
-                            <a href="#" style={profileButtonStyle}>Xem thông tin</a>
+                            <button
+                                style={profileButtonStyle}
+                                onClick={() => handleProfileClick(doctor.id)}
+                            >
+                                Xem thông tin
+                            </button>
                         </div>
                     </div>
                 ))}
@@ -153,4 +164,5 @@ const OurDoctors = () => {
         </div>
     );
 };
+
 export default OurDoctors;

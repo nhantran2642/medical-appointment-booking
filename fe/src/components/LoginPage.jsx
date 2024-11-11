@@ -186,7 +186,7 @@ const LoginPage = () => {
     };
 
     const eyeIcon = isPasswordVisible ? require('../assets/img/Eye.png') : require('../assets/img/Eye-1.png');
-    const googleIcon = require('../assets/img/icon-google.png');
+    // const googleIcon = require('../assets/img/icon-google.png');
 
     return (
         <div style={styles.container}>
@@ -204,7 +204,7 @@ const LoginPage = () => {
             <div style={styles.rightColumn}>
                 <div style={styles.inputWrapper}>
                     <div style={styles.inputBox}>
-                        <span style={styles.label}>Số điện thoại</span>
+                        <span style={styles.label}>Email</span>
                         <input type="text" style={styles.inputField} />
                     </div>
                     <div style={styles.inputBox}>
@@ -256,7 +256,7 @@ const LoginPage = () => {
                 >
                     <span style={styles.buttonLabel}>Đăng nhập</span>
                 </button>
-                <div
+                {/* <div
                     style={styles.googleButton}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#f1f3f4';
@@ -269,7 +269,7 @@ const LoginPage = () => {
                 >
                     <img src={googleIcon} alt="Google Icon" style={styles.googleIcon} />
                     <span style={styles.googleButtonLabel}>Đăng nhập bằng Google</span>
-                </div>
+                </div> */}
             </div>
         </div>
     );

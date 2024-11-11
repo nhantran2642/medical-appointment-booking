@@ -1,6 +1,3 @@
-import doctorImage1 from '../assets/img/doctor-1.png';
-import doctorImage2 from '../assets/img/doctor-2.png';
-import doctorImage3 from '../assets/img/doctor-3.png';
 const mockBlogPosts = [
     {
         id: 1,
@@ -77,27 +74,35 @@ const contactDetails = [
 
 const doctors = [
     {
+        id: 1,
         name: "Dr. John Doe",
         specialty: "Cardiology",
         image: require("../assets/img/doctor-1.png"),
+        bio: "Dr. John Doe is an experienced cardiologist with over 15 years of practice, specializing in heart diseases and surgeries.",
         social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")]
     },
     {
+        id: 2,
         name: "Dr. Jane Smith",
         specialty: "Neurology",
         image: require("../assets/img/doctor-2.png"),
+        bio: "Dr. John Doe is an experienced cardiologist with over 15 years of practice, specializing in heart diseases and surgeries.",
         social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")]
     },
     {
+        id: 3,
         name: "Dr. Emily Johnson",
         specialty: "Pediatrics",
         image: require("../assets/img/doctor-3.png"),
+        bio: "Dr. John Doe is an experienced cardiologist with over 15 years of practice, specializing in heart diseases and surgeries.",
         social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")]
     },
     {
+        id: 4,
         name: "Dr. Michael Brown",
         specialty: "Orthopedics",
         image: require("../assets/img/doctor-3.png"),
+        bio: "Dr. John Doe is an experienced cardiologist with over 15 years of practice, specializing in heart diseases and surgeries.",
         social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")]
     }
 ];
@@ -200,4 +205,71 @@ const articles = [
         likes: 86
     }
 ];
-export { mockBlogPosts, contactDetails, doctors, recentPosts, categories, cardData, specialties, articles };
+const menuItems = [
+    { label: 'Hồ sơ', route: '/profile' },
+    { label: 'Lịch khám', route: '/schedule' },
+    { label: 'Thông báo', route: '/notifications' },
+    { label: 'Đăng xuất', route: '/login' },
+];
+const schedules = [
+    {
+        id: 1,
+        name: 'Sally Trần',
+        email: 'sallysayhi@gmail.com',
+        date: '10/10/2024',
+        time: '9h-10h SA',
+        doctor: 'Mai Văn Hà',
+        department: 'Răng-Hàm-Mặt',
+        status: 'Sắp tới',
+    },
+    {
+        id: 2,
+        name: 'Sally Trần',
+        email: 'sallysayhi@gmail.com',
+        date: '10/10/2024',
+        time: '9h-10h SA',
+        doctor: 'Mai Văn Hà',
+        department: 'Răng-Hàm-Mặt',
+        status: 'Đã khám',
+    },
+];
+const services = [
+    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
+    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
+    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
+    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
+    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
+    { title: "Free Checkup", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat convallis felis vitae tortor augue. Velit nascetur massa in." },
+];
+
+const notifications = [
+    {
+        title: '🎉HOÀN TIỀN 5% khi đặt lịch tiêm HPV qua Meddical🎉',
+        description: '🎉20/10 này, đừng quên chăm sóc bản thân mình bằng cách chủ động phòng ngừa HPV từ sớm Nàng nhé!📍 Bệnh viện Đa khoa Quốc tế Hoàn Mỹ Thủ Đức. 💯Đặc biệt, khi đặt lịch qua Medpro, Nàng sẽ nhận được ưu đãi hoàn tiền lên đến 5% trên tổng hóa đơn thanh toán nữa đó! 👉 Đặt lịch ngay!',
+        time: '1 tuần trước',
+    },
+    {
+        title: '🔥TẶNG VOUCHER 50% Xét Nghiệm Ung Thư Cổ Tử Cung🔥',
+        description: '🔥Nhân dịp 20/10, Dr Marie dành tặng Nàng Voucher 50% gói “Xét nghiệm ung thư cổ tử cung” 🌷⏰Thời gian áp dụng: Từ nay đến hết ngày 5/11/2024. Đặc biệt hơn hết, bạn còn được hoàn tiền 5% khi đặt lịch khám qua Medpro nữa đó! Đặt khám ngay để không bỏ lỡ “Double Voucher” lần này bạn nhé!🔥',
+        time: '2 tuần trước',
+    },
+    {
+        title: '🔥Giảm giá 30% điều trị da liễu🔥',
+        description: '🔥Phòng khám Chuyên khoa Da Trần Thịnh đang có chương trình GIẢM GIÁ 30% cho tất cả các gói điều trị!💡 Đừng bỏ lỡ cơ hội làm đẹp với đội ngũ bác sĩ chuyên nghiệp và công nghệ hiện đại.⚡ Ưu đãi chỉ đến hết ngày 30/9.👉 Nhanh tay đặt lịch trên Meddical nhé!',
+        time: '15/09/2024 19:35',
+    }
+];
+const hours = [
+    "8h SA- 9h SA",
+    "9h SA - 10h SA",
+    "10h SA - 11h SA",
+    "11h SA - 12h CH",
+    "1h CH - 2h CH",
+    "2h CH - 3h CH",
+    "3h CH - 4h CH",
+    "4h CH - 5h CH",
+    "5h CH - 6h CH",
+    "6h CH - 7h CH",
+    "7h CH - 8h CH",
+];
+export { mockBlogPosts, contactDetails, doctors, recentPosts, categories, cardData, specialties, articles, menuItems, schedules, notifications, services, hours };

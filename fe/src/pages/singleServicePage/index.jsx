@@ -6,8 +6,8 @@ const ServicesPage = () => {
     return (
         <div className="services-page">
             <div className="header-banner">
-                <div className="title-head"> <a href="/">Home</a> / <a href="/service">Service</a>/ <a href="/service">Read more</a></div>
-                <h2>Our Services</h2>
+                <div className="title-head"> <a href="/">Trang chủ</a> / <a href="/service">Dịch vụ</a>/ <a href="/service">Xem thêm</a></div>
+                <h2>Dịch vụ của chúng tôi</h2>
             </div>
 
             <div className="services-section">
@@ -35,7 +35,7 @@ const ServicesPage = () => {
                     <div className="services-content">
                         <img src={require('../../assets/img/doctor_consulting.png')} alt="Service Icon" />
                         <div className="points">
-                            <h2>A passion for putting patients first</h2>
+                            <h2>Niềm đam mê đặt bệnh nhân lên hàng đầu</h2>
                             <ul className="list-points">
                                 {[
                                     "Niềm đam mê chữa bệnh",
@@ -62,8 +62,7 @@ const ServicesPage = () => {
                             </ul>
                         </div>
                         <p className="description">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare.
-                        </p>
+                            Bệnh viện Meddical là một trong những cơ sở y tế hàng đầu với sứ mệnh chăm sóc sức khỏe toàn diện và chất lượng cao cho cộng đồng. Với đội ngũ bác sĩ, chuyên gia y tế dày dạn kinh nghiệm và trang thiết bị hiện đại, bệnh viện mang đến các dịch vụ y tế đa dạng từ chẩn đoán, điều trị đến phục hồi chức năng trong nhiều chuyên khoa khác nhau như tim mạch, thần kinh, nhi khoa, chỉnh hình và nhiều lĩnh vực khác. Bệnh viện Meddical luôn nỗ lực không ngừng để đem lại sự an tâm, hài lòng và sức khỏe tốt nhất cho từng bệnh nhân, trở thành đối tác đáng tin cậy trong hành trình chăm sóc sức khỏe.                        </p>
                     </div>
                 </div>
             </div>
