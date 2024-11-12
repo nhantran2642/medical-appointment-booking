@@ -24,6 +24,7 @@ class CustomAuthorizationMiddleware:
             "reset_password",
             "password-reset",
             "redoc",
+            "static",
         ]
         if request.path != "/":
             for endpoint in public_endpoints:
