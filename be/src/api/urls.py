@@ -17,7 +17,6 @@ Including another URLconf
 
 from api import settings
 from django.conf.urls import include
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
@@ -36,18 +35,20 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=[permissions.AllowAny],
 )
-# schema_api_docs = []
-# if settings.DEBUG:
-schema_api_docs = [
-    path(
-        "",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="Schema Swagger UI",
-    ),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-]
+schema_api_docs = []
+if settings.DEBUG:
+    schema_api_docs = [
+        path(
+            "",
+            schema_view.with_ui("swagger", cache_timeout=0),
+            name="Schema Swagger UI",
+        ),
+        path(
+            "redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+        ),
+    ]
 
 ver = settings.VERSION
 

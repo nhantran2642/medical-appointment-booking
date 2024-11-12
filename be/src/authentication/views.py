@@ -19,7 +19,6 @@ from utilities.email.mailer import (
     send_verify_email,
     send_verify_login,
 )
-from utilities.permission import IsAuthenticated
 
 from .models import User
 from .serializers import (
@@ -119,7 +118,6 @@ class LoginAPIView(views.APIView):
             user = User.objects.get(email=request.data["email"])
         except User.DoesNotExist:
             raise NotFound("Invalid email")
-
         if not user.last_login and user.role == USER_ROLE["USER"]:
             verify_code = gen_verify_code(user)
 
@@ -151,7 +149,6 @@ class VerifyCodeAPIView(views.APIView):
 
 class LogoutAPIView(views.APIView):
     serializer_class = LogoutSerializer
-    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -184,7 +181,6 @@ class ResendCodeAPIView(views.APIView):
 
 class ChangePasswordAPIView(generics.GenericAPIView):
     serializer_class = ChangePasswordSerializer
-    permissions_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         serializer = self.serializer_class(
