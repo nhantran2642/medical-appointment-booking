@@ -23,11 +23,14 @@ class CustomAuthorizationMiddleware:
             "verify_email",
             "reset_password",
             "password-reset",
+            "redoc",
         ]
-
-        for endpoint in public_endpoints:
-            if endpoint in request.path:
-                return self.get_response(request)
+        if request.path != "/":
+            for endpoint in public_endpoints:
+                if endpoint in request.path:
+                    return self.get_response(request)
+        else:
+            return self.get_response(request)
 
         auth = request.headers.get("Authorization", "").split(" ")
 
