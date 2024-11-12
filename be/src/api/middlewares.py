@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from rest_framework.exceptions import AuthenticationFailed
 
 
-class CustomAuthorizationMiddleware:
+class AuthenticationMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
