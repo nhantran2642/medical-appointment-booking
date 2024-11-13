@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import googleIcon from '../assets/img/icon-google.png';
+import { Link, useNavigate } from 'react-router-dom';
+import AuthRepository from '../api/index';
+import { camelToSnakeKeys } from '../api/utils';
+// import googleIcon from '../assets/img/icon-google.png';
+
 const styles = {
     container: {
         display: 'flex',
@@ -59,7 +62,6 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
-
     },
     inputField: {
         height: '40px',
@@ -127,61 +129,27 @@ const styles = {
         color: 'red',
         fontSize: '16px',
     },
-    googleButton: {
-        width: '300px',
-        padding: '10px',
-        margin: '10px',
-        backgroundColor: '#fff',
-        borderRadius: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '10px',
-        border: '1px solid #d3e0fe',
-        cursor: 'pointer',
-        transition: 'background-color 0.3s, transform 0.3s',
-        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-    },
-    googleButtonHover: {
-        backgroundColor: '#f1f1f1',
-        transform: 'scale(1.05)',
-    },
-    googleIcon: {
-        width: '20px',
-        height: '20px',
-        objectFit: 'contain',
-    },
-    googleButtonLabel: {
-        fontFamily: 'Raleway, sans-serif',
-        fontWeight: 700,
-        fontSize: '20px',
-        color: '#1f2b6c',
-    },
     linkContainer: {
         fontSize: '20px',
         padding: '10px',
     }
-
 };
+
 const RegisterPage = () => {
+    const navigate = useNavigate();
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isHoveringButton, setIsHoveringButton] = useState(false);
-    // const [isHoveringGoogleButton, setIsHoveringGoogleButton] = useState(false);
-    const [isHoveringSignIn, setIsHoveringSignIn] = useState(false);
-
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [address, setAddress] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [phoneError, setPhoneError] = useState('');
 
-    const togglePasswordVisibility = () => {
-        setIsPasswordVisible(prevState => !prevState);
-    };
 
     const validateEmail = () => {
         const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -204,7 +172,7 @@ const RegisterPage = () => {
     };
 
     const validatePhone = () => {
-        const phoneRegex = /^[0-9]{10,11}$/;
+        const phoneRegex = /^[0-9]{10}$/;
         if (!phoneRegex.test(phone)) {
             setPhoneError('Số điện thoại không hợp lệ');
             return false;
@@ -213,37 +181,39 @@ const RegisterPage = () => {
         return true;
     };
 
-    const handleRegister = () => {
-        const isEmailValid = validateEmail();
-        const isPasswordValid = validatePassword();
-        const isPhoneValid = validatePhone();
-
-        if (isEmailValid && isPasswordValid && isPhoneValid) {
-            const response = {
-                status: "success",
-                message: "Đăng ký thành công!",
-                data: {
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    phone: phone
-                }
-            };
-            console.log(response.data);
-        } else {
-            const response = {
-                status: "error",
-                message: "Thông tin đăng ký không hợp lệ",
-                errors: {
-                    email: isEmailValid ? null : "Email không hợp lệ",
-                    password: isPasswordValid ? null : "Mật khẩu không hợp lệ",
-                    phone: isPhoneValid ? null : "Số điện thoại không hợp lệ"
-                }
-            };
-            console.log(response.message);
-        }
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
     };
 
+    const eyeIcon = isPasswordVisible ? require('../assets/img/Eye.png') : require('../assets/img/Eye-1.png');
+
+
+    const handleRegister = async () => {
+        if (emailError || phoneError || passwordError) {
+            alert('Vui lòng sửa các lỗi trước khi đăng ký');
+            return;
+        }
+
+        const userData = {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            phone: phone,
+            address: address,
+            password: password,
+            role_id: 4,
+        };
+
+        const snakeCaseData = camelToSnakeKeys(userData);
+
+
+        try {
+            await AuthRepository.registerUser(snakeCaseData);
+            navigate('/verify-email');
+        } catch (error) {
+            alert(error.message);
+        }
+    };
 
     return (
         <div style={styles.container}>
@@ -267,8 +237,8 @@ const RegisterPage = () => {
                                 type="text"
                                 id="firstName"
                                 value={firstName}
-                                onChange={e => setFirstName(e.target.value)}
-                                style={styles.inputName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                style={styles.inputField}
                             />
                         </div>
                         <div style={styles.inputBox}>
@@ -277,20 +247,20 @@ const RegisterPage = () => {
                                 type="text"
                                 id="lastName"
                                 value={lastName}
-                                onChange={e => setLastName(e.target.value)}
-                                style={styles.inputName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                style={styles.inputField}
                             />
                         </div>
                     </div>
                     <div style={styles.inputBox}>
                         <label style={styles.label} htmlFor="email">Email</label>
                         <input
-                            type="text"
+                            type="email"
                             id="email"
                             value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            style={styles.inputField}
+                            onChange={(e) => setEmail(e.target.value)}
                             onBlur={validateEmail}
+                            style={styles.inputField}
                         />
                         {emailError && <div style={styles.errorMessage}>{emailError}</div>}
                     </div>
@@ -300,26 +270,37 @@ const RegisterPage = () => {
                             type="text"
                             id="phone"
                             value={phone}
-                            onChange={e => setPhone(e.target.value)}
-                            style={styles.inputField}
+                            onChange={(e) => setPhone(e.target.value)}
                             onBlur={validatePhone}
+                            style={styles.inputField}
                         />
                         {phoneError && <div style={styles.errorMessage}>{phoneError}</div>}
                     </div>
                     <div style={styles.inputBox}>
-                        <label style={styles.label} htmlFor="password">Mật khẩu</label>
+                        <label style={styles.label} htmlFor="address">Địa chỉ</label>
+                        <input
+                            type="text"
+                            id="address"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            style={styles.inputField}
+                        />
+                    </div>
+
+                    <div style={styles.inputBox}>
+                        <span style={styles.label} htmlFor="password">Mật khẩu</span>
                         <div style={{ position: 'relative' }}>
                             <input
-                                type={isPasswordVisible ? 'text' : 'password'}
                                 id="password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
+                                type={isPasswordVisible ? 'text' : 'password'}
                                 style={styles.inputField}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 onBlur={validatePassword}
                             />
                             <img
-                                src={isPasswordVisible ? require('../assets/img/Eye.png') : require('../assets/img/Eye-1.png')}
-                                alt="eye icon"
+                                src={eyeIcon}
+                                alt={isPasswordVisible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
                                 style={styles.icon}
                                 onClick={togglePasswordVisibility}
                             />
@@ -329,29 +310,30 @@ const RegisterPage = () => {
                 </div>
                 <button
                     onClick={handleRegister}
-                    style={isHoveringButton ? { ...styles.button, ...styles.buttonHover } : styles.button}
+                    style={{
+                        ...styles.button,
+                        ...(isHoveringButton && styles.buttonHover),
+                    }}
                     onMouseEnter={() => setIsHoveringButton(true)}
                     onMouseLeave={() => setIsHoveringButton(false)}
                 >
                     <span style={styles.buttonLabel}>Đăng ký</span>
                 </button>
-                {/* <div
-                    style={isHoveringGoogleButton ? { ...styles.googleButton, ...styles.googleButtonHover } : styles.googleButton}
-                    onMouseEnter={() => setIsHoveringGoogleButton(true)}
-                    onMouseLeave={() => setIsHoveringGoogleButton(false)}
+                {/* <button
+                    style={{
+                        ...styles.googleButton,
+                        ...(isHoveringButton && styles.googleButtonHover),
+                    }}
+                    onMouseEnter={() => setIsHoveringSignIn(true)}
+                    onMouseLeave={() => setIsHoveringSignIn(false)}
                 >
                     <img src={googleIcon} alt="Google" style={styles.googleIcon} />
                     <span style={styles.googleButtonLabel}>Đăng nhập bằng Google</span>
-                </div> */}
+                </button> */}
                 <div style={styles.linkContainer}>
-                    <span style={styles.haveAccount}>Bạn đã có tài khoản?</span>
-                    <span
-                        style={isHoveringSignIn ? { ...styles.signIn, ...styles.signInHover } : styles.signIn}
-                        onMouseEnter={() => setIsHoveringSignIn(true)}
-                        onMouseLeave={() => setIsHoveringSignIn(false)}
-                    >
-                        <Link to="/login">Đăng nhập</Link>
-                    </span>
+                    <p>
+                        Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
+                    </p>
                 </div>
             </div>
         </div>

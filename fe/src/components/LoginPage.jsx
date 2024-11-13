@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import AuthRepository from '../api/index'
+import { camelToSnakeKeys } from '../api/utils';
 const styles = {
     container: {
         display: 'flex',
@@ -120,30 +121,6 @@ const styles = {
         fontSize: '24px',
         color: '#fff',
     },
-    googleButton: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '300px',
-        padding: '10px 0',
-        backgroundColor: '#fff',
-        borderRadius: '8px',
-        border: '1px solid #d3e0fe',
-        cursor: 'pointer',
-        transition: 'background-color 0.3s, transform 0.3s',
-        marginTop: '15px',
-    },
-    googleIcon: {
-        width: '20px',
-        height: '20px',
-        marginRight: '10px',
-    },
-    googleButtonLabel: {
-        fontFamily: 'Raleway, sans-serif',
-        fontWeight: 600,
-        fontSize: '20px',
-        color: '#1f2b6c',
-    },
     linkContainer: {
         display: 'flex',
         gap: '4px',
@@ -167,26 +144,48 @@ const styles = {
     signUpHover: {
         color: '#0056b3',
     },
-    link: {
-        width: '500px',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingBottom: '20px',
-    }
 };
 
 const LoginPage = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [isHoveringSignUp, setIsHoveringSignUp] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
+    const handleLogin = async () => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const loginData = camelToSnakeKeys({ email, password });
+
+            const response = await AuthRepository.loginUser(loginData);
+
+            if (response && response.status === 'success') {
+                alert("Đăng nhập thành công!");
+                navigate('/home');
+            } else {
+                setError("Sai email hoặc mật khẩu!");
+            }
+        } catch (error) {
+            console.error("Lỗi đăng nhập:", error);
+
+            if (error.response && error.response.data && error.response.data.message) {
+                setError(error.response.data.message);
+            } else {
+                setError("Đã xảy ra lỗi, vui lòng thử lại sau.");
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
 
     const eyeIcon = isPasswordVisible ? require('../assets/img/Eye.png') : require('../assets/img/Eye-1.png');
-    // const googleIcon = require('../assets/img/icon-google.png');
 
     return (
         <div style={styles.container}>
@@ -205,7 +204,12 @@ const LoginPage = () => {
                 <div style={styles.inputWrapper}>
                     <div style={styles.inputBox}>
                         <span style={styles.label}>Email</span>
-                        <input type="text" style={styles.inputField} />
+                        <input
+                            type="text"
+                            style={styles.inputField}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
                     </div>
                     <div style={styles.inputBox}>
                         <span style={styles.label}>Mật khẩu</span>
@@ -213,7 +217,8 @@ const LoginPage = () => {
                             <input
                                 type={isPasswordVisible ? 'text' : 'password'}
                                 style={styles.inputFieldWithIcon}
-
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                             <img
                                 src={eyeIcon}
@@ -224,27 +229,15 @@ const LoginPage = () => {
                         </div>
                     </div>
                 </div>
-                <div style={styles.link}>
-                    <div style={styles.linkContainer}>
-                        <Link to="/forgot-password" style={styles.signUp}>Quên mật khẩu?</Link>
-                    </div>
-                    <div style={styles.linkContainer}>
-                        <span style={styles.noAccount}>Bạn chưa có tài khoản?</span>
-                        <Link
-                            to="/register"
-                            style={{
-                                ...styles.signUp,
-                                ...(isHoveringSignUp ? styles.signUpHover : {}),
-                            }}
-                            onMouseEnter={() => setIsHoveringSignUp(true)}
-                            onMouseLeave={() => setIsHoveringSignUp(false)}
-                        >
-                            Đăng ký
-                        </Link>
-                    </div>
+                <div style={styles.linkContainer}>
+                    <Link to="/forgot-password" style={styles.signUp}>Quên mật khẩu?</Link>
+                    <span style={styles.noAccount}>Bạn chưa có tài khoản?</span>
+                    <Link to="/register" style={styles.signUp}>Đăng ký</Link>
                 </div>
                 <button
                     style={styles.button}
+                    onClick={handleLogin}
+                    disabled={isLoading}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#0056b3';
                         e.currentTarget.style.transform = 'scale(1.05)';
@@ -254,22 +247,9 @@ const LoginPage = () => {
                         e.currentTarget.style.transform = 'scale(1)';
                     }}
                 >
-                    <span style={styles.buttonLabel}>Đăng nhập</span>
+                    {isLoading ? <span>Đang xử lý...</span> : <span style={styles.buttonLabel}>Đăng nhập</span>}
                 </button>
-                {/* <div
-                    style={styles.googleButton}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f1f3f4';
-                        e.currentTarget.style.transform = 'scale(1.05)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#fff';
-                        e.currentTarget.style.transform = 'scale(1)';
-                    }}
-                >
-                    <img src={googleIcon} alt="Google Icon" style={styles.googleIcon} />
-                    <span style={styles.googleButtonLabel}>Đăng nhập bằng Google</span>
-                </div> */}
+                {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
             </div>
         </div>
     );
