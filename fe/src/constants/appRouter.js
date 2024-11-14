@@ -12,4 +12,6 @@ export const APP_ROUTER = {
     CALENDAR: '/admin/calendar',
     DOCTOR: '/admin/doctor',
     DEPARTMENT: '/admin/department',
+    PATIENT: '/admin/patientlist',
+    PAYMENT: '/admin/paymentpage',
 };

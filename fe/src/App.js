@@ -15,6 +15,8 @@ import CalendarLayout from "./pages/calendarpage";
 import AdLayout from "./layOuts/addashboardLayout";
 import DoctorList from "./pages/doctorPage";
 import DepartmentList from "./pages/medicaldepartmentpage";
+import PatientList from "./pages/patientpage";
+import PaymentPage from "./pages/paymentpage";
 
 // eslint-disable-next-line
 
@@ -33,7 +35,8 @@ const Main = () => {
             <Route path="/admin/doctor" element={<DoctorList />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/department" element={<DepartmentList />} />
-
+            <Route path="/admin/patientlist" element={<PatientList />} />
+            <Route path="/admin/paymentpage" element={<PaymentPage />} />
           </Route>
           <Route path="/" element={<HomeLayout />}>
 
