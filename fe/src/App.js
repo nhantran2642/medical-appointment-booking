@@ -16,7 +16,6 @@ import BlogPage from "./pages/blogpage";
 import BlogPostDetail from "./pages/detailBlogs";
 import ScrollToTop from "./components/ScrollToTop";
 import ForgotPassword from "./components/Forgot-password";
-import VerifyEmail from "./components/VerifyEmail";
 import ProfileInfo from "./pages/infoPage";
 import NotificationList from "./pages/notificationPage";
 import Schedule from "./pages/schedulePage";
@@ -34,10 +33,9 @@ const Main = () => {
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
-          <Route path="/verify-email/:token" element={<SuccessEmail />} />
+          <Route path="/verified-email" element={<SuccessEmail />} />
 
           <Route path="/" element={<HomeLayout />}>
             <Route path="/contact" element={<AboutPage />} />

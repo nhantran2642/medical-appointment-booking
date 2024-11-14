@@ -1,32 +1,65 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AuthRepository from '../api/index';
+const styles = {
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        textAlign: 'center',
+        padding: '20px',
+    },
+    error: {
+        color: 'red',
+    },
+    success: {
+        color: 'green',
+    },
+};
 
-const VerifyEmailPage = () => {
+const EmailVerification = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
-        const intervalId = setInterval(async () => {
-            try {
-                const isVerified = await AuthRepository.checkEmailVerified();
-                if (isVerified) {
-                    clearInterval(intervalId);
-                    navigate('/email-verified');
-                }
-            } catch (error) {
-                console.error(error.message);
-            }
-        }, 5000);
+        const queryParams = new URLSearchParams(location.search);
+        const verificationCode = queryParams.get('p');
 
-        return () => clearInterval(intervalId);
-    }, [navigate]);
+        if (verificationCode) {
+            const verifyEmail = async () => {
+                try {
+                    const response = await AuthRepository.verifyEmail(verificationCode);
+                    if (response.success) {
+                        console.log('Email verified:', response);
+                        setSuccessMessage('Xác thực email thành công!');
+                        setTimeout(() => {
+                            navigate('/verified-email');
+                        }, 3000);
+                    } else {
+                        setError('Mã xác thực không hợp lệ hoặc đã hết hạn.');
+                    }
+                } catch (error) {
+                    console.error('Error verifying email:', error);
+                    setError('Đã có lỗi xảy ra khi xác thực email.');
+                }
+            };
+
+            verifyEmail();
+        }
+    }, [location, navigate]);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', textAlign: 'center' }}>
-            <h1>Xin mời bạn kiểm tra email</h1>
-            <p>Chúng tôi đã gửi một email xác thực đến địa chỉ email của bạn. Vui lòng kiểm tra hộp thư đến và làm theo hướng dẫn để xác thực tài khoản của bạn.</p>
+        <div style={styles.container}>
+            <h1>Hãy kiểm tra email của bạn</h1>
+            <p>Chúng tôi đã gửi mã xác thực vào gmail của bạn. Hãy làm theo hướng dẫn trong gmail để hoàn tất đăng ký</p>
+            {successMessage && <p style={styles.success}>{successMessage}</p>}
+            {error && <p style={styles.error}>{error}</p>}
         </div>
     );
 };
 
-export default VerifyEmailPage;
+export default EmailVerification;

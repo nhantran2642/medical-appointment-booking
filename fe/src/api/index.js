@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { camelToSnakeKeys } from './utils';
 
 class AuthRepository {
     constructor() {
@@ -12,28 +13,27 @@ class AuthRepository {
 
     async registerUser(userData) {
         try {
-            const response = await this.apiClient.post('/register/', userData);
+            const requestData = camelToSnakeKeys(userData);
+            const response = await this.apiClient.post('/register/', requestData);
             return response.data;
         } catch (error) {
             this.handleError(error);
         }
     }
-
-
     async verifyEmail(verificationCode) {
         try {
-            const response = await this.apiClient.post('/verify_email/', {
-                p: verificationCode,
-            });
+            const response = await this.apiClient.get(`/verify_email/?p=${verificationCode}`);
             return response.data;
         } catch (error) {
             this.handleError(error);
         }
     }
+
 
     async loginUser(email, password) {
         try {
-            const response = await this.apiClient.post('/login/', { email, password });
+            const requestData = camelToSnakeKeys({ email, password });
+            const response = await this.apiClient.post('/login/', requestData);
             return response.data;
         } catch (error) {
             this.handleError(error);

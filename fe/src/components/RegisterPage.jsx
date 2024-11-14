@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthRepository from '../api/index';
-import { camelToSnakeKeys } from '../api/utils';
 // import googleIcon from '../assets/img/icon-google.png';
 
 const styles = {
@@ -189,7 +188,7 @@ const RegisterPage = () => {
 
 
     const handleRegister = async () => {
-        if (emailError || phoneError || passwordError) {
+        if (!validateEmail() || !validatePassword() || !validatePhone()) {
             alert('Vui lòng sửa các lỗi trước khi đăng ký');
             return;
         }
@@ -204,17 +203,13 @@ const RegisterPage = () => {
             role_id: 4,
         };
 
-        const snakeCaseData = camelToSnakeKeys(userData);
-
-
         try {
-            await AuthRepository.registerUser(snakeCaseData);
+            await AuthRepository.registerUser(userData);
             navigate('/verify-email');
         } catch (error) {
-            alert(error.message);
+            alert(`Lỗi đăng ký: ${error.message}`);
         }
     };
-
     return (
         <div style={styles.container}>
             <div style={styles.leftColumn}>
