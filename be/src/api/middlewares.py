@@ -43,6 +43,5 @@ class AuthenticationMiddleware:
                 request.role_id = payload.get("role_id")
             except AuthenticationFailed as e:
                 return JsonResponse({"message": str(e)}, status=401)
-
         response = self.get_response(request)
         return response

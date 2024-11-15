@@ -1,9 +1,13 @@
+from authentication.models import User
 from authentication.serializers import RegisterSerializer, UserSerializer
+from department.models import Department
+from django.core.exceptions import BadRequest
 from doctor.models import Doctor
 from rest_framework import serializers
+from specialty.models import Specialty
 
 
-class DoctorSerializer(serializers.ModelSerializer):
+class DoctorRegisterSerializer(serializers.ModelSerializer):
     user = RegisterSerializer()
 
     class Meta:
@@ -20,23 +24,46 @@ class DoctorSerializer(serializers.ModelSerializer):
         return doctor
 
 
-class DoctorUpdateSerializer(serializers.ModelSerializer):
+class SpecialtySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specialty
+        fields = ["id", "name", "description", "department"]
+
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = ["id", "name"]
+
+
+class DoctorSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    specialty = SpecialtySerializer()
+    department = DepartmentSerializer()
 
     class Meta:
         model = Doctor
-        fields = ["user", "description", "price", "active", "specialty", "department"]
+        fields = [
+            "id",
+            "user",
+            "description",
+            "price",
+            "active",
+            "specialty",
+            "department",
+        ]
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop("user")
-        instance.description = validated_data.get('description', instance.description)
-        instance.price = validated_data.get('price', instance.price)
-        instance.active = validated_data.get('active', instance.active)
+        try:
+            # update user
+            user_data = validated_data.pop("user")
+            User.objects.filter(pk=instance.user_id).update(**user_data)
 
-        if user_data:
-            for attr, value in user_data.items():
-                setattr(instance.user, attr, value)
-            instance.user.save()
+            # update doctor
+            for key, value in validated_data.items():
+                setattr(instance, key, value)
+            instance.save()
 
-        instance.save()
-        return instance
+            return instance
+        except:
+            return BadRequest("Data user and doctor are not valid")
