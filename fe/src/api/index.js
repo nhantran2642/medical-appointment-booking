@@ -1,56 +1,20 @@
-import axios from 'axios';
-import { camelToSnakeKeys } from './utils';
+import BaseRepository from './baseRepository';
 
-class AuthRepository {
+class AuthRepository extends BaseRepository {
     constructor() {
-        this.apiClient = axios.create({
-            baseURL: 'https://medical-clinic-api.vercel.app/api/v1/auth',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        super('/auth');
     }
 
     async registerUser(userData) {
-        try {
-            const requestData = camelToSnakeKeys(userData);
-            const response = await this.apiClient.post('/register/', requestData);
-            return response.data;
-        } catch (error) {
-            this.handleError(error);
-        }
-    }
-    async verifyEmail(verificationCode) {
-        try {
-            const response = await this.apiClient.get(`/verify_email/?p=${verificationCode}`);
-            return response.data;
-        } catch (error) {
-            this.handleError(error);
-        }
+        return this.post('/register/', userData);
     }
 
+    async verifyEmail(verificationCode) {
+        return this.get('/verify_email/', { p: verificationCode });
+    }
 
     async loginUser(email, password) {
-        try {
-            const requestData = camelToSnakeKeys({ email, password });
-            const response = await this.apiClient.post('/login/', requestData);
-            return response.data;
-        } catch (error) {
-            this.handleError(error);
-        }
-    }
-
-    handleError(error) {
-        if (error.response) {
-            console.error('Lỗi từ server:', error.response.data);
-            throw new Error(error.response.data.message || 'Thao tác thất bại');
-        } else if (error.request) {
-            console.error('Không có phản hồi từ server:', error.request);
-            throw new Error('Không có phản hồi từ server');
-        } else {
-            console.error('Lỗi không xác định:', error.message);
-            throw new Error('Đã xảy ra lỗi');
-        }
+        return this.post('/login/', { email, password });
     }
 }
 
