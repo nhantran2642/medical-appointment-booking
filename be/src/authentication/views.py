@@ -100,7 +100,7 @@ class RegisterUserView(generics.GenericAPIView):
         json_str = json.dumps(data)
         email_encode = urlsafe_b64encode(json_str.encode()).decode("utf-8")
 
-        url = f"{settings.WEBSITE_URL}?p={email_encode}"
+        url = f"{settings.WEBSITE_URL}/verify-email?p={email_encode}"
 
         send_verify_email(user, url)
         return Response(
