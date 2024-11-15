@@ -38,7 +38,7 @@ const EmailVerification = () => {
                         setSuccessMessage('Xác thực email thành công!');
                         setTimeout(() => {
                             navigate('/verified-email');
-                        }, 3000);
+                        }, 1000);
                     } else {
                         setError('Mã xác thực không hợp lệ hoặc đã hết hạn.');
                     }
