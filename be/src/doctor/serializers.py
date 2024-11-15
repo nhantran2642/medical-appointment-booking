@@ -1,9 +1,13 @@
-from authentication.serializers import RegisterSerializer
+from authentication.models import User
+from authentication.serializers import RegisterSerializer, UserSerializer
+from department.models import Department
+from django.core.exceptions import BadRequest
 from doctor.models import Doctor
 from rest_framework import serializers
+from specialty.models import Specialty
 
 
-class DoctorSerializer(serializers.ModelSerializer):
+class DoctorRegisterSerializer(serializers.ModelSerializer):
     user = RegisterSerializer()
 
     class Meta:
@@ -18,3 +22,48 @@ class DoctorSerializer(serializers.ModelSerializer):
         doctor = Doctor.objects.create(user=user, **validated_data)
 
         return doctor
+
+
+class SpecialtySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specialty
+        fields = ["id", "name", "description", "department"]
+
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = ["id", "name"]
+
+
+class DoctorSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    specialty = SpecialtySerializer()
+    department = DepartmentSerializer()
+
+    class Meta:
+        model = Doctor
+        fields = [
+            "id",
+            "user",
+            "description",
+            "price",
+            "active",
+            "specialty",
+            "department",
+        ]
+
+    def update(self, instance, validated_data):
+        try:
+            # update user
+            user_data = validated_data.pop("user")
+            User.objects.filter(pk=instance.user_id).update(**user_data)
+
+            # update doctor
+            for key, value in validated_data.items():
+                setattr(instance, key, value)
+            instance.save()
+
+            return instance
+        except:
+            return BadRequest("Data user and doctor are not valid")

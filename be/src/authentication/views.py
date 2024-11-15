@@ -38,17 +38,21 @@ from .serializers import (
 
 class UserViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self, *args, **kwargs):
-        if self.action == "create":
+        if self.action in ["create", "retrieve", "list"]:
             return RegisterSerializer
-        if self.action in ["update", "retrieve"]:
+        if self.action == "update":
             return UserSerializer
         return super().get_serializer(*args, **kwargs)
 
     def get_queryset(self):
-        return super().get_queryset()
+        queryset = User.objects.all()
+
+        return queryset
 
     def list(self, request, *args, **kwargs):
-        pass
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -57,7 +61,22 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
-        pass
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def update(self, request, *args, **kwargs):
+        data = request.data
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class RegisterUserView(generics.GenericAPIView):
@@ -118,7 +137,7 @@ class LoginAPIView(views.APIView):
             user = User.objects.get(email=request.data["email"])
         except User.DoesNotExist:
             raise NotFound("Invalid email")
-        if not user.last_login and user.role == USER_ROLE["USER"]:
+        if not user.last_login and user.role_id == USER_ROLE["USER"]:
             verify_code = gen_verify_code(user)
 
             send_verify_login(user, verify_code)
