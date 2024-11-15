@@ -1,5 +1,3 @@
-// PaymentPage.scss
-
 .payment-page {
     background-color: #f0f2f5;
     padding: 20px;
@@ -10,6 +8,7 @@
     .header {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         margin-bottom: 20px;
     }
 
@@ -17,13 +16,10 @@
         color: #2c3e50;
         font-weight: bold;
         margin: 0;
-        font-size: 40px;
+        font-size: 32px;
     }
 
     .download-button {
-        position: absolute;
-        top: 20px;
-        right: 20px;
         background-color: #2c3e50;
         color: white;
         border-radius: 8px;
@@ -34,16 +30,32 @@
         }
     }
 
-    .search-input {
+    .actions-header {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
         margin-bottom: 20px;
-        width: 100%;
-        max-width: 400px;
+
+        .search-input {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .ant-select {
+            width: 200px;
+        }
+
+        .ant-picker {
+            width: 200px;
+        }
     }
 
     .summary {
         display: flex;
         justify-content: space-between;
         margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
 
         .summary-item {
             background: white;
@@ -52,11 +64,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             flex: 1;
-            margin-right: 10px;
-
-            &:last-child {
-                margin-right: 0;
-            }
+            min-width: 180px;
 
             span {
                 color: #2c3e50;
