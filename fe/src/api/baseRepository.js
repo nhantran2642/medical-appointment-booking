@@ -1,64 +1,61 @@
 import axios from 'axios';
-import { camelToSnakeKeys } from './utils';
 
 class BaseRepository {
     constructor(endpoint) {
-        this.apiClient = axios.create({
-            baseURL: `${process.env.REACT_APP_BASE_URL}${endpoint}`,
+        this.baseURL = process.env.REACT_APP_BASE_URL;
+        this.endpoint = endpoint;
+
+        this.instance = axios.create({
+            baseURL: this.baseURL,
             headers: {
                 'Content-Type': 'application/json',
             },
         });
     }
 
-    async get(endpoint, params = {}) {
+    async get(path = '', params = {}) {
         try {
-            const response = await this.apiClient.get(endpoint, { params });
+            const response = await this.instance.get(`${this.endpoint}${path}`, { params });
             return response.data;
         } catch (error) {
-            this.handleError(error);
+            throw this.handleError(error);
         }
     }
 
-    async post(endpoint, data = {}) {
+    async post(path = '', data = {}) {
         try {
-            const requestData = camelToSnakeKeys(data);
-            const response = await this.apiClient.post(endpoint, requestData);
+            const response = await this.instance.post(`${this.endpoint}${path}`, data);
             return response.data;
         } catch (error) {
-            this.handleError(error);
+            throw this.handleError(error);
         }
     }
 
-    async put(endpoint, data = {}) {
+    async put(path = '', data = {}) {
         try {
-            const requestData = camelToSnakeKeys(data);
-            const response = await this.apiClient.put(endpoint, requestData);
+            const response = await this.instance.put(`${this.endpoint}${path}`, data);
             return response.data;
         } catch (error) {
-            this.handleError(error);
+            throw this.handleError(error);
         }
     }
 
-    async delete(endpoint) {
+    async delete(path = '') {
         try {
-            const response = await this.apiClient.delete(endpoint);
+            const response = await this.instance.delete(`${this.endpoint}${path}`);
             return response.data;
         } catch (error) {
-            this.handleError(error);
+            throw this.handleError(error);
         }
     }
 
     handleError(error) {
         if (error.response) {
-            console.error('Lỗi từ server:', error.response.data);
-            throw new Error(error.response.data.message || 'Thao tác thất bại');
+            return new Error(error.response.data.message || 'Lỗi xảy ra từ server');
         } else if (error.request) {
-            console.error('Không có phản hồi từ server:', error.request);
-            throw new Error('Không có phản hồi từ server');
+            return new Error('Không nhận được phản hồi từ server');
         } else {
-            console.error('Lỗi không xác định:', error.message);
-            throw new Error('Đã xảy ra lỗi');
+            return new Error(`Lỗi: ${error.message}`);
         }
     }
 }

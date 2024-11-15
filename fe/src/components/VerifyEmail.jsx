@@ -7,7 +7,7 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '100vh',
+        minHeight: '80vh',
         textAlign: 'center',
         padding: '20px',
     },
@@ -33,8 +33,8 @@ const EmailVerification = () => {
             const verifyEmail = async () => {
                 try {
                     const response = await AuthRepository.verifyEmail(verificationCode);
-                    if (response.success) {
-                        console.log('Email verified:', response);
+                    console.log(response);
+                    if (response.message == "User is activated") {
                         setSuccessMessage('Xác thực email thành công!');
                         setTimeout(() => {
                             navigate('/verified-email');
@@ -51,7 +51,6 @@ const EmailVerification = () => {
             verifyEmail();
         }
     }, [location, navigate]);
-
     return (
         <div style={styles.container}>
             <h1>Hãy kiểm tra email của bạn</h1>

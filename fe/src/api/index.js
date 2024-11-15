@@ -2,7 +2,7 @@ import BaseRepository from './baseRepository';
 
 class AuthRepository extends BaseRepository {
     constructor() {
-        super('/auth');
+        super('/api/v1/auth');
     }
 
     async registerUser(userData) {
@@ -10,7 +10,7 @@ class AuthRepository extends BaseRepository {
     }
 
     async verifyEmail(verificationCode) {
-        return this.get('/verify_email/', { p: verificationCode });
+        return this.post('/verify_email/?p=' + verificationCode);
     }
 
     async loginUser(email, password) {
