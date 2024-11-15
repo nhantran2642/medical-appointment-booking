@@ -28,15 +28,14 @@ class DoctorUpdateSerializer(serializers.ModelSerializer):
         fields = ["user", "description", "price", "active", "specialty", "department"]
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop("user")
-        instance.description = validated_data.get('description', instance.description)
-        instance.price = validated_data.get('price', instance.price)
-        instance.active = validated_data.get('active', instance.active)
+        user_data = validated_data.pop("user", None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
 
         if user_data:
-            for attr, value in user_data.items():
-                setattr(instance.user, attr, value)
-            instance.user.save()
+            user_serializer = self.fields["user"]
+            user_serializer.update(instance.user, user_data)
 
         instance.save()
         return instance
