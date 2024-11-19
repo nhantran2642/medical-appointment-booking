@@ -97,7 +97,6 @@ const AppointmentPage = () => {
                     </div>
                 </Col>
 
-                {/* Schedule and Emergency Info */}
                 <Col xs={24} md={12}>
                     <div className="schedule-info">
                         <h2>Schedule hours</h2>
