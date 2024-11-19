@@ -8,6 +8,7 @@ import {
     ProfileOutlined,
     MedicineBoxOutlined,
     DollarOutlined,
+    FileOutlined,
 } from '@ant-design/icons';
 import { Link, useLocation } from 'react-router-dom';
 import { APP_ROUTER } from '../constants/appRouter';
@@ -58,6 +59,9 @@ const Sidebar = () => {
                 </Menu.Item>
                 <Menu.Item key={APP_ROUTER.PAYMENT} icon={<DollarOutlined />}>
                     <Link to={APP_ROUTER.PAYMENT}>Thanh Toán</Link>
+                </Menu.Item>
+                <Menu.Item key={APP_ROUTER.BLOG} icon={<FileOutlined />}>
+                    <Link to={APP_ROUTER.BLOG}>Tin tức</Link>
                 </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item key={APP_ROUTER.LOGOUT} icon={<LogoutOutlined />} style={sidebarStyles.logout}>

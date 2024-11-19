@@ -14,4 +14,5 @@ export const APP_ROUTER = {
     DEPARTMENT: '/admin/department',
     PATIENT: '/admin/patientlist',
     PAYMENT: '/admin/paymentpage',
+    BLOG: '/admin/blogspage',
 };

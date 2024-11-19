@@ -1,119 +1,102 @@
-.blog-page {
-    display: flex;
-    padding: 0 70px;
+.news-table-container {
+    background-color: #f3f5fc;
+    padding: 40px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
 
-    .blog-posts {
-        flex: 3;
+    h2 {
+        font-size: 24px;
+        color: #24346d;
+        margin-bottom: 20px;
+        text-align: center;
+    }
 
-        .post {
-            margin-bottom: 30px;
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 10px;
-            overflow: hidden;
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
 
-            .post-image {
-                width: 100%;
-                height: 500px;
-                border-radius: 10px;
+        .search-bar {
+            display: flex;
+
+            input {
+                width: 400px;
+                padding: 10px;
+                border-radius: 20px 0 0 20px;
+                border: 1px solid #ccc;
             }
 
-            .post-info {
-                margin-top: 10px;
-
-                p {
-                    color: #666;
-                    font-size: 14px;
-                }
-
-                h2 {
-                    font-size: 24px;
-                    margin: 10px 0;
-                }
-
-                .read-more {
-                    background: #007bff;
-                    color: #fff;
-                    border: none;
-                    padding: 10px 20px;
-                    border-radius: 5px;
-                    cursor: pointer;
-
-                    &:hover {
-                        background: #0056b3;
-                    }
-                }
+            .search-button {
+                background-color: #24346d;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 0 20px 20px 0;
+                cursor: pointer;
             }
+        }
+
+        .add-news-button {
+            background-color: #24346d;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
         }
     }
 
-    .sidebar {
-        flex: 1;
-        margin-left: 30px;
-        margin-top: 30px;
+    .news-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
 
-        .search {
-            margin-bottom: 20px;
-
-            input {
-                width: 100%;
-                padding: 10px;
-                border-radius: 5px;
-                border: 1px solid #ddd;
-            }
+        th {
+            background-color: #24346d;
+            color: white;
+            padding: 12px;
         }
 
-        .recent-posts {
-            margin-bottom: 30px;
-
-            h3 {
-                font-size: 18px;
-                margin-bottom: 15px;
-            }
-
-            .recent-post {
-                display: flex;
-                margin-bottom: 15px;
-
-                .recent-post-image {
-                    width: 50px;
-                    height: 50px;
-                    margin-right: 10px;
-                    border-radius: 5px;
-                }
-
-                h4 {
-                    font-size: 14px;
-                    color: #333;
-                }
-
-                p {
-                    font-size: 12px;
-                    color: #999;
-                }
-            }
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
         }
 
-        .categories {
-            h3 {
-                font-size: 18px;
-                margin-bottom: 15px;
-            }
+        .delete-button {
+            background: none;
+            border: none;
+            color: #24346d;
+            cursor: pointer;
+            font-size: 18px;
+        }
 
-            ul {
-                list-style: none;
-                padding: 0;
+        .empty-message {
+            text-align: center;
+            color: #888;
+        }
+    }
 
-                li {
-                    font-size: 14px;
-                    margin-bottom: 10px;
-                    color: #007bff;
-                    cursor: pointer;
+    .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
 
-                    &:hover {
-                        text-decoration: underline;
-                    }
-                }
+        .page-button {
+            background-color: #e0e4f1;
+            border: none;
+            color: #24346d;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 50%;
+            cursor: pointer;
+
+            &.active {
+                background-color: #24346d;
+                color: white;
             }
         }
     }

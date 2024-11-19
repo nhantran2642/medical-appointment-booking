@@ -1,84 +1,78 @@
 import React from "react";
 import "./style.scss";
-import { ScheduleOutlined } from "@ant-design/icons";
 
-const BlogPage = () => {
-    const posts = [
-        {
-            icon: <ScheduleOutlined />,
-            date: "Monday 05, September 2024",
-            author: "By Author",
-            views: 231,
-            likes: 86,
-            title: "A passion for putting patients first",
-            excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare...",
-            image: "https://www.strunkmedia.com/wp-content/uploads/2017/07/doctors-nurses.jpg", // Use the imported image directly
-        },
-        {
-            icon: <ScheduleOutlined />,
-            date: "Monday 05, September 2024",
-            author: "By Author",
-            views: 278,
-            likes: 96,
-            title: "A passion for putting patients first",
-            excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare...",
-            image: "https://www.strunkmedia.com/wp-content/uploads/2017/07/doctors-nurses.jpg", // Replace with actual image paths or import them
-        },
-        {
-            icon: <ScheduleOutlined />,
-            date: "Monday 05, September 2024",
-            author: "By Author",
-            views: 542,
-            likes: 186,
-            title: "A passion for putting patients first",
-            excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare...",
-            image: "https://www.strunkmedia.com/wp-content/uploads/2017/07/doctors-nurses.jpg", // Replace with actual image paths or import them
-        },
+const NewsTable = () => {
+    const newsData = [
+        { title: "Tin tức 1", date: "2024-10-01", views: 120, likes: 45 },
+        { title: "Tin tức 2", date: "2024-10-05", views: 85, likes: 30 },
+        { title: "Tin tức 3", date: "2024-10-10", views: 200, likes: 78 },
+        { title: "Tin tức 4", date: "2024-10-15", views: 150, likes: 50 },
+        { title: "Tin tức 5", date: "2024-10-20", views: 300, likes: 120 },
+        { title: "Tin tức 6", date: "2024-10-25", views: 250, likes: 95 },
     ];
 
+    const handleDelete = (id) => {
+        console.log("Xóa tin tức với id:", id);
+    };
+
     return (
-        <div className="blog-page">
-            <div className="blog-posts">
-                {posts.map((post, index) => (
-                    <div key={index} className="post">
-                        <img src={post.image} alt={post.title} className="post-image" />
-                        <div className="post-info">
-                            <p>{post.icon} {post.date} • {post.author} • {post.views} 👁️ • {post.likes} ❤️</p>
-                            <h2>{post.title}</h2>
-                            <p>{post.excerpt}</p>
-                            <button className="read-more">Read More</button>
-                        </div>
-                    </div>
-                ))}
+        <div className="news-table-container">
+            <h2>Tin Tức</h2>
+            <div className="top-bar">
+                <div className="search-bar">
+                    <input type="text" placeholder="Tìm kiếm tin tức" />
+                    <button className="search-button">
+                        <span role="img" aria-label="search">🔍</span>
+                    </button>
+                </div>
+                <button className="add-news-button">+ Thêm tin tức</button>
             </div>
-            <div className="sidebar">
-                <div className="search">
-                    <input type="text" placeholder="Search" />
-                </div>
-                <div className="recent-posts">
-                    <h3>Recent Posts</h3>
-                    {posts.slice(0, 3).map((post, index) => (
-                        <div key={index} className="recent-post">
-                            <img src={post.image} alt={post.title} className="recent-post-image" />
-                            <div>
-                                <p>{post.date}</p>
-                                <h4>{post.title}</h4>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <div className="categories">
-                    <h3>Categories</h3>
-                    <ul>
-                        <li>Surgery</li>
-                        <li>Health Care</li>
-                        <li>Medical</li>
-                        <li>Professional</li>
-                    </ul>
-                </div>
+
+            <table className="news-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tiêu đề</th>
+                        <th>Ngày đăng</th>
+                        <th>Lượt xem</th>
+                        <th>Lượt thích</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {newsData.length > 0 ? (
+                        newsData.map((news, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{news.title}</td>
+                                <td>{news.date}</td>
+                                <td>{news.views}</td>
+                                <td>{news.likes}</td>
+                                <td>
+                                    <button className="delete-button" onClick={() => handleDelete(news.id)}>
+                                        🗑️
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="6" className="empty-message">
+                                Không có dữ liệu
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+
+            <div className="pagination">
+                <button className="page-button active">1</button>
+                <button className="page-button">2</button>
+                <button className="page-button">3</button>
+                <button className="page-button">4</button>
             </div>
         </div>
     );
 };
 
-export default BlogPage;
+export default NewsTable;

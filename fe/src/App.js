@@ -37,6 +37,7 @@ const Main = () => {
             <Route path="/admin/department" element={<DepartmentList />} />
             <Route path="/admin/patientlist" element={<PatientList />} />
             <Route path="/admin/paymentpage" element={<PaymentPage />} />
+            <Route path="/admin/blogspage" element={<BlogPage />} />
           </Route>
           <Route path="/" element={<HomeLayout />}>
 
