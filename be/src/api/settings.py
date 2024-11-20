@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "specialty",
     "staff",
     "time_slot",
+    "payment",
 ]
 
 MIDDLEWARE = [
@@ -214,3 +215,9 @@ TWO_FA_EXPIRE = int(os.getenv("TWO_FA_EXPIRE", "30"))
 
 # times
 LOGIN_TIME = int(os.getenv("LOGIN_TIME", "5"))
+
+# VNPay Config
+VNPAY_TMN_CODE = os.getenv("VNPAY_TMN_CODE")
+VNPAY_HASH_SECRET = os.getenv("VNPAY_HASH_SECRET")
+VNPAY_URL = os.getenv("VNPAY_URL")
+VNPAY_RETURN_URL = os.getenv("VNPAY_RETURN_URL")
