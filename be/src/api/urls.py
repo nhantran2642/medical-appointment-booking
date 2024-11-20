@@ -59,6 +59,7 @@ urlpatterns = (
         re_path(f"api/{ver}/users/", include("authentication.users_urls")),
         re_path(f"api/{ver}/doctor/", include("doctor.urls")),
         re_path(f"api/{ver}/payment/", include("payment.urls")),
+        re_path(f"api/{ver}/medical-record/", include("medical_record.urls")),
     ]
     + schema_api_docs
     + staticfiles_urlpatterns()
