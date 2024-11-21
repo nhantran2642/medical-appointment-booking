@@ -30,5 +30,29 @@
         "appointmentDate": "25/10/2024",
         "price": "150.000 VND",
         "status": "Chưa thanh toán"
+    },
+    {
+        "key": 5,
+        "name": "Hiếu Lê",
+        "email": "hieule@gmail.com",
+        "appointmentDate": "12/11/2024",
+        "price": "660.000 VND",
+        "status": "Đã thanh toán"
+    },
+    {
+        "key": 6,
+        "name": "Nhi Trần",
+        "email": "trannhi@gmail.com",
+        "appointmentDate": "16/11/2024",
+        "price": "1.150.000 VND",
+        "status": "Chưa thanh toán"
+    },
+    {
+        "key": 7,
+        "name": "Nhần Trần",
+        "email": "tranthanhnhan@gmail.com",
+        "appointmentDate": "16/11/2024",
+        "price": "7.150.000 VND",
+        "status": "Chưa thanh toán"
     }
 ]

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import AuthRepository from '../api/index';
+// import googleIcon from '../assets/img/icon-google.png';
 
 const styles = {
     container: {
@@ -24,13 +26,13 @@ const styles = {
     welcome: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 700,
-        fontSize: '48px',
+        fontSize: '70px',
         color: '#1f2b6c',
     },
     register: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 700,
-        fontSize: '36px',
+        fontSize: '50px',
         color: '#1f2b6c',
     },
     illustration: {
@@ -51,11 +53,14 @@ const styles = {
         gap: '15px',
         marginBottom: '20px',
     },
+    inputRow: {
+        display: 'flex',
+        gap: '15px',
+    },
     inputBox: {
-        width: '500px',
         display: 'flex',
         flexDirection: 'column',
-        padding: '10px',
+        flex: 1,
     },
     inputField: {
         height: '40px',
@@ -64,31 +69,26 @@ const styles = {
         borderRadius: '8px',
         border: '1px solid #d3e0fe',
         fontFamily: 'Raleway, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#1f2b6c',
         outline: 'none',
+        width: '97%',
     },
-    inputInnerBox: {
-        display: 'flex',
-        alignItems: 'center',
-        position: 'relative',
-    },
-    inputFieldWithIcon: {
-        width: '100%',
+    inputName: {
         height: '40px',
-        padding: '10px 40px 10px 10px',
+        padding: '10px',
         backgroundColor: '#fff',
         borderRadius: '8px',
         border: '1px solid #d3e0fe',
         fontFamily: 'Raleway, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#1f2b6c',
         outline: 'none',
     },
     label: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 500,
-        fontSize: '20px',
+        fontSize: '24px',
         color: '#1f2b6c',
         marginBottom: '5px',
     },
@@ -114,40 +114,71 @@ const styles = {
         cursor: 'pointer',
         transition: 'background-color 0.3s, transform 0.3s',
     },
+    buttonHover: {
+        backgroundColor: '#0056b3',
+        transform: 'scale(1.05)',
+    },
     buttonLabel: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 600,
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#fff',
     },
+    errorMessage: {
+        color: 'red',
+        fontSize: '16px',
+    },
     linkContainer: {
-        display: 'flex',
-        gap: '4px',
-        marginTop: '20px',
-    },
-    haveAccount: {
-        fontFamily: 'Raleway, sans-serif',
-        fontWeight: 500,
         fontSize: '20px',
-        color: '#1f2b6c',
-    },
-    signIn: {
-        fontFamily: 'Raleway, sans-serif',
-        fontWeight: 500,
-        fontSize: '20px',
-        color: '#1f2b6c',
-        cursor: 'pointer',
-        textDecoration: 'underline',
-        transition: 'color 0.3s',
-    },
-    signInHover: {
-        color: '#0056b3',
-    },
+        padding: '10px',
+    }
 };
 
 const RegisterPage = () => {
+    const navigate = useNavigate();
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [isHoveringSignIn, setIsHoveringSignIn] = useState(false);
+    const [isHoveringButton, setIsHoveringButton] = useState(false);
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [phone, setPhone] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [address, setAddress] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+
+
+    const validateEmail = () => {
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        if (!emailRegex.test(email)) {
+            setEmailError('Email không hợp lệ');
+            return false;
+        }
+        setEmailError('');
+        return true;
+    };
+
+    const validatePassword = () => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            setPasswordError('Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt');
+            return false;
+        }
+        setPasswordError('');
+        return true;
+    };
+
+    const validatePhone = () => {
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(phone)) {
+            setPhoneError('Số điện thoại không hợp lệ');
+            return false;
+        }
+        setPhoneError('');
+        return true;
+    };
 
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
@@ -155,6 +186,30 @@ const RegisterPage = () => {
 
     const eyeIcon = isPasswordVisible ? require('../assets/img/Eye.png') : require('../assets/img/Eye-1.png');
 
+
+    const handleRegister = async () => {
+        if (!validateEmail() || !validatePassword() || !validatePhone()) {
+            alert('Vui lòng sửa các lỗi trước khi đăng ký');
+            return;
+        }
+
+        const userData = {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            phone: phone,
+            address: address,
+            password: password,
+            role_id: 4,
+        };
+
+        try {
+            await AuthRepository.registerUser(userData);
+            navigate('/verify-email');
+        } catch (error) {
+            alert(`Lỗi đăng ký: ${error.message}`);
+        }
+    };
     return (
         <div style={styles.container}>
             <div style={styles.leftColumn}>
@@ -170,21 +225,73 @@ const RegisterPage = () => {
             </div>
             <div style={styles.rightColumn}>
                 <div style={styles.inputWrapper}>
-                    <div style={styles.inputBox}>
-                        <span style={styles.label}>Họ và tên</span>
-                        <input type="text" style={styles.inputField} placeholder="Nhập họ và tên" />
-                    </div>
-                    <div style={styles.inputBox}>
-                        <span style={styles.label}>Số điện thoại</span>
-                        <input type="text" style={styles.inputField} placeholder="Nhập số điện thoại" />
-                    </div>
-                    <div style={styles.inputBox}>
-                        <span style={styles.label}>Mật khẩu</span>
-                        <div style={styles.inputInnerBox}>
+                    <div style={styles.inputRow}>
+                        <div style={styles.inputBox}>
+                            <label style={styles.label} htmlFor="firstName">Họ</label>
                             <input
+                                type="text"
+                                id="firstName"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                style={styles.inputField}
+                            />
+                        </div>
+                        <div style={styles.inputBox}>
+                            <label style={styles.label} htmlFor="lastName">Tên</label>
+                            <input
+                                type="text"
+                                id="lastName"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                style={styles.inputField}
+                            />
+                        </div>
+                    </div>
+                    <div style={styles.inputBox}>
+                        <label style={styles.label} htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            onBlur={validateEmail}
+                            style={styles.inputField}
+                        />
+                        {emailError && <div style={styles.errorMessage}>{emailError}</div>}
+                    </div>
+                    <div style={styles.inputBox}>
+                        <label style={styles.label} htmlFor="phone">Số điện thoại</label>
+                        <input
+                            type="text"
+                            id="phone"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            onBlur={validatePhone}
+                            style={styles.inputField}
+                        />
+                        {phoneError && <div style={styles.errorMessage}>{phoneError}</div>}
+                    </div>
+                    <div style={styles.inputBox}>
+                        <label style={styles.label} htmlFor="address">Địa chỉ</label>
+                        <input
+                            type="text"
+                            id="address"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            style={styles.inputField}
+                        />
+                    </div>
+
+                    <div style={styles.inputBox}>
+                        <span style={styles.label} htmlFor="password">Mật khẩu</span>
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                id="password"
                                 type={isPasswordVisible ? 'text' : 'password'}
-                                style={styles.inputFieldWithIcon}
-                                placeholder="Nhập mật khẩu"
+                                style={styles.inputField}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                onBlur={validatePassword}
                             />
                             <img
                                 src={eyeIcon}
@@ -193,34 +300,35 @@ const RegisterPage = () => {
                                 onClick={togglePasswordVisibility}
                             />
                         </div>
+                        {passwordError && <div style={styles.errorMessage}>{passwordError}</div>}
                     </div>
                 </div>
                 <button
-                    style={styles.button}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#0056b3';
-                        e.currentTarget.style.transform = 'scale(1.05)';
+                    onClick={handleRegister}
+                    style={{
+                        ...styles.button,
+                        ...(isHoveringButton && styles.buttonHover),
                     }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#1f2b6c';
-                        e.currentTarget.style.transform = 'scale(1)';
-                    }}
+                    onMouseEnter={() => setIsHoveringButton(true)}
+                    onMouseLeave={() => setIsHoveringButton(false)}
                 >
                     <span style={styles.buttonLabel}>Đăng ký</span>
                 </button>
+                {/* <button
+                    style={{
+                        ...styles.googleButton,
+                        ...(isHoveringButton && styles.googleButtonHover),
+                    }}
+                    onMouseEnter={() => setIsHoveringSignIn(true)}
+                    onMouseLeave={() => setIsHoveringSignIn(false)}
+                >
+                    <img src={googleIcon} alt="Google" style={styles.googleIcon} />
+                    <span style={styles.googleButtonLabel}>Đăng nhập bằng Google</span>
+                </button> */}
                 <div style={styles.linkContainer}>
-                    <span style={styles.haveAccount}>Đã có tài khoản?</span>
-                    <Link
-                        to="/"
-                        style={{
-                            ...styles.signIn,
-                            ...(isHoveringSignIn ? styles.signInHover : {}),
-                        }}
-                        onMouseEnter={() => setIsHoveringSignIn(true)}
-                        onMouseLeave={() => setIsHoveringSignIn(false)}
-                    >
-                        Đăng nhập
-                    </Link>
+                    <p>
+                        Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
+                    </p>
                 </div>
             </div>
         </div>

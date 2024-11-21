@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import AuthRepository from '../api/index'
+import { camelToSnakeKeys } from '../api/utils';
 const styles = {
     container: {
         display: 'flex',
@@ -24,13 +25,13 @@ const styles = {
     welcome: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 700,
-        fontSize: '48px',
+        fontSize: '70px',
         color: '#1f2b6c',
     },
     login: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 700,
-        fontSize: '36px',
+        fontSize: '50px',
         color: '#1f2b6c',
     },
     illustration: {
@@ -48,8 +49,7 @@ const styles = {
     inputWrapper: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '15px',
-        marginBottom: '20px',
+        gap: '10px',
     },
     inputBox: {
         width: '500px',
@@ -64,7 +64,7 @@ const styles = {
         borderRadius: '8px',
         border: '1px solid #d3e0fe',
         fontFamily: 'Raleway, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#1f2b6c',
         outline: 'none',
     },
@@ -81,14 +81,14 @@ const styles = {
         borderRadius: '8px',
         border: '1px solid #d3e0fe',
         fontFamily: 'Raleway, sans-serif',
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#1f2b6c',
         outline: 'none',
     },
     label: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 500,
-        fontSize: '20px',
+        fontSize: '24px',
         color: '#1f2b6c',
         marginBottom: '5px',
     },
@@ -104,6 +104,7 @@ const styles = {
     },
     button: {
         width: '300px',
+        height: '50px',
         padding: '10px',
         backgroundColor: '#1f2b6c',
         borderRadius: '8px',
@@ -117,7 +118,7 @@ const styles = {
     buttonLabel: {
         fontFamily: 'Raleway, sans-serif',
         fontWeight: 600,
-        fontSize: '14px',
+        fontSize: '24px',
         color: '#fff',
     },
     linkContainer: {
@@ -146,9 +147,40 @@ const styles = {
 };
 
 const LoginPage = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [isHoveringSignUp, setIsHoveringSignUp] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
+    const handleLogin = async () => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const loginData = camelToSnakeKeys({ email, password });
+
+            const response = await AuthRepository.loginUser(loginData);
+
+            if (response && response.status === 'success') {
+                alert("Đăng nhập thành công!");
+                navigate('/home');
+            } else {
+                setError("Sai email hoặc mật khẩu!");
+            }
+        } catch (error) {
+            console.error("Lỗi đăng nhập:", error);
+
+            if (error.response && error.response.data && error.response.data.message) {
+                setError(error.response.data.message);
+            } else {
+                setError("Đã xảy ra lỗi, vui lòng thử lại sau.");
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
@@ -171,8 +203,13 @@ const LoginPage = () => {
             <div style={styles.rightColumn}>
                 <div style={styles.inputWrapper}>
                     <div style={styles.inputBox}>
-                        <span style={styles.label}>Số điện thoại</span>
-                        <input type="text" style={styles.inputField} placeholder="Nhập số điện thoại" />
+                        <span style={styles.label}>Email</span>
+                        <input
+                            type="text"
+                            style={styles.inputField}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
                     </div>
                     <div style={styles.inputBox}>
                         <span style={styles.label}>Mật khẩu</span>
@@ -180,7 +217,8 @@ const LoginPage = () => {
                             <input
                                 type={isPasswordVisible ? 'text' : 'password'}
                                 style={styles.inputFieldWithIcon}
-                                placeholder="Nhập mật khẩu"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                             <img
                                 src={eyeIcon}
@@ -191,8 +229,15 @@ const LoginPage = () => {
                         </div>
                     </div>
                 </div>
+                <div style={styles.linkContainer}>
+                    <Link to="/forgot-password" style={styles.signUp}>Quên mật khẩu?</Link>
+                    <span style={styles.noAccount}>Bạn chưa có tài khoản?</span>
+                    <Link to="/register" style={styles.signUp}>Đăng ký</Link>
+                </div>
                 <button
                     style={styles.button}
+                    onClick={handleLogin}
+                    disabled={isLoading}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#0056b3';
                         e.currentTarget.style.transform = 'scale(1.05)';
@@ -202,22 +247,9 @@ const LoginPage = () => {
                         e.currentTarget.style.transform = 'scale(1)';
                     }}
                 >
-                    <span style={styles.buttonLabel}>Đăng nhập</span>
+                    {isLoading ? <span>Đang xử lý...</span> : <span style={styles.buttonLabel}>Đăng nhập</span>}
                 </button>
-                <div style={styles.linkContainer}>
-                    <span style={styles.noAccount}>Bạn chưa có tài khoản?</span>
-                    <Link
-                        to="/register"
-                        style={{
-                            ...styles.signUp,
-                            ...(isHoveringSignUp ? styles.signUpHover : {}),
-                        }}
-                        onMouseEnter={() => setIsHoveringSignUp(true)}
-                        onMouseLeave={() => setIsHoveringSignUp(false)}
-                    >
-                        Đăng ký
-                    </Link>
-                </div>
+                {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
             </div>
         </div>
     );

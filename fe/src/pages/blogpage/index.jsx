@@ -1,81 +1,37 @@
-import React from "react";
-import "./style.scss";
-import { ScheduleOutlined } from "@ant-design/icons";
+import React from 'react';
+import './style.scss';
+import { Link } from 'react-router-dom';
+import BlogSidebar from '../blogSidebar';
+import { mockBlogPosts } from '../../mock';
+
+
 
 const BlogPage = () => {
-    const posts = [
-        {
-            icon: <ScheduleOutlined />,
-            date: "Monday 05, September 2024",
-            author: "By Author",
-            views: 231,
-            likes: 86,
-            title: "A passion for putting patients first",
-            excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare...",
-            image: "https://www.strunkmedia.com/wp-content/uploads/2017/07/doctors-nurses.jpg", // Use the imported image directly
-        },
-        {
-            icon: <ScheduleOutlined />,
-            date: "Monday 05, September 2024",
-            author: "By Author",
-            views: 278,
-            likes: 96,
-            title: "A passion for putting patients first",
-            excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare...",
-            image: "https://www.strunkmedia.com/wp-content/uploads/2017/07/doctors-nurses.jpg", // Replace with actual image paths or import them
-        },
-        {
-            icon: <ScheduleOutlined />,
-            date: "Monday 05, September 2024",
-            author: "By Author",
-            views: 542,
-            likes: 186,
-            title: "A passion for putting patients first",
-            excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare...",
-            image: "https://www.strunkmedia.com/wp-content/uploads/2017/07/doctors-nurses.jpg", // Replace with actual image paths or import them
-        },
-    ];
-
+    const blogPosts = mockBlogPosts;
     return (
-        <div className="blog-page">
-            <div className="blog-posts">
-                {posts.map((post, index) => (
-                    <div key={index} className="post">
-                        <img src={post.image} alt={post.title} className="post-image" />
-                        <div className="post-info">
-                            <p>{post.icon} {post.date} • {post.author} • {post.views} 👁️ • {post.likes} ❤️</p>
-                            <h2>{post.title}</h2>
-                            <p>{post.excerpt}</p>
-                            <button className="read-more">Read More</button>
-                        </div>
-                    </div>
-                ))}
-            </div>
-            <div className="sidebar">
-                <div className="search">
-                    <input type="text" placeholder="Search" />
+        <div className="blog-posts">
+            <div className="blog-header" style={{ backgroundImage: `url(${require('../../assets/img/SubHead-news.png')})` }}>
+                <div className="title-head">
+                    <Link to="/">Trang chủ</Link> / <Link to="/blogspage">Tin tức</Link>
                 </div>
-                <div className="recent-posts">
-                    <h3>Recent Posts</h3>
-                    {posts.slice(0, 3).map((post, index) => (
-                        <div key={index} className="recent-post">
-                            <img src={post.image} alt={post.title} className="recent-post-image" />
-                            <div>
-                                <p>{post.date}</p>
-                                <h4>{post.title}</h4>
+                <h2>Tin tức</h2>
+            </div>
+            <div className="blog-content">
+                <div className="posts">
+                    {blogPosts.map((post) => (
+                        <div className="post-card" key={post.id}>
+                            <div className="post-img">
+                                <img src={post.image} alt={post.title} />
+                            </div>
+                            <div className="post-content">
+                                <h3>{post.title}</h3>
+                                <p>{post.description}</p>
+                                <Link to={`/blogspage/${post.id}`} className="read-more">Xem chi tiết</Link>
                             </div>
                         </div>
                     ))}
                 </div>
-                <div className="categories">
-                    <h3>Categories</h3>
-                    <ul>
-                        <li>Surgery</li>
-                        <li>Health Care</li>
-                        <li>Medical</li>
-                        <li>Professional</li>
-                    </ul>
-                </div>
+                <BlogSidebar />
             </div>
         </div>
     );

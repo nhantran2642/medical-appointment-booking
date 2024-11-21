@@ -1,0 +1,140 @@
+.services {
+    .services-header {
+        background-size: cover;
+        background-position: center;
+        height: 300px; 
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        color: #1F2B6C; 
+        text-align: left;
+        position: relative;
+        padding-left: 200px;
+
+        a {
+            font-size: 20px;
+            color: #1F2B6C;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+
+        h2 {
+            font-size: 50px;
+            color: #1F2B6C;
+            font-weight: 700;
+        }
+    }
+
+    .services-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        padding: 50px;
+    }
+
+    .service-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        text-align: center;
+        transition: transform 0.3s;
+        max-width: 300px;
+
+        &:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-img {
+            position: relative;
+            width: 100%;
+
+            img {
+                width: 100%;
+                height: auto;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+            }
+
+            .service-icon {
+                position: absolute;
+                bottom: -20px;
+                right: 15px;
+                width: 50px;
+                height: 50px;
+                background-color: #002f5f;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                color: #fff;
+                font-size: 20px;
+                transition: all 0.3s ease;
+            }
+
+            &:hover .service-icon {
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(31, 43, 108, 0.5);
+                border-radius: 8px;
+                opacity: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .icon-overlay {
+                width: 25px;
+                height: 25px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                img {
+                    width: 100%;
+                    height: auto;
+                }
+            }
+        }
+
+        .service-content {
+            padding: 20px;
+            text-align: left;
+
+            h3 {
+                font-size: 20px;
+                color: #003366;
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 14px;
+                color: #666;
+                margin-bottom: 20px;
+            }
+
+            .learn-more {
+                font-size: 14px;
+                color: #007bff;
+                text-decoration: none;
+                font-weight: 500;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
