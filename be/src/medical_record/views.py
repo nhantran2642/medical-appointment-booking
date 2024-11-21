@@ -1,7 +1,7 @@
-from rest_framework import viewsets, status
-from rest_framework.response import Response
 from medical_record.models import MedicalRecord
 from medical_record.serializers import MedicalRecordSerializer
+from rest_framework import status, viewsets
+from rest_framework.response import Response
 from utilities.permission import IsDoctorUser
 
 
@@ -25,7 +25,7 @@ class MedicalRecordViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(
-            data=request.data, context={"user": request.user}
+            data=request.data, context={"user_id": request.user_id}
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()

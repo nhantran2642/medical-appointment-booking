@@ -1,9 +1,9 @@
-from rest_framework import serializers
-from rest_framework.exceptions import NotFound
 from authentication.models import User
 from doctor.models import Doctor
 from doctor.serializers import DoctorSerializer
 from medical_record.models import MedicalRecord
+from rest_framework import serializers
+from rest_framework.exceptions import NotFound
 
 
 class MedicalRecordSerializer(serializers.ModelSerializer):
@@ -26,8 +26,8 @@ class MedicalRecordSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         # Retrieve current doctor from the context
-        user = self.context.get("user", None)
-        doctor = Doctor.objects.get(pk=user.id)
+        user_id = self.context.get("user_id", None)
+        doctor = Doctor.objects.get(user_id=user_id)
 
         # Retrieve and validate the user ID
         try:
@@ -40,9 +40,7 @@ class MedicalRecordSerializer(serializers.ModelSerializer):
 
         # Create the Medical Record instance
         medical_record = MedicalRecord.objects.create(
-            **validated_data,
-            user=user,
-            doctor=doctor
+            **validated_data, user=user, doctor=doctor
         )
 
         return medical_record
