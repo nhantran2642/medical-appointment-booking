@@ -5,7 +5,6 @@ from django.core.exceptions import BadRequest
 from department.serializers import DepartmentSerializer
 from doctor.models import Doctor
 from rest_framework import serializers
-from specialty.models import Specialty
 from specialty.serializers import SpecialtySerializer
 
 
