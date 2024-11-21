@@ -41,6 +41,7 @@ class AuthenticationMiddleware:
             try:
                 payload = self._check_token(auth[1])
                 request.role_id = payload.get("role_id")
+                request.user_id = payload.get("user_id", None)
             except AuthenticationFailed as e:
                 return JsonResponse({"message": str(e)}, status=401)
         response = self.get_response(request)
