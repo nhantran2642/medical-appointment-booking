@@ -1,10 +1,11 @@
 from authentication.models import User
 from authentication.serializers import RegisterSerializer, UserSerializer
-from department.models import Department
 from django.core.exceptions import BadRequest
+
+from department.serializers import DepartmentSerializer
 from doctor.models import Doctor
 from rest_framework import serializers
-from specialty.models import Specialty
+from specialty.serializers import SpecialtySerializer
 
 
 class DoctorRegisterSerializer(serializers.ModelSerializer):
@@ -22,18 +23,6 @@ class DoctorRegisterSerializer(serializers.ModelSerializer):
         doctor = Doctor.objects.create(user=user, **validated_data)
 
         return doctor
-
-
-class SpecialtySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Specialty
-        fields = ["id", "name", "description", "department"]
-
-
-class DepartmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Department
-        fields = ["id", "name"]
 
 
 class DoctorSerializer(serializers.ModelSerializer):
