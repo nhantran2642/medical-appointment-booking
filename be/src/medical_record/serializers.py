@@ -13,6 +13,7 @@ class MedicalRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalRecord
         fields = [
+            "id",
             "diagnosis",
             "treatment",
             "prescription",
@@ -26,8 +27,11 @@ class MedicalRecordSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         # Retrieve current doctor from the context
-        user_id = self.context.get("user_id", None)
-        doctor = Doctor.objects.get(user_id=user_id)
+        try:
+            user_id = self.context.get("user_id", None)
+            doctor = Doctor.objects.get(user_id=user_id)
+        except Doctor.DoesNotExist:
+            raise NotFound("Doctor does not exist.")
 
         # Retrieve and validate the user ID
         try:
@@ -44,3 +48,22 @@ class MedicalRecordSerializer(serializers.ModelSerializer):
         )
 
         return medical_record
+
+
+class MedicalRecordUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MedicalRecord
+        fields = [
+            "diagnosis",
+            "treatment",
+            "prescription",
+            "start_date",
+            "end_date",
+            "notes",
+        ]
+
+    def update(self, instance, validated_data):
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
+        return instance
