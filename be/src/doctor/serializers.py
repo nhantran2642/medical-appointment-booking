@@ -1,9 +1,15 @@
+from authentication.models import User
 from authentication.serializers import RegisterSerializer, UserSerializer
+from django.core.exceptions import BadRequest
+
+from department.serializers import DepartmentSerializer
 from doctor.models import Doctor
 from rest_framework import serializers
+from specialty.models import Specialty
+from specialty.serializers import SpecialtySerializer
 
 
-class DoctorSerializer(serializers.ModelSerializer):
+class DoctorRegisterSerializer(serializers.ModelSerializer):
     user = RegisterSerializer()
 
     class Meta:
@@ -20,22 +26,34 @@ class DoctorSerializer(serializers.ModelSerializer):
         return doctor
 
 
-class DoctorUpdateSerializer(serializers.ModelSerializer):
+class DoctorSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    specialty = SpecialtySerializer()
+    department = DepartmentSerializer()
 
     class Meta:
         model = Doctor
-        fields = ["user", "description", "price", "active", "specialty", "department"]
+        fields = [
+            "id",
+            "user",
+            "description",
+            "price",
+            "active",
+            "specialty",
+            "department",
+        ]
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop("user", None)
+        try:
+            # update user
+            user_data = validated_data.pop("user")
+            User.objects.filter(pk=instance.user_id).update(**user_data)
 
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+            # update doctor
+            for key, value in validated_data.items():
+                setattr(instance, key, value)
+            instance.save()
 
-        if user_data:
-            user_serializer = self.fields["user"]
-            user_serializer.update(instance.user, user_data)
-
-        instance.save()
-        return instance
+            return instance
+        except:
+            return BadRequest("Data user and doctor are not valid")
