@@ -26,6 +26,7 @@ class AuthenticationMiddleware:
             "redoc",
             "static",
         ]
+        print(request.path)
         if request.path != "/":
             for endpoint in public_endpoints:
                 if endpoint in request.path:
@@ -35,14 +36,17 @@ class AuthenticationMiddleware:
 
         auth = request.headers.get("Authorization", "").split(" ")
 
-        if len(auth) != 2 or auth[0] != "Bearer":
-            return JsonResponse({"message": "Authorization header missing"}, status=401)
-        else:
-            try:
-                payload = self._check_token(auth[1])
-                request.role_id = payload.get("role_id")
-            except AuthenticationFailed as e:
-                return JsonResponse({"message": str(e)}, status=401)
+        if request.method != "OPTIONS":
+            if len(auth) != 2 or auth[0] != "Bearer":
+                return JsonResponse(
+                    {"message": "Authorization header missing"}, status=401
+                )
+            else:
+                try:
+                    payload = self._check_token(auth[1])
+                    request.role_id = payload.get("role_id")
+                except AuthenticationFailed as e:
+                    return JsonResponse({"message": str(e)}, status=401)
 
         response = self.get_response(request)
         return response
