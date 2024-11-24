@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthRepository from '../api/index'
-import { camelToSnakeKeys } from '../api/utils';
+import AuthRepository from '../api/index';
+import EyeOpenIcon from '../assets/img/Eye.png';
+import EyeClosedIcon from '../assets/img/Eye-1.png';
+import BannerImage from '../assets/img/banner-login.png';
+import { jwtDecode } from 'jwt-decode';
+
+
 const styles = {
     container: {
         display: 'flex',
@@ -141,8 +146,9 @@ const styles = {
         textDecoration: 'underline',
         transition: 'color 0.3s',
     },
-    signUpHover: {
-        color: '#0056b3',
+    error: {
+        color: 'red',
+        marginTop: '10px',
     },
 };
 
@@ -158,34 +164,64 @@ const LoginPage = () => {
         setIsLoading(true);
         setError(null);
 
+        if (!email) {
+            setError("Email không được để trống.");
+            setIsLoading(false);
+            return;
+        }
+
+        if (!password) {
+            setError("Mật khẩu không được để trống.");
+            setIsLoading(false);
+            return;
+        }
+
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        if (!emailRegex.test(email)) {
+            setError("Email không đúng định dạng.");
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            const loginData = camelToSnakeKeys({ email, password });
-
+            const loginData = { email, password };
             const response = await AuthRepository.loginUser(loginData);
+            console.log('API Response:', response);
 
-            if (response && response.status === 'success') {
-                alert("Đăng nhập thành công!");
-                navigate('/home');
+            if (response.message === "Send code verify for mail success") {
+                navigate('/verify', { state: { email } });
+            } else if (response.message === "Login successful" && response.access) {
+                const token = response.access;
+                localStorage.removeItem('auth_token');
+                localStorage.setItem('auth_token', token);
+                const decodeToken = jwtDecode(token);
+                console.log('Decodecode:', decodeToken);
+                const roleId = decodeToken.role_id;
+
+                if (roleId === 1) {
+                    navigate('/admin/dashboard');
+                } else if (roleId === 4) {
+                    navigate('/home');
+                } else {
+                    setError("khong xac dinh duoc nguoi dung");
+                }
+                console.log('Role ID:', roleId);
+                localStorage.setItem('auth_toKen', token);
+
             } else {
                 setError("Sai email hoặc mật khẩu!");
             }
         } catch (error) {
-            console.error("Lỗi đăng nhập:", error);
-
-            if (error.response && error.response.data && error.response.data.message) {
-                setError(error.response.data.message);
-            } else {
-                setError("Đã xảy ra lỗi, vui lòng thử lại sau.");
-            }
+            console.error("Phản hồi lỗi từ API:", error);
+            setError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
         } finally {
             setIsLoading(false);
         }
     };
+
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
-
-    const eyeIcon = isPasswordVisible ? require('../assets/img/Eye.png') : require('../assets/img/Eye-1.png');
 
     return (
         <div style={styles.container}>
@@ -195,7 +231,7 @@ const LoginPage = () => {
                     <h2 style={styles.login}>Đăng nhập</h2>
                 </div>
                 <img
-                    src={require('../assets/img/banner-login.png')}
+                    src={BannerImage}
                     alt="Hình minh họa trang đăng nhập"
                     style={styles.illustration}
                 />
@@ -221,7 +257,7 @@ const LoginPage = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             <img
-                                src={eyeIcon}
+                                src={isPasswordVisible ? EyeOpenIcon : EyeClosedIcon}
                                 alt={isPasswordVisible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
                                 style={styles.icon}
                                 onClick={togglePasswordVisibility}
@@ -247,9 +283,9 @@ const LoginPage = () => {
                         e.currentTarget.style.transform = 'scale(1)';
                     }}
                 >
-                    {isLoading ? <span>Đang xử lý...</span> : <span style={styles.buttonLabel}>Đăng nhập</span>}
+                    <span style={styles.buttonLabel}>{isLoading ? 'Đang xử lý...' : 'Đăng nhập'}</span>
                 </button>
-                {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+                {error && <p style={styles.error}>{error}</p>}
             </div>
         </div>
     );

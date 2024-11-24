@@ -2,8 +2,6 @@
     height: 100vh;
     display: flex;
     overflow: hidden;
-
-    // Đảm bảo toàn bộ bố cục không có khoảng trống
     margin: 0;
     padding: 0;
     width: 100%;
@@ -74,8 +72,6 @@
     flex-direction: column;
     gap: 20px;
     overflow-y: auto;
-
-    // Xóa các khoảng trống thừa
     margin: 0;
     width: 100%;
     box-sizing: border-box;
@@ -91,6 +87,7 @@
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
 
             &:hover {
                 transform: translateY(-5px);
@@ -128,6 +125,18 @@
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .chart-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .ant-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: #fff;
         }
     }
 

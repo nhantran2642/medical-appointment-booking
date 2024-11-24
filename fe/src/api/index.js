@@ -13,8 +13,17 @@ class AuthRepository extends BaseRepository {
         return this.post('/verify_email/?p=' + verificationCode);
     }
 
-    async loginUser(email, password) {
-        return this.post('/login/', { email, password });
+    async loginUser(data) {
+        return this.post('/login/', data);
+    }
+    async verifyLoginCode(data) {
+        return this.post('/login/verify_code', data);
+    }
+    async forgotPassword(data) {
+        return this.post('/reset_password/', data);
+    }
+    async resetPassword(data) {
+        return this.post('/password-reset-complete/', data);
     }
 }
 

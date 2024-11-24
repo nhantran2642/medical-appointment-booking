@@ -29,6 +29,9 @@ import DoctorList from "./pages/doctorPage";
 import DepartmentList from "./pages/medicaldepartmentpage";
 import PatientList from "./pages/patientpage";
 import PaymentPage from "./pages/paymentpage";
+import DoctorListAdmin from "./pages/doctorListAdmin";
+import ProtectedRoute from "./constants/protectRouter";
+import DashboardLayout from "./pages/calendarpage";
 
 // eslint-disable-next-line
 
@@ -51,13 +54,13 @@ const Main = () => {
           {/* Default Layout */}
           <Route path={APP_ROUTER.LOGIN} element={<LoginPage />} />
           <Route path="/calendar" element={<CalendarLayout />} />
-          <Route path="/admin" element={<AdLayout />}>
-            <Route path="/admin/calendar" element={<CalendarLayout />} />
-            <Route path="/admin/doctor" element={<DoctorList />} />
-            <Route path="/admin/dashboard" element={<Dashboard />} />
-            <Route path="/admin/department" element={<DepartmentList />} />
-            <Route path="/admin/patientlist" element={<PatientList />} />
-            <Route path="/admin/paymentpage" element={<PaymentPage />} />
+          <Route path="/admin" element={<ProtectedRoute role={1} > <AdLayout /></ProtectedRoute>}>
+            <Route path="/admin/calendar" element={<ProtectedRoute role={1}><DashboardLayout /></ProtectedRoute>} />
+            <Route path="/admin/doctor" element={<ProtectedRoute role={1}><DoctorListAdmin /></ProtectedRoute>} />
+            <Route path="/admin/dashboard" element={<ProtectedRoute role={1}><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/department" element={<ProtectedRoute role={1}><DepartmentList /></ProtectedRoute>} />
+            <Route path="/admin/patientlist" element={<ProtectedRoute role={1}><PatientList /></ProtectedRoute>} />
+            <Route path="/admin/paymentpage" element={<ProtectedRoute role={1}><PaymentPage /></ProtectedRoute>} />
           </Route>
           <Route path="/" element={<HomeLayout />}>
             <Route path="/contact" element={<AboutPage />} />
