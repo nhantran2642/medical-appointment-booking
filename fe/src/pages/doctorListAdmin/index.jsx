@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Avatar, Input, Pagination, Button, Modal, Form, Select, TimePicker, notification, Row, Col } from 'antd';
+import { Card, Avatar, Input, Pagination, Button, Modal, Form, Select, TimePicker, notification, Row, Col, InputNumber } from 'antd';
 import { UserOutlined, SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import DoctorRepository from '../../api/indexDT';
 import './styles.scss';
-
 
 const DoctorListAdmin = () => {
     const [doctors, setDoctors] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [error, setError] = useState(null);
     const pageSize = 12;
 
     useEffect(() => {
         const fetchDoctors = async () => {
             try {
                 const data = await DoctorRepository.getAllDoctors();
-                console.log('Doctors fetched:', data); // Log kết quả từ API
-                setDoctors(data);
+                console.log('Doctors fetched:', data.results); // Log kết quả từ API
+                setDoctors(data.results); // Sử dụng `results` từ phản hồi API
             } catch (err) {
                 console.error('Error fetching doctors:', err);
                 notification.error({
@@ -30,8 +28,11 @@ const DoctorListAdmin = () => {
         fetchDoctors();
     }, []);
 
+    // Lọc danh sách bác sĩ theo từ khóa tìm kiếm
     const filteredDoctors = doctors.filter((doctor) =>
-        doctor.name.toLowerCase().includes(searchTerm.toLowerCase())
+        `${doctor.user.first_name} ${doctor.user.last_name}`
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
     );
 
     const startIndex = (currentPage - 1) * pageSize;
@@ -57,16 +58,25 @@ const DoctorListAdmin = () => {
     const handleAddDoctor = async (values) => {
         try {
             const newDoctor = {
-                name: values.name,
-                specialty: values.specialty,
-                email: values.email,
-                startTime: values.startTime.format('HH:mm'),
-                endTime: values.endTime.format('HH:mm'),
-                phone: values.phone,
-                avatar: 'https://via.placeholder.com/150',
+                user: {
+                    email: values.email,
+                    password: values.password || 'defaultpassword123', // Mật khẩu mặc định
+                    role_id: 2, // Vai trò bác sĩ
+                    first_name: values.first_name,
+                    last_name: values.last_name,
+                    address: values.address,
+                    phone: values.phone,
+                },
+                description: values.description,
+                price: parseFloat(values.price), // Chuyển giá trị thành số thực
+                specialty: parseInt(values.specialty, 10), // ID chuyên khoa (số nguyên)
+                department: parseInt(values.department, 10), // ID khoa (số nguyên)
             };
+
+            console.log('Payload gửi lên API:', newDoctor); // Log để kiểm tra
+
             const createdDoctor = await DoctorRepository.createDoctor(newDoctor);
-            setDoctors([...doctors, createdDoctor]);
+            setDoctors((prevDoctors) => [...prevDoctors, createdDoctor]);
             notification.success({
                 message: 'Thành công',
                 description: 'Bác sĩ đã được thêm',
@@ -76,7 +86,7 @@ const DoctorListAdmin = () => {
             console.error('Error adding doctor:', err);
             notification.error({
                 message: 'Lỗi',
-                description: typeof err === 'string' ? err : 'Không thể thêm bác sĩ',
+                description: 'Không thể thêm bác sĩ. Vui lòng kiểm tra lại thông tin.',
             });
         }
     };
@@ -97,34 +107,30 @@ const DoctorListAdmin = () => {
                 </Button>
             </div>
 
-            {error ? (
-                <p style={{ color: 'red' }}>{error}</p>
-            ) : (
-                <>
-                    <div className="doctor-grid">
-                        {currentDoctors.map((doctor, index) => (
-                            <Card key={index} className="doctor-card" hoverable>
-                                <Avatar
-                                    size={80}
-                                    src={doctor.avatar}
-                                    icon={!doctor.avatar && <UserOutlined />}
-                                />
-                                <h3>{doctor.name}</h3>
-                                <p>{doctor.specialty}</p>
-                            </Card>
-                        ))}
-                    </div>
+            <div className="doctor-grid">
+                {currentDoctors.map((doctor) => (
+                    <Card key={doctor.id} className="doctor-card" hoverable>
+                        <Avatar
+                            size={80}
+                            src="https://via.placeholder.com/150"
+                            icon={!doctor.avatar && <UserOutlined />}
+                        />
+                        <h3>{`${doctor.user.first_name} ${doctor.user.last_name}`}</h3>
+                        <p>{doctor.specialty.name}</p>
+                        <p>{doctor.department.name}</p>
+                        <p>{doctor.description}</p>
+                    </Card>
+                ))}
+            </div>
 
-                    <Pagination
-                        current={currentPage}
-                        total={filteredDoctors.length}
-                        pageSize={pageSize}
-                        onChange={handlePageChange}
-                        className="pagination"
-                        showTotal={(total) => `Hiển thị ${currentDoctors.length} trên tổng ${total} bác sĩ`}
-                    />
-                </>
-            )}
+            <Pagination
+                current={currentPage}
+                total={filteredDoctors.length}
+                pageSize={pageSize}
+                onChange={handlePageChange}
+                className="pagination"
+                showTotal={(total) => `Hiển thị ${currentDoctors.length} trên tổng ${total} bác sĩ`}
+            />
 
             <Modal
                 title="Thêm Bác Sĩ Mới"
@@ -133,34 +139,87 @@ const DoctorListAdmin = () => {
                 footer={null}
             >
                 <Form layout="vertical" onFinish={handleAddDoctor}>
-                    <Form.Item label="Tên Bác Sĩ" name="name" rules={[{ required: true, message: 'Vui lòng nhập tên bác sĩ' }]}>
-                        <Input placeholder="Tên bác sĩ" />
-                    </Form.Item>
-                    <Form.Item label="Chuyên Khoa" name="specialty" rules={[{ required: true, message: 'Vui lòng chọn chuyên khoa' }]}>
-                        <Select placeholder="Chọn chuyên khoa">
-                            <Select.Option value="Virologist">Virologist</Select.Option>
-                            <Select.Option value="Oncologist">Oncologist</Select.Option>
-                            <Select.Option value="Surgeon">Surgeon</Select.Option>
-                            <Select.Option value="Pediatrician">Pediatrician</Select.Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item label="Email" name="email" rules={[{ type: 'email', message: 'Vui lòng nhập email hợp lệ' }]}>
-                        <Input placeholder="Email" />
-                    </Form.Item>
                     <Row gutter={16}>
                         <Col span={12}>
-                            <Form.Item label="Giờ Bắt Đầu" name="startTime" rules={[{ required: true, message: 'Vui lòng chọn giờ bắt đầu' }]}>
-                                <TimePicker style={{ width: '100%' }} />
+                            <Form.Item
+                                label="Họ"
+                                name="last_name"
+                                rules={[{ required: true, message: 'Vui lòng nhập họ' }]}
+                            >
+                                <Input placeholder="Họ" />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item label="Giờ Kết Thúc" name="endTime" rules={[{ required: true, message: 'Vui lòng chọn giờ kết thúc' }]}>
-                                <TimePicker style={{ width: '100%' }} />
+                            <Form.Item
+                                label="Tên"
+                                name="first_name"
+                                rules={[{ required: true, message: 'Vui lòng nhập tên' }]}
+                            >
+                                <Input placeholder="Tên" />
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Form.Item label="Số Điện Thoại" name="phone">
+                    <Form.Item
+                        label="Email"
+                        name="email"
+                        rules={[{ required: true, type: 'email', message: 'Vui lòng nhập email hợp lệ' }]}
+                    >
+                        <Input placeholder="Email" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Mật khẩu"
+                        name="password"
+                        rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+                    >
+                        <Input.Password placeholder="Mật khẩu" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Địa chỉ"
+                        name="address"
+                        rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+                    >
+                        <Input placeholder="Địa chỉ" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Số Điện Thoại"
+                        name="phone"
+                        rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
+                    >
                         <Input placeholder="Số điện thoại" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Mô tả"
+                        name="description"
+                        rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}
+                    >
+                        <Input.TextArea placeholder="Mô tả chuyên môn" rows={3} />
+                    </Form.Item>
+                    <Form.Item
+                        label="Giá Khám"
+                        name="price"
+                        rules={[{ required: true, message: 'Vui lòng nhập giá khám' }]}
+                    >
+                        <InputNumber placeholder="Giá khám" style={{ width: '100%' }} />
+                    </Form.Item>
+                    <Form.Item
+                        label="Chuyên Khoa"
+                        name="specialty"
+                        rules={[{ required: true, message: 'Vui lòng chọn chuyên khoa' }]}
+                    >
+                        <Select placeholder="Chọn chuyên khoa">
+                            <Select.Option value={8}>Thần kinh nhi</Select.Option>
+                            <Select.Option value={2}>Điện sinh lý tim</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label="Khoa"
+                        name="department"
+                        rules={[{ required: true, message: 'Vui lòng chọn khoa' }]}
+                    >
+                        <Select placeholder="Chọn khoa">
+                            <Select.Option value={2}>Khoa thần kinh</Select.Option>
+                            <Select.Option value={1}>Khoa tim mạch</Select.Option>
+                        </Select>
                     </Form.Item>
                     <Form.Item>
                         <Button type="default" onClick={handleModalCancel} style={{ marginRight: '10px' }}>

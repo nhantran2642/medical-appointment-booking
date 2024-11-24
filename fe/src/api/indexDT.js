@@ -8,10 +8,10 @@ class DoctorRepository extends BaseRepository {
     async getAllDoctors() {
         try {
             const response = await this.get('/');
-            console.log('API Response:', response); // Log phản hồi từ API
+            console.log('API Response:', response);
             return response;
         } catch (error) {
-            console.error('API Error:', error.response || error.message); // Log lỗi chi tiết
+            console.error('API Error:', error.response || error.message);
             throw error.response?.data?.message || 'Unable to fetch doctors';
         }
     }
