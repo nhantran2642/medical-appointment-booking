@@ -79,7 +79,9 @@ const doctors = [
         specialty: "Cardiology",
         image: require("../assets/img/doctor-1.png"),
         bio: "Dr. John Doe is an experienced cardiologist with over 15 years of practice, specializing in heart diseases and surgeries.",
-        social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")]
+        social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")],
+        department: 'Tim mạch',
+        price: 500.000
     },
     {
         id: 2,
@@ -87,7 +89,9 @@ const doctors = [
         specialty: "Neurology",
         image: require("../assets/img/doctor-2.png"),
         bio: "Dr. John Doe is an experienced cardiologist with over 15 years of practice, specializing in heart diseases and surgeries.",
-        social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")]
+        social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")],
+        department: 'Nhi',
+        price: 500.000
     },
     {
         id: 3,
@@ -95,7 +99,9 @@ const doctors = [
         specialty: "Pediatrics",
         image: require("../assets/img/doctor-3.png"),
         bio: "Dr. John Doe is an experienced cardiologist with over 15 years of practice, specializing in heart diseases and surgeries.",
-        social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")]
+        social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")],
+        department: 'Ngoại',
+        price: 850.000
     },
     {
         id: 4,
@@ -103,7 +109,9 @@ const doctors = [
         specialty: "Orthopedics",
         image: require("../assets/img/doctor-3.png"),
         bio: "Dr. John Doe is an experienced cardiologist with over 15 years of practice, specializing in heart diseases and surgeries.",
-        social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")]
+        social: [require("../assets/img/linkin-1.png"), require("../assets/img/facebook-1.png"), require("../assets/img/instagram-1.png")],
+        department: 'Ngoại',
+        price: 850.000
     }
 ];
 
@@ -272,4 +280,7 @@ const hours = [
     "6h CH - 7h CH",
     "7h CH - 8h CH",
 ];
+export const departments = ['Tim mạch', 'Nhi', 'Ngoại'];
+
+
 export { mockBlogPosts, contactDetails, doctors, recentPosts, categories, cardData, specialties, articles, menuItems, schedules, notifications, services, hours };

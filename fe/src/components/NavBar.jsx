@@ -18,13 +18,9 @@ const Navbar = () => {
             setShowInput(false);
         }
     };
-    const handleLogout = async () => {
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (!refreshToken) {
-            console.error("No refresh token found!");
-            navigate("/login");
-            return;
-        }
+    const handleLogout = () => {
+        localStorage.removeItem('auth_token');
+        window.location.href = '/login'; 
     };
     const handleAvatarClick = () => {
         setShowDropdown(!showDropdown);
