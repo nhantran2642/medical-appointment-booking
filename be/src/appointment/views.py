@@ -20,7 +20,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return super().get_permissions()
 
     def get_serializer_class(self):
-        if self.action == "create":
+        if self.action in ["create", "list", "retrieve"]:
             return AppointmentSerializer
         return super().get_serializer_class()
 
