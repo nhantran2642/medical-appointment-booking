@@ -13,21 +13,15 @@
 
 # misc
 .DS_Store
+
+# environment files
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
+# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-#.env
-REACT_APP_FIREBASE_API_KEY=AIzaSyDvG8qPJF_fzzgM8MsyI9F7A12c5_ewklA
-REACT_APP_FIREBASE_AUTH_DOMAIN=meddical-clinic.firebaseapp.com
-REACT_APP_FIREBASE_PROJECT_ID=meddical-clinic
-REACT_APP_FIREBASE_STORAGE_BUCKET=meddical-clinic.appspot.com
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=642517885917
-REACT_APP_FIREBASE_APP_ID=1:642517885917:web:4137cb2b347079c2108c34
-REACT_APP_FIREBASE_MEASUREMENT_ID=G-QFSWPD5QPG
-

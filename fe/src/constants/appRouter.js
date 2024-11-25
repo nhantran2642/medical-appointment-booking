@@ -9,5 +9,5 @@ export const APP_ROUTER = {
     BOOKAPOINT: '/bookappointment',
     PROFILE: '/profile',
     NOTIFICATIONS: '/notifications',
-    SCHEDULE: '/schedule'
+    SCHEDULE: '/schedule',
 };

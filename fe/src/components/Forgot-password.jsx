@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AuthRepository from '../api/index';
 
 const styles = {
     wrapper: {
@@ -7,7 +9,6 @@ const styles = {
         justifyContent: 'center',
         minHeight: '100vh',
         background: 'linear-gradient(90deg, rgba(33,150,243,1) 0%, rgba(144,202,249,1) 30%, rgba(224,247,250,1) 100%)',
-
     },
     container: {
         display: 'flex',
@@ -28,36 +29,14 @@ const styles = {
         borderRadius: '5px',
         border: '1px solid #ddd',
         fontSize: '16px',
-
-    },
-    captchaContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '15px',
-        width: '100%',
-    },
-    captchaInput: {
-        flex: 1,
-        padding: '12px',
-        borderRadius: '5px',
-        border: '1px solid #ddd',
-        fontSize: '16px',
-        marginRight: '10px',
-    },
-    captchaCode: {
-        fontSize: '18px',
-        fontWeight: '600',
-        color: '#333',
-    },
-    refreshButton: {
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        fontSize: '18px',
-        color: '#007bff',
     },
     errorMessage: {
         color: '#e74c3c',
+        marginBottom: '15px',
+        fontSize: '14px',
+    },
+    successMessage: {
+        color: '#2ecc71',
         marginBottom: '15px',
         fontSize: '14px',
     },
@@ -86,29 +65,35 @@ const styles = {
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
-    const [captchaInput, setCaptchaInput] = useState('');
-    const [captchaCode, setCaptchaCode] = useState(generateCaptcha());
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const [isHovered, setIsHovered] = useState(false);
+    const navigate = useNavigate();
 
-    function generateCaptcha() {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < 4; i++) {
-            result += characters.charAt(Math.floor(Math.random() * characters.length));
+    const handleSubmit = async () => {
+        if (!email) {
+            setErrorMessage('Vui lòng nhập email của bạn.');
+            return;
         }
-        return result;
-    }
 
-    const handleSubmit = () => {
-        if (captchaInput !== captchaCode) {
-            setErrorMessage('Mã captcha không đúng. Vui lòng thử lại.');
-            setCaptchaCode(generateCaptcha());
-            setCaptchaInput('');
-        } else {
-            setErrorMessage('');
-            console.log(`Gửi email xác nhận đến: ${email}`);
-            alert('Yêu cầu lấy lại mật khẩu đã được gửi.');
+        try {
+            const forgotPasswordResponse = await AuthRepository.forgotPassword({ email });
+            if (forgotPasswordResponse.message === 'We have sent you a link to reset your password') {
+                navigate('/check-email');
+            } else {
+                setErrorMessage('Đã có lỗi khi gửi yêu cầu đặt lại mật khẩu.');
+                setSuccessMessage('');
+            }
+        } catch (error) {
+            if (error.response?.data?.non_field_errors) {
+                const errorMessage = error.response.data.non_field_errors[0];
+                if (errorMessage === "Invalid email") {
+                    setErrorMessage('Email không hợp lệ. Vui lòng kiểm tra lại.');
+                }
+            } else {
+                setErrorMessage('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+            }
+            setSuccessMessage('');
         }
     };
 
@@ -117,7 +102,7 @@ const ForgotPassword = () => {
             <div style={styles.container}>
                 <h2 style={{ marginBottom: '20px', color: '#333' }}>Quên mật khẩu</h2>
                 <p style={{ textAlign: 'center', color: '#666', marginBottom: '20px' }}>
-                    Nhập email của bạn để nhận mã xác nhận lấy lại mật khẩu.
+                    Nhập email của bạn để đặt lại mật khẩu.
                 </p>
                 <input
                     type="email"
@@ -126,22 +111,7 @@ const ForgotPassword = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     style={styles.input}
                 />
-                <div style={styles.captchaContainer}>
-                    <input
-                        type="text"
-                        placeholder="Nhập mã captcha"
-                        value={captchaInput}
-                        onChange={(e) => setCaptchaInput(e.target.value)}
-                        style={styles.captchaInput}
-                    />
-                    <span style={styles.captchaCode}>{captchaCode}</span>
-                    <button
-                        onClick={() => setCaptchaCode(generateCaptcha())}
-                        style={styles.refreshButton}
-                    >
-                        🔄
-                    </button>
-                </div>
+                {successMessage && <p style={styles.successMessage}>{successMessage}</p>}
                 {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
                 <button
                     onClick={handleSubmit}
@@ -152,7 +122,7 @@ const ForgotPassword = () => {
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                 >
-                    Lấy lại mật khẩu
+                    Gửi yêu cầu đặt lại mật khẩu
                 </button>
                 <a href="/login" style={styles.backLink}>Quay lại đăng nhập</a>
             </div>
