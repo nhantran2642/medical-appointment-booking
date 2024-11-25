@@ -11,6 +11,11 @@ class BaseModel(models.Model):
         abstract = True
 
 
+class CustomManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False)
+
+
 class CustomModel(models.Model):
     is_deleted = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -23,3 +28,5 @@ class CustomModel(models.Model):
             self.is_deleted = True
             self.deleted_at = timezone.now()
             self.save()
+
+    objects = CustomManager()
