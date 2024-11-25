@@ -8,8 +8,10 @@ from rest_framework.views import APIView
 from api import settings
 from appointment.serializers import AppointmentSerializer
 from appointment.utils import decode_appointment_data
+from authentication.models import User
 from payment.utils import generate_vnpay_payment_url
 from payment.vnpay import VNPay
+from utilities.email.mailer import send_appointment_notification
 
 
 class VNPayCreatePaymentView(APIView):
@@ -37,6 +39,7 @@ class VNPayReturnView(APIView):
                 try:
                     transaction_ref = vnp.response_data.get('vnp_TxnRef')
                     appointment_data = decode_appointment_data(transaction_ref)
+                    user = User.objects.get(pk=appointment_data.get('user_id'))
                     data = {
                         "doctor_id": appointment_data.get('doctor_id'),
                         "appointment_date": appointment_data.get('appointment_datetime'),
@@ -44,7 +47,10 @@ class VNPayReturnView(APIView):
                     }
                     serializer = AppointmentSerializer(data=data, context={"user_id": appointment_data.get('user_id')})
                     serializer.is_valid(raise_exception=True)
-                    serializer.save()
+                    appointment = serializer.save()
+
+                    send_appointment_notification(user, appointment)
+
                     return Response({'message': 'Thanh toán thành công', 'data': serializer.data})
                 except (KeyError, ValueError) as e:
                     return Response({'message': 'Dữ liệu không hợp lệ', 'error': str(e)},

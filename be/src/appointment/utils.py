@@ -4,8 +4,7 @@ import json
 
 
 def encode_appointment_data(user_id, doctor_id, appointment_datetime):
-    timezone_vn = timezone(timedelta(hours=7))
-    current_time = datetime.now(timezone_vn).isoformat()
+    current_time = datetime.now().isoformat()
     data = {
         "user_id": user_id,
         "doctor_id": doctor_id,
