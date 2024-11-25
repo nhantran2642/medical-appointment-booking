@@ -1,5 +1,6 @@
-from rest_framework.exceptions import ValidationError, NotFound
+from rest_framework.exceptions import ValidationError, NotFound, PermissionDenied
 
+from api import constants
 from appointment.models import Appointment
 from appointment.serializers import AppointmentSerializer
 from rest_framework import status, viewsets
@@ -25,7 +26,20 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
     def get_queryset(self):
-        queryset = Appointment.objects.all()
+        user_id = self.request.user_id
+        role_id = self.request.role_id
+        if not role_id or not user_id:
+            raise PermissionDenied("Missing role_id or user_id in request.")
+
+        if role_id == constants.USER_ROLE["DOCTOR"]:
+            queryset = Appointment.objects.filter(doctor_id=user_id)
+        elif role_id == constants.USER_ROLE["USER"]:
+            queryset = Appointment.objects.filter(user_id=user_id)
+        elif role_id == constants.USER_ROLE["ADMIN"]:
+            queryset = Appointment.objects.all()
+        else:
+            raise PermissionDenied("Invalid role_id.")
+
         return queryset
 
     def create(self, request, *args, **kwargs):
