@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import AuthRepository from '../api/index';
+import AuthRepository from '../api/auth';
 
 const styles = {
     container: {
@@ -60,11 +60,11 @@ const VerificationCode = () => {
     const handleVerify = async () => {
         setIsLoading(true);
         setError(null);
-    
+
         try {
             const payload = { email, code: verificationCode };
             const response = await AuthRepository.verifyLoginCode(payload);
-    
+
             if (response.email === email && response.access) {
                 navigate(`/home?p=${encodeURIComponent(response.access)}`);
             } else {

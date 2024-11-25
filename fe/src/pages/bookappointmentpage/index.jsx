@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './style.scss';
 import { doctors, departments, hours } from '../../mock/index.js';
-import AuthRepository from '../../api/index.js';
+import UsersRepository from '../../api/apiUsers.js'; 
+import AppointmentRepository from '../../api/apiAppointment.js';
 
 const AppointmentPage = () => {
     const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const AppointmentPage = () => {
     });
 
     const [filteredDoctors, setFilteredDoctors] = useState([]);
-    
+
     // Hàm xử lý thay đổi thông tin form
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,9 +51,9 @@ const AppointmentPage = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await AuthRepository.users(); 
+                const response = await UsersRepository.getUsers();  // Lấy thông tin người dùng từ UsersRepository
                 if (response.results && response.results.length > 0) {
-                    const user = response.results[0]; 
+                    const user = response.results[0]; // Giả sử bạn chỉ lấy người dùng đầu tiên
                     setFormData({
                         ...formData,
                         name: `${user.first_name} ${user.last_name}`,
@@ -66,7 +67,7 @@ const AppointmentPage = () => {
         };
 
         fetchUserData();
-    }, []);
+    }, []); // Chạy khi component mount
 
     // Hàm xử lý gửi thông tin đặt lịch
     const handleSubmit = async (e) => {
@@ -80,7 +81,7 @@ const AppointmentPage = () => {
         }
 
         try {
-            const response = await AuthRepository.appointment(formData);
+            const response = await AppointmentRepository.appointment(formData);
             alert('Đặt lịch thành công!');
             console.log('Response:', response);
         } catch (error) {
