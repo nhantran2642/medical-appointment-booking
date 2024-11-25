@@ -1,6 +1,6 @@
-from authentication.models import User
 from django.db import models
 from doctor.models import Doctor
+from authentication.models import User
 from utilities.base import BaseModel
 
 
