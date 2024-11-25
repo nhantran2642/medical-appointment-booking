@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './style.scss';
 import { doctors, departments, hours } from '../../mock/index.js';
 import AuthRepository from '../../api/index.js';
+import UserRepository from '../../api/indexUser.js';
 
 const AppointmentPage = () => {
     const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const AppointmentPage = () => {
     });
 
     const [filteredDoctors, setFilteredDoctors] = useState([]);
-    
+
     // Hàm xử lý thay đổi thông tin form
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,18 +51,33 @@ const AppointmentPage = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await AuthRepository.users(); 
-                if (response.results && response.results.length > 0) {
-                    const user = response.results[0]; 
+                const token = localStorage.getItem('auth_token');
+                if (!token) {
+                    alert('Vui lòng đăng nhập');
+                    return;
+                }
+
+                const response = await UserRepository.users();
+                if (response && response.results && response.results.length > 0) {
+                    const user = response.results[0];
                     setFormData({
                         ...formData,
                         name: `${user.first_name} ${user.last_name}`,
                         email: user.email,
                         phone: user.phone
                     });
+                } else {
+                    console.log('Không tìm thấy thông tin người dùng');
                 }
             } catch (error) {
-                console.error('Lỗi khi lấy thông tin người dùng:', error.message);
+                console.error('Lỗi khi lấy thông tin người dùng:', error);
+                if (error.response) {
+                    console.error('Response error:', error.response.status, error.response.data);
+                } else if (error.request) {
+                    console.error('Request error:', error.request);
+                } else {
+                    console.error('General error:', error.message);
+                }
             }
         };
 
@@ -84,7 +100,7 @@ const AppointmentPage = () => {
             alert('Đặt lịch thành công!');
             console.log('Response:', response);
         } catch (error) {
-            console.error('Lỗi khi gửi yêu cầu đặt lịch:', error.message);
+            console.error('Lỗi khi gửi yêu cầu đặt lịch:', error);
             alert('Đặt lịch thất bại, vui lòng thử lại.');
         }
     };
@@ -242,12 +258,10 @@ const AppointmentPage = () => {
 
             <div className="map">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.0980619197676!2d108.21058327459991!3d16.060400339675287!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314219b5ed09e295%3A0xdb79efdf8394954d!2zMTI2IMSQLiBOZ3V54buFbiBWxINuIExpbmcsIFbEqW5oIFRydW5nLCBUaGFuaCBLaMOqLCDEkMOgIE7hurVuZyA1NTAwMDAsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1729735211461!5m2!1svi!2s"
-                    width="100%"
-                    height="450"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.438577788259!2d108.22015231545916!3d16.05987444382998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3142194052d812d5%3A0x20048a6db5e7fe9!2sVivo%20Coffee%20%26%20Tea!5e0!3m2!1svi!2s!4v1687375122999!5m2!1svi!2s"
+                    style={{ border: '0', width: '100%', height: '450px' }}
                     allowFullScreen=""
                     loading="lazy"
-                    title="Google Maps"
                 ></iframe>
             </div>
         </div>

@@ -41,9 +41,6 @@ class AuthRepository extends BaseRepository {
     async appointment(data) {
         return this.post('/appointment', data);
     }
-    async users(data) {
-        return this.get('/users', data);
-    }
 }
 
 export default new AuthRepository();
