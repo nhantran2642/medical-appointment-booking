@@ -12,7 +12,7 @@ class AppointmentStatus(models.TextChoices):
 
 class Appointment(BaseModel):
     appointment_date = models.DateTimeField()
-    status = models.CharField(max_length=255)
+    status = models.CharField(max_length=255, null=True, blank=True)
     user = models.ForeignKey(
         User, related_name="appointments", on_delete=models.DO_NOTHING, null=True
     )
