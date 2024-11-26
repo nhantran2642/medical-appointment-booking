@@ -1,15 +1,14 @@
-from rest_framework.exceptions import ValidationError, NotFound, PermissionDenied
+import datetime
 
 from api import constants
 from appointment.models import Appointment
 from appointment.serializers import AppointmentSerializer
-from rest_framework import status, viewsets
-from rest_framework.response import Response
-
 from doctor.models import Doctor
 from payment.utils import generate_vnpay_payment_url
-from utilities.permission import IsUser, IsDoctorUser
-import datetime
+from rest_framework import status, viewsets
+from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
+from rest_framework.response import Response
+from utilities.permission import IsUser
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
@@ -44,7 +43,9 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        serializer = self.get_serializer(data=data, context={"user_id": request.user_id})
+        serializer = self.get_serializer(
+            data=data, context={"user_id": request.user_id}
+        )
         serializer.is_valid(raise_exception=True)
 
         user_id = request.user_id
@@ -53,9 +54,16 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         price = int(doctor.price)
         order_desc = f"Thanh toán cuộc hẹn cho bác sĩ {doctor.user.get_full_name()}"
 
-        payment_url = generate_vnpay_payment_url(request, user_id=user_id, amount=price, doctor_id=doctor_id, appointment_datetime=data.get("appointment_date"), order_desc=order_desc)
+        payment_url = generate_vnpay_payment_url(
+            request,
+            user_id=user_id,
+            amount=price,
+            doctor_id=doctor_id,
+            appointment_datetime=data.get("appointment_date"),
+            order_desc=order_desc,
+        )
 
-        return Response({'payment_url': payment_url}, status=status.HTTP_200_OK)
+        return Response({"payment_url": payment_url}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

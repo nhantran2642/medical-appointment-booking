@@ -1,20 +1,20 @@
 from medical_record.models import MedicalRecord
-from medical_record.serializers import MedicalRecordSerializer, MedicalRecordUpdateSerializer
+from medical_record.serializers import (
+    MedicalRecordSerializer,
+    MedicalRecordUpdateSerializer,
+)
 from rest_framework import status, viewsets
 from rest_framework.response import Response
-from utilities.permission import IsDoctorUser, IsAdminUser
+from utilities.permission import IsAdminUser, IsDoctor
 
 
 class MedicalRecordViewSet(viewsets.ModelViewSet):
     serializer_class = MedicalRecordSerializer
-    permission_classes = [IsDoctorUser]
 
     def get_permissions(self):
-        if self.action in ["create", "update", "list"]:
-            self.permission_classes = [IsDoctorUser]
         if self.action == "destroy":
-            self.permission_classes = [IsAdminUser]
-        return super().get_permissions()
+            return [IsAdminUser]
+        return []
 
     def get_serializer_class(self):
         if self.action in ["create", "list"]:
