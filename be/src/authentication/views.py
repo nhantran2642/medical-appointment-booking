@@ -19,6 +19,7 @@ from utilities.email.mailer import (
     send_verify_email,
     send_verify_login,
 )
+from utilities.permission import *
 
 from .models import User
 from .serializers import (
@@ -37,6 +38,13 @@ from .serializers import (
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    def get_permissions(self):
+        if self.action in ["create", "destroy", "list"]:
+            return [IsAdmin()]
+        if self.action == "update":
+            return [IsAdminUser()]
+        return []
+
     def get_serializer_class(self, *args, **kwargs):
         if self.action in ["create", "retrieve", "list"]:
             return RegisterSerializer

@@ -8,16 +8,16 @@ from payment.utils import generate_vnpay_payment_url
 from rest_framework import status, viewsets
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.response import Response
-from utilities.permission import IsUser
+from utilities.permission import *
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentSerializer
 
     def get_permissions(self):
-        if self.action in ["create", "list", "destroy"]:
-            self.permission_classes = [IsUser]
-        return super().get_permissions()
+        if self.action in ["create", "destroy"]:
+            return [IsUser()]
+        return []
 
     def get_serializer_class(self):
         if self.action in ["create", "list", "retrieve"]:
@@ -31,7 +31,12 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             raise PermissionDenied("Missing role_id or user_id in request.")
 
         if role_id == constants.USER_ROLE["DOCTOR"]:
-            queryset = Appointment.objects.filter(doctor_id=user_id)
+            try:
+                doctor = Doctor.objects.get(user_id=user_id)
+                doctor_id = doctor.id
+            except Doctor.DoesNotExist:
+                raise NotFound("Doctor not found")
+            queryset = Appointment.objects.filter(doctor_id=doctor_id)
         elif role_id == constants.USER_ROLE["USER"]:
             queryset = Appointment.objects.filter(user_id=user_id)
         elif role_id == constants.USER_ROLE["ADMIN"]:
