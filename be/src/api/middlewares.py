@@ -27,6 +27,7 @@ class AuthenticationMiddleware:
             "static",
             "admin",
             "favicon.ico",
+            "payment",
         ]
         if request.path != "/":
             for endpoint in public_endpoints:
