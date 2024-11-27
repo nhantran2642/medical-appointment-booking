@@ -12,7 +12,7 @@ export const APP_ROUTER = {
     SCHEDULE: '/schedule',
     DETAILAPOINT: '/detailappointment',
     BLOG: '/blogspage',
-    DOCTORS: '/doctors',
+    DOCTORS: '/doctor',
     ADDASHBOARD: '/admin/dashboard',
     CALENDAR: '/admin/calendar',
     DOCTOR: '/admin/doctor',
