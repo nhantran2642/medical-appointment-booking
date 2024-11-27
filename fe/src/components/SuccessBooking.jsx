@@ -1,12 +1,23 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const SuccessBooking = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const vnpAmount = queryParams.get("vnp_Amount");
+  const vnpTransactionStatus = queryParams.get("vnp_TransactionStatus");
+  const vnpOrderInfo = queryParams.get("vnp_OrderInfo");
 
   const handleGoHome = () => {
     navigate("/home");
   };
+
+  const transactionMessage =
+    vnpTransactionStatus === "00"
+      ? "Thanh toán thành công"
+      : "Thanh toán không thành công";
 
   const styles = {
     successBooking: {
@@ -47,7 +58,7 @@ const SuccessBooking = () => {
       transition: "background-color 0.3s ease",
     },
     backBtnHover: {
-      backgroundColor: "#1a2a4c", 
+      backgroundColor: "#1a2a4c",
     },
   };
 
@@ -56,13 +67,27 @@ const SuccessBooking = () => {
       <div style={styles.content}>
         <h1 style={styles.title}>🎉 Đặt Lịch Thành Công 🎉</h1>
         <p style={styles.message}>
-          Cảm ơn bạn đã đặt lịch thành công! <br/> Chúng tôi sẽ liên hệ với bạn
-          sớm.
+          {transactionMessage} <br />
+          {vnpAmount && (
+            <>
+              Số tiền thanh toán: <strong>{vnpAmount / 100} VND</strong>
+            </>
+          )}
+          <br />
+          {vnpOrderInfo && (
+            <>
+              Thông tin đặt lịch: <strong>{vnpOrderInfo}</strong>
+            </>
+          )}
         </p>
         <button
           style={styles.backBtn}
-          onMouseEnter={(e) => (e.target.style.backgroundColor = styles.backBtnHover.backgroundColor)}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = styles.backBtn.backgroundColor)}
+          onMouseEnter={(e) =>
+            (e.target.style.backgroundColor = styles.backBtnHover.backgroundColor)
+          }
+          onMouseLeave={(e) =>
+            (e.target.style.backgroundColor = styles.backBtn.backgroundColor)
+          }
           onClick={handleGoHome}
         >
           Quay lại trang chủ

@@ -59,7 +59,7 @@ const Main = () => {
           <Route path="/verify" element={<VerifyCode />} />
           <Route path="/password-reset" element={<NewPassword />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/api/v1/payment/vnpay_return" element={<SuccessBooking />} />
+          <Route path="/payment/vnpay_return" element={<SuccessBooking />} />
 
 
           {/* Default Layout */}
