@@ -10,5 +10,13 @@ export const APP_ROUTER = {
     PROFILE: '/profile',
     NOTIFICATIONS: '/notifications',
     SCHEDULE: '/schedule',
+    DETAILAPOINT: '/detailappointment',
+    BLOG: '/blogspage',
+    ADDASHBOARD: '/admin/dashboard',
+    CALENDAR: '/admin/calendar',
+    DOCTOR: '/admin/doctor',
+    DEPARTMENT: '/admin/department',
+    PATIENT: '/admin/patientlist',
+    PAYMENT: '/admin/paymentpage',
     MEDICALRECORD: '/medical-record',
 };

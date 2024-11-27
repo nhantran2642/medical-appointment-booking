@@ -1,0 +1,68 @@
+.department-list {
+    padding: 20px;
+    background-color: #f0f2f5;
+    min-height: 500px;
+
+    h2 {
+        color: #001529;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .ant-input-search {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .department-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: center;
+        align-items: center;
+        min-height: 350px;
+    }
+
+    .department-item {
+        flex: 0 0 calc(25% - 16px);
+        max-width: calc(25% - 16px);
+        box-sizing: border-box;
+    }
+
+    .department-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 150px;
+        text-align: center;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        .department-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #001529;
+        }
+
+        .department-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #001529;
+        }
+    }
+
+    .empty-card {
+        background-color: transparent;
+        box-shadow: none;
+        pointer-events: none;
+    }
+
+    .ant-pagination {
+        margin-top: 20px;
+    }
+}

@@ -1,0 +1,134 @@
+.payment-page {
+    background-color: #f0f2f5;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    width: 100%;
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #2c3e50;
+        font-weight: bold;
+        margin: 0;
+        font-size: 32px;
+    }
+
+    .download-button {
+        background-color: #2c3e50;
+        color: white;
+        border-radius: 8px;
+        padding: 8px 16px;
+
+        &:hover {
+            background-color: #1a2e45;
+        }
+    }
+
+    .actions-header {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+
+        .search-input {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .ant-select {
+            width: 200px;
+        }
+
+        .ant-picker {
+            width: 200px;
+        }
+    }
+
+    .summary {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .summary-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            flex: 1;
+            min-width: 180px;
+
+            span {
+                color: #2c3e50;
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            p {
+                font-size: 18px;
+                color: #2c3e50;
+                margin: 0;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .payment-table-container {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .payment-table {
+        .ant-table-thead>tr>th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 12px;
+        }
+
+        .ant-table-tbody>tr>td {
+            text-align: center;
+            padding: 16px;
+        }
+
+        .patient-name {
+            display: flex;
+            align-items: center;
+
+            .anticon {
+                margin-right: 8px;
+            }
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+
+            button {
+                background: none;
+                border: none;
+                color: #2c3e50;
+
+                &:hover {
+                    color: #1890ff;
+                }
+            }
+        }
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+}

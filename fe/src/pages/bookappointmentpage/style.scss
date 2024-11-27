@@ -82,17 +82,17 @@
                         min-width: 200px;
                         padding: 10px;
                         background-color: #1F2B6C;
-                        border: 0.1px solid transparent; 
+                        border: 0.1px solid transparent;
                         border-radius: 5px;
                         color: white;
 
-                        &::placeholder { 
-                            color: white; 
+                        &::placeholder {
+                            color: white;
                         }
 
                         &:focus {
-                            border: none; 
-                            outline: none; 
+                            border: none;
+                            outline: none;
                         }
                     }
                 }
@@ -121,7 +121,7 @@
     }
 
     .appointment-page-info {
-     
+
         background: #002855;
         color: #BFD2F8;
         padding: 20px;

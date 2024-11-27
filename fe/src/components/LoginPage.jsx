@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthRepository from '../api/auth';
+import EyeOpenIcon from '../assets/img/Eye.png';
+import EyeClosedIcon from '../assets/img/Eye-1.png';
+import BannerImage from '../assets/img/banner-login.png';
 import { jwtDecode } from 'jwt-decode';
 import UsersRepository from '../api/apiUsers';
+
 
 const styles = {
     container: {
@@ -143,6 +147,10 @@ const styles = {
         textDecoration: 'underline',
         transition: 'color 0.3s',
     },
+    error: {
+        color: 'red',
+        marginTop: '10px',
+    },
 };
 
 const LoginPage = () => {
@@ -162,6 +170,7 @@ const LoginPage = () => {
             setIsLoading(false);
             return;
         }
+
         if (!password) {
             setError("Mật khẩu không được để trống.");
             setIsLoading(false);
@@ -188,10 +197,10 @@ const LoginPage = () => {
                 localStorage.setItem('auth_token', access);
 
                 const userResponse = await UsersRepository.getUserById(user_id);
-               
+
                 if (userResponse && userResponse.first_name && userResponse.last_name) {
                     const { first_name, last_name, email: userEmail, phone } = userResponse;
-                    const fullName =`${first_name} ${last_name}`;
+                    const fullName = `${first_name} ${last_name}`;
                     localStorage.setItem('user_name', fullName);
                     localStorage.setItem('user_email', userEmail);
                     localStorage.setItem('user_phone', phone);
@@ -218,10 +227,10 @@ const LoginPage = () => {
         }
     };
 
+
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
-
 
     return (
         <div style={styles.container}>
@@ -231,7 +240,7 @@ const LoginPage = () => {
                     <h2 style={styles.login}>Đăng nhập</h2>
                 </div>
                 <img
-                    src={require('../assets/img/banner-login.png')}
+                    src={BannerImage}
                     alt="Hình minh họa trang đăng nhập"
                     style={styles.illustration}
                 />
@@ -257,7 +266,7 @@ const LoginPage = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             <img
-                                src={require(`../assets/img/${isPasswordVisible ? 'Eye' : 'Eye-1'}.png`)}
+                                src={isPasswordVisible ? EyeOpenIcon : EyeClosedIcon}
                                 alt={isPasswordVisible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
                                 style={styles.icon}
                                 onClick={togglePasswordVisibility}
@@ -277,7 +286,7 @@ const LoginPage = () => {
                 >
                     <span style={styles.buttonLabel}>{isLoading ? 'Đang xử lý...' : 'Đăng nhập'}</span>
                 </button>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p style={styles.error}>{error}</p>}
             </div>
         </div>
     );

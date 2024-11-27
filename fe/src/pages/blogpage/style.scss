@@ -21,8 +21,9 @@
             a {
                 color: #1F2B6C;
                 text-decoration: none;
+
                 &:hover {
-                    text-decoration: underline; 
+                    text-decoration: underline;
                 }
             }
         }
@@ -41,7 +42,7 @@
 
         .posts {
             flex: 3;
-            padding:  0px 100px;
+            padding: 0px 100px;
 
 
             .post-card {

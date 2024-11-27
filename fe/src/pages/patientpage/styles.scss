@@ -1,0 +1,53 @@
+.patient-list {
+    background-color: #f0f2f5;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+
+    h2 {
+        color: #2c3e50;
+        font-weight: bold;
+    }
+
+    .search-input {
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .patient-table {
+        width: 100% !important;
+
+        .ant-table {
+            width: 100% !important;
+        }
+
+        .ant-table-thead>tr>th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 12px;
+        }
+
+        .ant-table-tbody>tr>td {
+            text-align: center;
+            padding: 16px;
+        }
+
+        .patient-name {
+            display: flex;
+            align-items: center;
+
+            .anticon {
+                margin-right: 8px;
+            }
+        }
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+}

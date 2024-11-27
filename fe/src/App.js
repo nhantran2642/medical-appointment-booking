@@ -21,6 +21,20 @@ import Schedule from "./pages/schedulePage";
 import SingleDoctor from "./pages/singleDoctor";
 import VerifyEmailPage from './components/VerifyEmail';
 import SuccessEmail from './components/SuccessEmail';
+import Dashboard from "./pages/adminDashboard";
+import CalendarLayout from "./pages/calendarpage";
+import AdLayout from "./layOuts/addashboardLayout";
+import DoctorList from "./pages/doctorPage";
+import DepartmentList from "./pages/medicaldepartmentpage";
+import PatientList from "./pages/patientpage";
+import PaymentPage from "./pages/paymentpage";
+import DoctorListAdmin from "./pages/doctorListAdmin";
+import ProtectedRoute from "./constants/protectRouter";
+import DashboardLayout from "./pages/calendarpage";
+
+// eslint-disable-next-line
+
+
 import VerifyCode from './components/VerifyCode';
 import NotFound from './components/Error';
 import CheckEmail from "./components/CheckMail";
@@ -48,8 +62,23 @@ const Main = () => {
           <Route path="/api/v1/payment/vnpay_return" element={<SuccessBooking />} />
 
 
+          {/* Default Layout */}
+          <Route path={APP_ROUTER.LOGIN} element={<LoginPage />} />
+          <Route path="/calendar" element={<CalendarLayout />} />
+          <Route path="/admin" element={<ProtectedRoute role={1} > <AdLayout /></ProtectedRoute>}>
+            <Route path="/admin/calendar" element={<ProtectedRoute role={1}><DashboardLayout /></ProtectedRoute>} />
+            <Route path="/admin/doctor" element={<ProtectedRoute role={1}><DoctorListAdmin /></ProtectedRoute>} />
+            <Route path="/admin/dashboard" element={<ProtectedRoute role={1}><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/department" element={<ProtectedRoute role={1}><DepartmentList /></ProtectedRoute>} />
+            <Route path="/admin/patientlist" element={<ProtectedRoute role={1}><PatientList /></ProtectedRoute>} />
+            <Route path="/admin/paymentpage" element={<ProtectedRoute role={1}><PaymentPage /></ProtectedRoute>} />
+          </Route>
           <Route path="/" element={<HomeLayout />}>
             <Route path="/contact" element={<AboutPage />} />
+            <Route path="/home" element={<HomePage />} />
+
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/bookappointment" element={<AppointmentPage />} />
             <Route path="/service" element={<Services />} />
@@ -64,10 +93,13 @@ const Main = () => {
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/medical-record" element={<MedicalRecord />} />
             <Route path="/medical-record/:id" element={<MedicalRecordDetail />} />
-            </Route>
+            <Route path="/blogspage" element={<BlogPage />} />
+          </Route>
+
+
         </Routes>
       </div>
-    </Router>
+    </Router >
   );
 };
 
