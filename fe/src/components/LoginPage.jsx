@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthRepository from '../api/index';
+import AuthRepository from '../api/auth';
 import EyeOpenIcon from '../assets/img/Eye.png';
 import EyeClosedIcon from '../assets/img/Eye-1.png';
 import BannerImage from '../assets/img/banner-login.png';
 import { jwtDecode } from 'jwt-decode';
+import UsersRepository from '../api/apiUsers';
 
 
 const styles = {
@@ -186,39 +187,46 @@ const LoginPage = () => {
         try {
             const loginData = { email, password };
             const response = await AuthRepository.loginUser(loginData);
-            console.log('API Response:', response);
+            const { message, access } = response;
 
-            if (response.message === "Send code verify for mail success") {
+            if (message === "Send code verify for mail success") {
                 navigate('/verify', { state: { email } });
-            } else if (response.message === "Login successful" && response.access) {
-                const token = response.access;
-                localStorage.removeItem('auth_token');
-                localStorage.setItem('auth_token', token);
-                const decodeToken = jwtDecode(token);
-                console.log('Decodecode:', decodeToken);
-                const roleId = decodeToken.role_id;
+            } else if (message === "Login successful" && access) {
+                const decodedToken = jwtDecode(access);
+                const { role_id, user_id } = decodedToken;
+                localStorage.setItem('auth_token', access);
 
-                if (roleId === 1) {
-                    navigate('/admin/dashboard');
-                } else if (roleId === 4) {
-                    navigate('/home');
+                const userResponse = await UsersRepository.getUserById(user_id);
+
+                if (userResponse && userResponse.first_name && userResponse.last_name) {
+                    const { first_name, last_name, email: userEmail, phone } = userResponse;
+                    const fullName = `${first_name} ${last_name}`;
+                    localStorage.setItem('user_name', fullName);
+                    localStorage.setItem('user_email', userEmail);
+                    localStorage.setItem('user_phone', phone);
+
+                    if (role_id === 1) {
+                        navigate('/admin/dashboard');
+                    } else if (role_id === 4) {
+                        navigate('/home');
+                    } else {
+                        setError("Không xác định được loại người dùng.");
+                    }
                 } else {
-                    setError("khong xac dinh duoc nguoi dung");
+                    setError("Không thể lấy thông tin người dùng.");
+                    console.error("Phản hồi lỗi từ API:", userResponse);
                 }
-                console.log('Role ID:', roleId);
-                localStorage.setItem('auth_toKen', token);
-
             } else {
                 setError("Sai email hoặc mật khẩu!");
-                console.error("Phản hồi không thành công từ API:", response);
             }
-        } catch (error) {
-            console.error("Phản hồi lỗi từ API:", error);
+        } catch (err) {
+            console.error("Phản hồi lỗi từ API:", err);
             setError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
         } finally {
             setIsLoading(false);
         }
     };
+
 
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
@@ -275,14 +283,6 @@ const LoginPage = () => {
                     style={styles.button}
                     onClick={handleLogin}
                     disabled={isLoading}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#0056b3';
-                        e.currentTarget.style.transform = 'scale(1.05)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#1f2b6c';
-                        e.currentTarget.style.transform = 'scale(1)';
-                    }}
                 >
                     <span style={styles.buttonLabel}>{isLoading ? 'Đang xử lý...' : 'Đăng nhập'}</span>
                 </button>

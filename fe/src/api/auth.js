@@ -29,6 +29,7 @@ class AuthRepository extends BaseRepository {
     async resetPassword(data) {
         return this.put('/password-reset-complete/', data);
     }
+
     async logout({ refresh }) {
         try {
             const response = await axios.post(`${this.baseUrl}/logout/`, { refresh });
@@ -38,6 +39,7 @@ class AuthRepository extends BaseRepository {
             throw err;
         }
     }
+  
 }
 
 export default new AuthRepository();

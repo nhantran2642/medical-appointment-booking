@@ -1,3 +1,6 @@
+from rest_framework.exceptions import NotFound, PermissionDenied
+
+from doctor.models import Doctor
 from medical_record.models import MedicalRecord
 from medical_record.serializers import (
     MedicalRecordSerializer,
@@ -5,7 +8,7 @@ from medical_record.serializers import (
 )
 from rest_framework import status, viewsets
 from rest_framework.response import Response
-from utilities.permission import IsAdminUser, IsDoctor
+from utilities.permission import *
 
 
 class MedicalRecordViewSet(viewsets.ModelViewSet):
@@ -13,7 +16,9 @@ class MedicalRecordViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == "destroy":
-            return [IsAdminUser]
+            return [IsAdmin()]
+        if self.action in ["create", "update"]:
+            return [IsDoctor()]
         return []
 
     def get_serializer_class(self):
@@ -24,7 +29,24 @@ class MedicalRecordViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
     def get_queryset(self):
-        queryset = MedicalRecord.objects.all()
+        user_id = self.request.user_id
+        role_id = self.request.role_id
+        if not role_id or not user_id:
+            raise PermissionDenied("Missing role_id or user_id in request.")
+
+        if role_id == constants.USER_ROLE["DOCTOR"]:
+            try:
+                doctor = Doctor.objects.get(user_id=user_id)
+                doctor_id = doctor.id
+            except Doctor.DoesNotExist:
+                raise NotFound("Doctor not found")
+            queryset = MedicalRecord.objects.filter(doctor_id=doctor_id)
+        elif role_id == constants.USER_ROLE["USER"]:
+            queryset = MedicalRecord.objects.filter(user_id=user_id)
+        elif role_id == constants.USER_ROLE["ADMIN"]:
+            queryset = MedicalRecord.objects.all()
+        else:
+            raise PermissionDenied("Invalid role_id.")
         return queryset
 
     def create(self, request, *args, **kwargs):
