@@ -94,7 +94,6 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
     "CORS_ALLOWED_ORIGINS",
     "http://localhost:3000,https://medical-clinic-api.vercel.app",
 ).split(",")
-
 ROOT_URLCONF = "api.urls"
 
 TEMPLATES = [

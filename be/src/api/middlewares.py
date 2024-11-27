@@ -25,6 +25,8 @@ class AuthenticationMiddleware:
             "password-reset",
             "redoc",
             "static",
+            "admin",
+            "favicon.ico",
         ]
         if request.path != "/":
             for endpoint in public_endpoints:

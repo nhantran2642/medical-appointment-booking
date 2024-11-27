@@ -235,10 +235,11 @@ class ResetPasswordRequestSerializer(serializers.Serializer):
         email = attrs.get("email", "")
         try:
             validate_email(email)
-            if not User.objects.filter(email=email).exists():
-                raise ValidationError("Email is not exist.")
         except ValidationError:
             raise ValidationError("Invalid email")
+
+        if not User.objects.filter(email=email).exists():
+            raise NotFound("Email is not exist.")
         return super().validate(attrs)
 
 
