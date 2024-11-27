@@ -9,7 +9,7 @@ const DoctorListAdmin = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const pageSize = 12;
+    const pageSize = 8;
 
     useEffect(() => {
         const fetchDoctors = async () => {
@@ -207,8 +207,18 @@ const DoctorListAdmin = () => {
                         rules={[{ required: true, message: 'Vui lòng chọn chuyên khoa' }]}
                     >
                         <Select placeholder="Chọn chuyên khoa">
-                            <Select.Option value={8}>Thần kinh nhi</Select.Option>
+
+                            <Select.Option value={1}>Tim mạch can thiệp</Select.Option>
                             <Select.Option value={2}>Điện sinh lý tim</Select.Option>
+                            <Select.Option value={3}>Suy tim và ghép tim</Select.Option>
+                            <Select.Option value={4}>Chẩn đoán hình ảnh tim mạch</Select.Option>
+                            <Select.Option value={5}>Tim mạch nhi</Select.Option>
+                            <Select.Option value={6}>Thần kinh đột quỵ</Select.Option>
+                            <Select.Option value={7}>Thần kinh vận động</Select.Option>
+                            <Select.Option value={8}>Thần kinh nhi</Select.Option>
+                            <Select.Option value={9}>Thần kinh lão khoa</Select.Option>
+                            <Select.Option value={10}>Chẩn đoán hình ảnh thần kinh</Select.Option>
+
                         </Select>
                     </Form.Item>
                     <Form.Item
@@ -219,6 +229,16 @@ const DoctorListAdmin = () => {
                         <Select placeholder="Chọn khoa">
                             <Select.Option value={2}>Khoa thần kinh</Select.Option>
                             <Select.Option value={1}>Khoa tim mạch</Select.Option>
+                            <Select.Option value={3}>Khoa chấn thương chỉnh hình</Select.Option>
+                            <Select.Option value={4}>Khoa nhi</Select.Option>
+                            <Select.Option value={5}>Khoa sản phụ</Select.Option>
+                            <Select.Option value={6}>Khoa da liễu</Select.Option>
+                            <Select.Option value={7}>Khoa nội</Select.Option>
+                            <Select.Option value={9}>Khoa ngoại</Select.Option>
+                            <Select.Option value={10}>Khoa y học cổ truyền</Select.Option>
+
+
+
                         </Select>
                     </Form.Item>
                     <Form.Item>

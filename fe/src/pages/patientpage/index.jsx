@@ -1,100 +1,97 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Pagination, Input, Button, Modal, Badge } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Table, Pagination, Input, Button, Modal, Row, Col } from 'antd';
+import { SearchOutlined, UserOutlined } from '@ant-design/icons';
+import UserRepository from '../../api/indexUser';
 import './styles.scss';
 
 const PatientList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [patients, setPatients] = useState([]);
     const [totalPatients, setTotalPatients] = useState(0);
-    const [searchValue, setSearchValue] = useState('');
-    const [selectedPatient, setSelectedPatient] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');  // Thêm state cho tìm kiếm
+    const [loading, setLoading] = useState(false);
+    const [filteredPatient, setFilteredPatient] = useState([]);
+
+
+    const getRandomStatus = () => {
+        const statuses = ['Đang điều trị', 'Đã khỏi', 'Đang theo dõi'];
+        return statuses[Math.floor(Math.random() * statuses.length)];
+    };
+
+    const getRandomDoctor = () => {
+        const doctors = ['Dr. Nguyen', 'Dr. Tran', 'Dr. Le'];
+        return doctors[Math.floor(Math.random() * doctors.length)];
+    };
+
+    // Hàm gọi API để lấy dữ liệu người dùng
+    const fetchPatients = async () => {
+        setLoading(true);
+        try {
+            const userRepository = new UserRepository();
+            const response = await userRepository.getUser({ search: searchQuery });
+            const filteredPatients = response
+                .filter(patient => patient.role_id === 4) // Lọc bệnh nhân có role_id = 4
+                .map(patient => ({
+                    name: `${patient.last_name} ${patient.first_name}`,
+                    address: patient.address,
+                    email: patient.email,
+                    status: getRandomStatus(),
+                    doctor: getRandomDoctor()
+                }));
+
+            setPatients(filteredPatients);
+            setTotalPatients(filteredPatients.length);
+        } catch (error) {
+            console.error('API Error:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     useEffect(() => {
-        fetchData(currentPage);
-    }, [currentPage]);
+        fetchPatients();
+    }, [searchQuery]);
 
-    const fetchData = async (page) => {
-        const data = Array.from({ length: 40 }, (_, index) => ({
-            key: index,
-            name: `Patient ${index + 1}`,
-            email: `patient${index + 1}@gmail.com`,
-            appointmentDate: `2024-11-${(index % 30) + 1}`,
-            time: '9h-10h SA',
-            doctor: `Doctor ${index % 5 + 1}`,
-            department: index % 2 === 0 ? 'Răng-Hàm-Mặt' : 'Tim Mạch',
-            status: index % 3 === 0 ? 'Đã xác nhận' : 'Chờ xác nhận'
-        }));
-        const filteredData = data.filter((item) =>
-            item.name.toLowerCase().includes(searchValue) ||
-            item.email.toLowerCase().includes(searchValue)
-        );
-        setPatients(filteredData.slice((page - 1) * 10, page * 10));
-        setTotalPatients(filteredData.length);
-    };
+    // Lọc danh sách bác sĩ theo từ khóa tìm kiếm
 
-    const onSearch = (e) => {
-        setSearchValue(e.target.value.toLowerCase());
-        setCurrentPage(1);
-        fetchData(1);
-    };
-
-    const onPageChange = (page) => {
+    const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
-    const onViewDetails = (record) => {
-        setSelectedPatient(record);
+    const handleSearch = (e) => {
+        setSearchQuery(e.target.value);
     };
 
-    const closeModal = () => {
-        setSelectedPatient(null);
-    };
+    const filteredPatients = patients.filter(patient =>
+        patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        patient.email.toLowerCase().includes(searchQuery.toLowerCase())
 
-    const onEdit = (record) => {
-        Modal.info({
-            title: 'Chỉnh sửa bệnh nhân',
-            content: `Chỉnh sửa thông tin của bệnh nhân: ${record.name}`,
-        });
-    };
-
-    const onDelete = (record) => {
-        Modal.confirm({
-            title: 'Bạn có chắc chắn muốn xóa?',
-            onOk: () => {
-                console.log(`Deleted: ${record.name}`);
-                fetchData(currentPage);
-            },
-        });
-    };
+    );
 
     const columns = [
         {
-            title: 'Tên',
+            title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            render: (text, record) => (
-                <a onClick={() => onViewDetails(record)}>
-                    <UserOutlined />
-                    <span>{text}</span>
-                </a>
-            ),
+            render: text => <span>{text}</span>,
+        },
+        {
+            title: 'Address',
+            dataIndex: 'address',
+            key: 'address',
+            render: text => <span>{text}</span>,
         },
         {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
+            render: text => <span>{text}</span>,
         },
         {
-            title: 'Ngày hẹn',
-            dataIndex: 'appointmentDate',
-            key: 'appointmentDate',
-            sorter: (a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate),
-        },
-        {
-            title: 'Thời gian',
-            dataIndex: 'time',
-            key: 'time',
+            title: 'Trạng thái',
+            dataIndex: 'status',
+            key: 'status',
         },
         {
             title: 'Bác sĩ',
@@ -102,76 +99,65 @@ const PatientList = () => {
             key: 'doctor',
         },
         {
-            title: 'Khoa',
-            dataIndex: 'department',
-            key: 'department',
-            filters: [
-                { text: 'Răng-Hàm-Mặt', value: 'Răng-Hàm-Mặt' },
-                { text: 'Tim Mạch', value: 'Tim Mạch' },
-            ],
-            onFilter: (value, record) => record.department.includes(value),
-        },
-        {
-            title: 'Trạng thái',
-            key: 'status',
-            render: (_, record) => (
-                <Badge
-                    status={record.status === 'Đã xác nhận' ? 'success' : 'processing'}
-                    text={record.status}
-                />
-            ),
-        },
-        {
-            title: 'Hành động',
-            key: 'action',
-            render: (_, record) => (
-                <span>
-                    <Button type="link" onClick={() => onEdit(record)}>Chỉnh sửa</Button>
-                    <Button type="link" danger onClick={() => onDelete(record)}>Xóa</Button>
-                </span>
+            title: 'Actions',
+            key: 'actions',
+            render: (text, record) => (
+                <Button icon={<UserOutlined />} onClick={() => handleView(record)}>
+                    View
+                </Button>
             ),
         },
     ];
 
+
+    const handleView = (record) => {
+        Modal.info({
+            title: 'Patient Info',
+            content: (
+                <div>
+                    <p><strong>Name:</strong> {record.name}</p>
+                    <p><strong>Address:</strong> {record.address}</p>
+                    <p><strong>Email:</strong> {record.email}</p>
+                    <p><strong>Status:</strong> {record.status}</p>
+                    <p><strong>Doctor:</strong> {record.doctor}</p>
+                </div>
+            ),
+        });
+    };
+
     return (
         <div className="patient-list">
-            <h2>DANH SÁCH BỆNH NHÂN</h2>
-            <Input
-                placeholder="Tìm kiếm bệnh nhân"
-                className="search-input"
-                onChange={onSearch}
-            />
+
+            <Row justify="space-between" align="middle" className="header">
+                <Col>
+                    <h2>Danh Sách Bệnh Nhân</h2>
+                </Col>
+                <Col>
+                    <Input
+                        prefix={<SearchOutlined />}
+                        placeholder="Tìm kiếm bệnh nhân"
+                        value={searchQuery}
+                        onChange={handleSearch}
+                        style={{ width: 200 }}
+                    />
+                </Col>
+            </Row>
+
             <Table
                 columns={columns}
-                dataSource={patients}
+                dataSource={filteredPatients}
+                rowKey="id"
+                loading={loading}
                 pagination={false}
-                className="patient-table"
             />
             <Pagination
                 current={currentPage}
                 total={totalPatients}
-                pageSize={10}
-                onChange={onPageChange}
-                className="pagination"
+                pageSize={10} // 10 bệnh nhân mỗi trang
+                onChange={handlePageChange}
+                showSizeChanger={false} // Không cho thay đổi số lượng trên mỗi trang
+                style={{ marginTop: 16, textAlign: 'right' }}
             />
-            <Modal
-                visible={!!selectedPatient}
-                title="Thông tin chi tiết bệnh nhân"
-                onCancel={closeModal}
-                footer={null}
-            >
-                {selectedPatient && (
-                    <div>
-                        <p><b>Tên:</b> {selectedPatient.name}</p>
-                        <p><b>Email:</b> {selectedPatient.email}</p>
-                        <p><b>Ngày hẹn:</b> {selectedPatient.appointmentDate}</p>
-                        <p><b>Thời gian:</b> {selectedPatient.time}</p>
-                        <p><b>Bác sĩ:</b> {selectedPatient.doctor}</p>
-                        <p><b>Khoa:</b> {selectedPatient.department}</p>
-                        <p><b>Trạng thái:</b> {selectedPatient.status}</p>
-                    </div>
-                )}
-            </Modal>
         </div>
     );
 };

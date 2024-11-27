@@ -12,8 +12,6 @@ apiClient.interceptors.request.use(
         const token = localStorage.getItem('auth_token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
-            response_object.header("Access-Control-Allow-Origin", "*");
-            response_object.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         }
 
         console.log('Request Details:', {
