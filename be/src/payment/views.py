@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import transaction
+from django.http import HttpResponseRedirect
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -35,7 +36,7 @@ class VNPayReturnView(APIView):
 
         if vnp.validate_response(settings.VNPAY_HASH_SECRET):
             response_code = vnp.response_data.get('vnp_ResponseCode')
-            if response_code == '00':  # Giao dịch không thành công
+            if response_code == '00':  # Giao dịch thành công
                 try:
                     transaction_ref = vnp.response_data.get('vnp_TxnRef')
                     appointment_data = decode_appointment_data(transaction_ref)
@@ -51,7 +52,13 @@ class VNPayReturnView(APIView):
 
                     send_appointment_notification(user, appointment)
 
-                    return Response({'message': 'Thanh toán thành công', 'data': serializer.data})
+                    redirect_url = (
+                        f"{settings.WEBSITE_URL}/payment/vnpay_return/"
+                        f"?vnp_Amount={vnp.response_data.get('vnp_Amount')}"
+                        f"&vnp_OrderInfo={vnp.response_data.get('vnp_OrderInfo')}"
+                    )
+
+                    return HttpResponseRedirect(redirect_url)
                 except (KeyError, ValueError) as e:
                     return Response({'message': 'Dữ liệu không hợp lệ', 'error': str(e)},
                                     status=status.HTTP_400_BAD_REQUEST)
