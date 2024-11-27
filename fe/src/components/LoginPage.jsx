@@ -210,6 +210,7 @@ const LoginPage = () => {
 
             } else {
                 setError("Sai email hoặc mật khẩu!");
+                console.error("Phản hồi không thành công từ API:", response);
             }
         } catch (error) {
             console.error("Phản hồi lỗi từ API:", error);

@@ -10,7 +10,6 @@ const HomeLayout = () => {
         <div>
             <Topmost />
             <Navbar />
-            <HeroSection />
             <Outlet />
             <Footer />
         </div>

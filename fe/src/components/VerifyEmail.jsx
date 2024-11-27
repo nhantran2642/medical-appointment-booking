@@ -34,7 +34,7 @@ const EmailVerification = () => {
                 try {
                     const response = await AuthRepository.verifyEmail(verificationCode);
                     console.log(response);
-                    if (response.message == "User is activated") {
+                    if (response.message === "User is activated") {
                         setSuccessMessage('Xác thực email thành công!');
                         setTimeout(() => {
                             navigate('/verified-email');

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { APP_ROUTER } from "../constants/appRouter";
-import { menuItems } from "../mock";
 
 const Navbar = () => {
     const [hover, setHover] = useState(false);
@@ -19,7 +18,14 @@ const Navbar = () => {
             setShowInput(false);
         }
     };
-
+    const handleLogout = async () => {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+            console.error("No refresh token found!");
+            navigate("/login");
+            return;
+        }
+    };
     const handleAvatarClick = () => {
         setShowDropdown(!showDropdown);
     };
@@ -35,6 +41,11 @@ const Navbar = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    const handleLinkClick = (route) => {
+        setShowDropdown(false);
+        navigate(route);
+    };
 
     const navbarStyle = {
         display: "flex",
@@ -112,11 +123,11 @@ const Navbar = () => {
     return (
         <nav style={navbarStyle}>
             <ul style={{ display: "flex", listStyle: "none", gap: "20px", margin: 0, padding: 0 }}>
-                <li><Link to={APP_ROUTER.HOME} style={navLinkStyle}>Trang chủ</Link></li>
-                <li><Link to={APP_ROUTER.SERVICE} style={navLinkStyle}>Dịch vụ</Link></li>
-                <li><Link to={APP_ROUTER.DOCTOR} style={navLinkStyle}>Đội ngũ</Link></li>
-                <li><Link to={APP_ROUTER.BLOG} style={navLinkStyle}>Tin tức</Link></li>
-                <li><Link to={APP_ROUTER.CONTACT} style={navLinkStyle}>Liên hệ</Link></li>
+                <li><a href={APP_ROUTER.HOME} style={navLinkStyle}>Trang chủ</a></li>
+                <li><a href={APP_ROUTER.SERVICE} style={navLinkStyle}>Dịch vụ</a></li>
+                <li><a href={APP_ROUTER.DOCTOR} style={navLinkStyle}>Đội ngũ</a></li>
+                <li><a href={APP_ROUTER.BLOG} style={navLinkStyle}>Tin tức</a></li>
+                <li><a href={APP_ROUTER.CONTACT} style={navLinkStyle}>Liên hệ</a></li>
             </ul>
 
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -165,38 +176,38 @@ const Navbar = () => {
                     {showDropdown && (
                         <div style={dropdownMenuStyle}>
                             <div style={arrowStyle}></div>
-                            <Link
-                                to={APP_ROUTER.PROFILE}
+                            <div
                                 style={dropdownItemStyle(hoveredItem === "profile")}
                                 onMouseEnter={() => setHoveredItem("profile")}
                                 onMouseLeave={() => setHoveredItem(null)}
+                                onClick={() => handleLinkClick(APP_ROUTER.PROFILE)}
                             >
                                 Thông tin cá nhân
-                            </Link>
-                            <Link
-                                to={APP_ROUTER.SCHEDULE}
+                            </div>
+                            <div
                                 style={dropdownItemStyle(hoveredItem === "schedule")}
                                 onMouseEnter={() => setHoveredItem("schedule")}
                                 onMouseLeave={() => setHoveredItem(null)}
+                                onClick={() => handleLinkClick(APP_ROUTER.SCHEDULE)}
                             >
                                 Lịch khám bệnh
-                            </Link>
-                            <Link
-                                to={APP_ROUTER.NOTIFICATIONS}
+                            </div>
+                            <div
                                 style={dropdownItemStyle(hoveredItem === "notifications")}
                                 onMouseEnter={() => setHoveredItem("notifications")}
                                 onMouseLeave={() => setHoveredItem(null)}
+                                onClick={() => handleLinkClick(APP_ROUTER.NOTIFICATIONS)}
                             >
                                 Thông báo
-                            </Link>
-                            <Link
-                                to={APP_ROUTER.LOGOUT}
+                            </div>
+                            <div
                                 style={dropdownItemStyle(hoveredItem === "logout")}
                                 onMouseEnter={() => setHoveredItem("logout")}
                                 onMouseLeave={() => setHoveredItem(null)}
+                                onClick={handleLogout}
                             >
                                 Đăng xuất
-                            </Link>
+                            </div>
                         </div>
                     )}
                 </div>

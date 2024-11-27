@@ -9,7 +9,7 @@ import {
     MedicineBoxOutlined,
     DollarOutlined,
 } from '@ant-design/icons';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { APP_ROUTER } from '../constants/appRouter';
 
 const { Sider } = Layout;
@@ -36,6 +36,16 @@ const sidebarStyles = {
 const Sidebar = () => {
     const location = useLocation();
     const selectedKey = location.pathname;
+    const navigate = useNavigate(); // Thay useHistory bằng useNavigate
+
+    // Phương thức đăng xuất
+    const onLogout = () => {
+        // Xóa token từ localStorage
+        localStorage.removeItem('auth_token'); // hoặc sessionStorage tùy vào nơi bạn lưu token
+
+        // Điều hướng người dùng đến trang đăng nhập
+        navigate(APP_ROUTER.LOGIN); // Giả sử bạn có định nghĩa route /login trong APP_ROUTER
+    };
 
     return (
         <Sider style={sidebarStyles} collapsible>
@@ -60,8 +70,8 @@ const Sidebar = () => {
                     <Link to={APP_ROUTER.PAYMENT}>Thanh Toán</Link>
                 </Menu.Item>
                 <Menu.Divider />
-                <Menu.Item key={APP_ROUTER.LOGOUT} icon={<LogoutOutlined />} style={sidebarStyles.logout}>
-                    <Link to={APP_ROUTER.LOGOUT}>Đăng Xuất</Link>
+                <Menu.Item key={APP_ROUTER.LOGIN} icon={<LogoutOutlined />} onClick={onLogout} style={sidebarStyles.logout}>
+                    <Link to={APP_ROUTER.LOGIN}>Đăng Xuất</Link>
                 </Menu.Item>
             </Menu>
         </Sider>

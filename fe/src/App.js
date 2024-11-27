@@ -36,6 +36,10 @@ import DashboardLayout from "./pages/calendarpage";
 // eslint-disable-next-line
 
 
+import VerifyCode from './components/VerifyCode';
+import NotFound from './components/Error';
+import CheckEmail from "./components/CheckMail";
+import NewPassword from "./components/NewPassword";
 
 const Main = () => {
   return (
@@ -50,6 +54,11 @@ const Main = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/verified-email" element={<SuccessEmail />} />
+          <Route path="/check-email" element={<CheckEmail />} />
+          <Route path="/verify" element={<VerifyCode />} />
+          <Route path="/password-reset" element={<NewPassword />} />
+          <Route path="*" element={<NotFound />} />
+
 
           {/* Default Layout */}
           <Route path={APP_ROUTER.LOGIN} element={<LoginPage />} />
