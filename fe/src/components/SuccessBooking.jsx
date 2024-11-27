@@ -14,11 +14,6 @@ const SuccessBooking = () => {
     navigate("/home");
   };
 
-  const transactionMessage =
-    vnpTransactionStatus === "00"
-      ? "Thanh toán thành công"
-      : "Thanh toán không thành công";
-
   const styles = {
     successBooking: {
       display: "flex",
@@ -67,7 +62,6 @@ const SuccessBooking = () => {
       <div style={styles.content}>
         <h1 style={styles.title}>🎉 Đặt Lịch Thành Công 🎉</h1>
         <p style={styles.message}>
-          {transactionMessage} <br />
           {vnpAmount && (
             <>
               Số tiền thanh toán: <strong>{vnpAmount / 100} VND</strong>
