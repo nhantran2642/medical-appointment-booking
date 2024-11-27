@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./style.scss";
 import OurDoctors from "../../components/OurDoctors";
-import { contactDetails, specialties, cardData, articles, doctors } from "../../mock";
+import { contactDetails, specialties, cardData, mockBlogPosts} from "../../mock";
 
 
 
@@ -140,7 +140,7 @@ const Services = () => {
 
                     <div className="images-container">
                         <img
-                            src={require('../../assets/img/doctor_consulting.png')}
+                            src={require('../../assets/img/service-1.png')}
                             alt="Doctor consulting patient"
                             className="image"
                         />
@@ -179,14 +179,14 @@ const SpecialtiesGrid = () => {
 const NewsSection = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const articlesPerPage = 4;
-    const totalPages = Math.ceil(articles.length / articlesPerPage);
+    const totalPages = Math.ceil(mockBlogPosts.length / articlesPerPage);
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
 
     const startIndex = currentPage * articlesPerPage;
-    const displayedArticles = articles.slice(startIndex, startIndex + articlesPerPage);
+    const displayedArticles = mockBlogPosts.slice(startIndex, startIndex + articlesPerPage);
 
     return (
         <div className="news-section">
@@ -196,7 +196,7 @@ const NewsSection = () => {
             </div>
             <div className="articles-grid">
                 {displayedArticles.map((article, index) => (
-                    <div className="article" key={index}>
+                    <div className="article" key={article.id}>
                         <img src={article.image} alt="news" />
                         <div className="article-content">
                             <span className="date">{article.date}</span>

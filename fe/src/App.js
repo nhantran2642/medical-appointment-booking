@@ -11,7 +11,6 @@ import Services from "./pages/servicesPage";
 import SingleServicePage from "./pages/singleServicePage";
 import DoctorsGrid from "./pages/doctorPage";
 import BookAppointmentPage from "./pages/bookappointmentpage";
-import AppointmentDetails from "./pages/detailAppointmentPage";
 import BlogPage from "./pages/blogpage";
 import BlogPostDetail from "./pages/detailBlogs";
 import ScrollToTop from "./components/ScrollToTop";
@@ -26,7 +25,9 @@ import VerifyCode from './components/VerifyCode';
 import NotFound from './components/Error';
 import CheckEmail from "./components/CheckMail";
 import NewPassword from "./components/NewPassword";
-
+import SuccessBooking from "./components/SuccessBooking";
+import MedicalRecord from "./pages/medicalRecords";
+import MedicalRecordDetail from "./pages/detailMedicalRecords";
 const Main = () => {
   return (
     <Router>
@@ -44,6 +45,7 @@ const Main = () => {
           <Route path="/verify" element={<VerifyCode />} />
           <Route path="/password-reset" element={<NewPassword />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/api/v1/payment/vnpay_return" element={<SuccessBooking />} />
 
 
           <Route path="/" element={<HomeLayout />}>
@@ -55,13 +57,14 @@ const Main = () => {
             <Route path="/doctor" element={<DoctorsGrid />} />
             <Route path="/singledoctor/:doctorId" element={<SingleDoctor />} />
             <Route path="/book-appointment" element={<BookAppointmentPage />} />
-            <Route path="/detailappointment" element={<AppointmentDetails />} />
             <Route path="/blogspage" element={<BlogPage />} />
             <Route path="/blogspage/:id" element={<BlogPostDetail />} />
             <Route path="/profile" element={<ProfileInfo />} />
             <Route path="/notifications" element={<NotificationList />} />
             <Route path="/schedule" element={<Schedule />} />
-          </Route>
+            <Route path="/medical-record" element={<MedicalRecord />} />
+            <Route path="/medical-record/:id" element={<MedicalRecordDetail />} />
+            </Route>
         </Routes>
       </div>
     </Router>

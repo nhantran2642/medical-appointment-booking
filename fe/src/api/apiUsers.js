@@ -1,65 +1,76 @@
 import BaseRepository from './baseRepository';
 
-class UsersRepository extends BaseRepository {
+class UserRepository extends BaseRepository {
     constructor() {
-        super('/api/v1');
+        super('/api/v1/users');
     }
 
-    async createUser(userData) {
+    // Lấy danh sách người dùng
+    async users(data) {
         try {
-            return await this.post('/user/', userData);
-        } catch (error) {
-            console.error('Error creating user:', error);
-            throw error;
-        }
-    }
-
-    async getUsers(params = {}) {
-        try {
-            return await this.get('/user/', { params });
+            const response = await this.get('', data);
+            return response.data;
         } catch (error) {
             console.error('Error fetching users:', error);
             throw error;
         }
     }
 
-
-    async getUser(userId) {
+    // Lấy thông tin người dùng theo ID
+    async getUserById(id) {
         try {
-            return await this.get(`/user/${userId}`);
+            const response = await this.get(`/${id}/`);
+            console.log("response:", response);
+            return response;
         } catch (error) {
-            console.error('Error fetching user:', error);
+            console.error(`Error fetching user with ID ${id}:`, error);
             throw error;
         }
     }
 
-
-    async updateUser(userId, userData) {
+    // Tạo người dùng mới
+    async createUser(data) {
         try {
-            return await this.put(`/user/${userId}/`, userData);
+            const response = await this.post('', data);
+            return response.data;
         } catch (error) {
-            console.error('Error updating user:', error);
+            console.error('Error creating user:', error);
             throw error;
         }
     }
 
-    async patchUser(userId, userData) {
+    // Cập nhật toàn bộ thông tin người dùng theo ID
+    async updateUser(id, data) {
         try {
-            return await this.patch(`/user/${userId}/`, userData);
+            const response = await this.put(`/${id}/`, data);
+            return response.data;
         } catch (error) {
-            console.error('Error patching user:', error);
+            console.error(`Error updating user with ID ${id}:`, error);
             throw error;
         }
     }
 
-    async deleteUser(userId) {
+    // Cập nhật một phần thông tin người dùng theo ID
+    async patchUser(id, data) {
         try {
-            return await this.delete(`/user/${userId}`);
+            const response = await this.patch(`/${id}/`, data);
+            return response.data;
         } catch (error) {
-            console.error('Error deleting user:', error);
+            console.error(`Error partially updating user with ID ${id}:`, error);
+            throw error;
+        }
+    }
+
+    // Xóa người dùng theo ID
+    async deleteUser(id) {
+        try {
+            const response = await this.delete(`/${id}/`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error deleting user with ID ${id}:`, error);
             throw error;
         }
     }
 }
 
-export default new UsersRepository();
+export default new UserRepository();

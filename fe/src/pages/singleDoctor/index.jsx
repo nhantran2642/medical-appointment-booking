@@ -27,6 +27,11 @@ const SingleDoctor = () => {
                 <h2 className="doctor-name">{doctor.name}</h2>
                 <p className="doctor-specialty">{doctor.specialty}</p>
                 <div className="doctor-bio">{doctor.bio}</div>
+
+                <div className="doctor-price">
+                    <p>{doctor.price ? `${doctor.price.toLocaleString()} ₫` : 'Liên hệ để biết giá'}</p>
+                </div>
+
                 <div className="social-icons">
                     <a href={doctor.linkedin}><img src={linkedinIcon} alt="LinkedIn" /></a>
                     <a href={doctor.instagram}><img src={instagramIcon} alt="Instagram" /></a>

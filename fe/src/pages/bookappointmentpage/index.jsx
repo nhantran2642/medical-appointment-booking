@@ -1,91 +1,97 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './style.scss';
-import { doctors, departments, hours } from '../../mock/index.js';
-import UsersRepository from '../../api/apiUsers.js'; 
+import DoctorRepository from '../../api/apiDoctor.js';
 import AppointmentRepository from '../../api/apiAppointment.js';
 
 const AppointmentPage = () => {
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
+        name: localStorage.getItem('user_name') || '',
+        email: localStorage.getItem('user_email') || '',
+        phone: localStorage.getItem('user_phone') || '',
         date: '',
         time: '',
-        doctor: '',
+        doctor: '', 
         message: '',
         gender: '',
         department: '',
-        doctorPrice: 0 // Thêm trường giá bác sĩ
+        doctorPrice: 0
     });
 
+    const [departments, setDepartments] = useState([]);
     const [filteredDoctors, setFilteredDoctors] = useState([]);
 
-    // Hàm xử lý thay đổi thông tin form
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            try {
+                const response = await DoctorRepository.getAllDoctors();
+                const uniqueDepartments = Array.from(new Set(response.results.map(doctor => doctor.department.name)));
+                setDepartments(uniqueDepartments);
+                console.log('Danh sách khoa:', uniqueDepartments);
+            } catch (error) {
+                console.error('Lỗi khi lấy danh sách bác sĩ:', error);
+            }
+        };
+
+        fetchDoctors();
+    }, []);
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // Hàm xử lý thay đổi khoa và lọc bác sĩ theo khoa
     const handleDepartmentChange = (e) => {
         const selectedDepartment = e.target.value;
-        setFormData({ ...formData, department: selectedDepartment });
+        setFormData({ ...formData, department: selectedDepartment, doctor: '', doctorPrice: 0 });
 
-        // Lọc bác sĩ theo khoa
-        const filtered = doctors.filter((doctor) => doctor.department === selectedDepartment);
-        setFilteredDoctors(filtered);
+        DoctorRepository.getAllDoctors().then((response) => {
+            const filtered = response.results.filter(doctor => doctor.department.name === selectedDepartment);
+            setFilteredDoctors(filtered);
+        }).catch(error => console.error('Lỗi khi lọc bác sĩ:', error));
     };
 
-    // Hàm xử lý khi người dùng chọn bác sĩ và giá khám
     const handleDoctorChange = (e) => {
-        const selectedDoctor = e.target.value;
-        const doctor = doctors.find((doctor) => doctor.name === selectedDoctor);
+        const selectedDoctorId = parseInt(e.target.value, 10);
+        const doctor = filteredDoctors.find(doc => doc.id === selectedDoctorId);
+
         setFormData({
             ...formData,
-            doctor: doctor ? doctor.name : '',
-            doctorPrice: doctor ? doctor.price : 0 // Cập nhật giá bác sĩ
+            doctor: selectedDoctorId, 
+            doctorPrice: doctor ? parseFloat(doctor.price) : 0
         });
     };
 
-    // Gọi API lấy thông tin người dùng và điền tự động vào form
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await UsersRepository.getUsers();  // Lấy thông tin người dùng từ UsersRepository
-                if (response.results && response.results.length > 0) {
-                    const user = response.results[0]; // Giả sử bạn chỉ lấy người dùng đầu tiên
-                    setFormData({
-                        ...formData,
-                        name: `${user.first_name} ${user.last_name}`,
-                        email: user.email,
-                        phone: user.phone
-                    });
-                }
-            } catch (error) {
-                console.error('Lỗi khi lấy thông tin người dùng:', error.message);
-            }
-        };
-
-        fetchUserData();
-    }, []); // Chạy khi component mount
-
-    // Hàm xử lý gửi thông tin đặt lịch
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Dữ liệu gửi:', formData);
 
-        // Kiểm tra xem đã có đủ thông tin cần thiết chưa
         if (!formData.name || !formData.email || !formData.phone || !formData.date || !formData.time || !formData.doctor) {
             alert('Vui lòng điền đầy đủ thông tin.');
             return;
         }
 
+        const appointmentDate = `${formData.date}T${formData.time}:00+07:00`;
+
+        const payload = {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            appointment_date: appointmentDate,
+            doctor_id: formData.doctor, 
+            message: formData.message,
+            gender: formData.gender,
+        };
+
         try {
-            const response = await AppointmentRepository.appointment(formData);
-            alert('Đặt lịch thành công!');
-            console.log('Response:', response);
+            const response = await AppointmentRepository.createAppointment(payload);
+            if (response.payment_url) {
+                window.location.href = response.payment_url; 
+            } else {
+                alert('Đặt lịch thành công!');
+                console.log('Response:', response);
+            }
         } catch (error) {
-            console.error('Lỗi khi gửi yêu cầu đặt lịch:', error.message);
+            console.error('Lỗi khi gửi yêu cầu đặt lịch:', error.response?.data || error);
             alert('Đặt lịch thất bại, vui lòng thử lại.');
         }
     };
@@ -149,11 +155,16 @@ const AppointmentPage = () => {
                                 <hr />
                                 <select name="time" onChange={handleChange}>
                                     <option value="">Khung giờ</option>
-                                    {hours.map((hour, index) => (
-                                        <option key={index} value={hour}>
-                                            {hour}
-                                        </option>
-                                    ))}
+                                    <option value="08:00">08:00</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="10:00">11:00</option>
+                                    <option value="10:00">13:00</option>
+                                    <option value="10:00">14:00</option>
+                                    <option value="10:00">15:00</option>
+                                    <option value="10:00">16:00</option>
+                                    <option value="10:00">17:00</option>
+                                    <option value="10:00">18:00</option>
                                 </select>
                             </div>
                             <hr style={{ width: '100%' }} />
@@ -170,8 +181,8 @@ const AppointmentPage = () => {
                                 <select name="doctor" onChange={handleDoctorChange}>
                                     <option value="">Bác sĩ</option>
                                     {filteredDoctors.map((doctor) => (
-                                        <option key={doctor.id} value={doctor.name}>
-                                            {doctor.name} - {doctor.specialty}
+                                        <option key={doctor.id} value={doctor.id}>
+                                            {doctor.user.first_name} {doctor.user.last_name} - {doctor.specialty.name}
                                         </option>
                                     ))}
                                 </select>
@@ -179,7 +190,7 @@ const AppointmentPage = () => {
                             <hr style={{ width: '100%' }} />
                             <div className="doctor-price">
                                 <span>Giá khám: </span>
-                                {formData.doctorPrice ? `${formData.doctorPrice} VNĐ` : '0'}
+                                {formData.doctorPrice ? `${formData.doctorPrice.toLocaleString()} VNĐ` : '0'}
                             </div>
                             <hr style={{ width: '100%' }} />
                             <textarea
@@ -243,12 +254,11 @@ const AppointmentPage = () => {
 
             <div className="map">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.0980619197676!2d108.21058327459991!3d16.060400339675287!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314219b5ed09e295%3A0xdb79efdf8394954d!2zMTI2IMSQLiBOZ3V54buFbiBWxINuIExpbmcsIFbEqW5oIFRydW5nLCBUaGFuaCBLaMOqLCDEkMOgIE7hurVuZyA1NTAwMDAsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1729735211461!5m2!1svi!2s"
-                    width="100%"
-                    height="450"
+                    title="Google Maps Location"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.438577788259!2d108.22015231545916!3d16.05987444382998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3142194052d812d5%3A0x20048a6db5e7fe9!2sVivo%20Coffee%20%26%20Tea!5e0!3m2!1svi!2s!4v1687375122999!5m2!1svi!2s"
+                    style={{ border: '0', width: '100%', height: '450px' }}
                     allowFullScreen=""
                     loading="lazy"
-                    title="Google Maps"
                 ></iframe>
             </div>
         </div>

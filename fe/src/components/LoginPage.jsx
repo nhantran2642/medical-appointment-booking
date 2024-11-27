@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthRepository from '../api/auth';
 import { jwtDecode } from 'jwt-decode';
+import UsersRepository from '../api/apiUsers';
 
 const styles = {
     container: {
@@ -183,16 +184,28 @@ const LoginPage = () => {
                 navigate('/verify', { state: { email } });
             } else if (message === "Login successful" && access) {
                 const decodedToken = jwtDecode(access);
-                const { role_id } = decodedToken;
-
+                const { role_id, user_id } = decodedToken;
                 localStorage.setItem('auth_token', access);
 
-                if (role_id === 1) {
-                    navigate('/admin/dashboard');
-                } else if (role_id === 4) {
-                    navigate('/home');
+                const userResponse = await UsersRepository.getUserById(user_id);
+               
+                if (userResponse && userResponse.first_name && userResponse.last_name) {
+                    const { first_name, last_name, email: userEmail, phone } = userResponse;
+                    const fullName =`${first_name} ${last_name}`;
+                    localStorage.setItem('user_name', fullName);
+                    localStorage.setItem('user_email', userEmail);
+                    localStorage.setItem('user_phone', phone);
+
+                    if (role_id === 1) {
+                        navigate('/admin/dashboard');
+                    } else if (role_id === 4) {
+                        navigate('/home');
+                    } else {
+                        setError("Không xác định được loại người dùng.");
+                    }
                 } else {
-                    setError("Không xác định được loại người dùng.");
+                    setError("Không thể lấy thông tin người dùng.");
+                    console.error("Phản hồi lỗi từ API:", userResponse);
                 }
             } else {
                 setError("Sai email hoặc mật khẩu!");
@@ -208,6 +221,7 @@ const LoginPage = () => {
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
+
 
     return (
         <div style={styles.container}>

@@ -85,12 +85,12 @@
               padding: 4px 10px;
               border-radius: 5px;
   
-              &.completed {
+              &.scheduled {
                 color: #00796b;
                 background-color: #b2dfdb;
               }
   
-              &.upcoming {
+              &.not-yet-paid {
                 color: #e65100;
                 background-color: #ffe0b2;
               }

@@ -10,4 +10,5 @@ export const APP_ROUTER = {
     PROFILE: '/profile',
     NOTIFICATIONS: '/notifications',
     SCHEDULE: '/schedule',
+    MEDICALRECORD: '/medical-record',
 };
