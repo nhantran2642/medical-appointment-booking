@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthRepository from '../api/index';
+import AuthRepository from '../api/auth';
+import { jwtDecode } from 'jwt-decode';
+import UsersRepository from '../api/apiUsers';
 
 const styles = {
     container: {
@@ -141,9 +143,6 @@ const styles = {
         textDecoration: 'underline',
         transition: 'color 0.3s',
     },
-    signUpHover: {
-        color: '#0056b3',
-    },
 };
 
 const LoginPage = () => {
@@ -177,45 +176,52 @@ const LoginPage = () => {
         }
 
         try {
-            const loginData = { email, password };        
-            const response = await AuthRepository.loginUser(loginData);        
-            const { is_send_code, access } = response;
-        
-            if (response.message === "Send code verify for mail success") {
-                if (is_send_code === true) {
-                    navigate('/verify', { state: { email } });
-                } else if (is_send_code === false && access) {
-                    navigate(`/home?p=${encodeURIComponent(access)}`);
+            const loginData = { email, password };
+            const response = await AuthRepository.loginUser(loginData);
+            const { message, access } = response;
+
+            if (message === "Send code verify for mail success") {
+                navigate('/verify', { state: { email } });
+            } else if (message === "Login successful" && access) {
+                const decodedToken = jwtDecode(access);
+                const { role_id, user_id } = decodedToken;
+                localStorage.setItem('auth_token', access);
+
+                const userResponse = await UsersRepository.getUserById(user_id);
+               
+                if (userResponse && userResponse.first_name && userResponse.last_name) {
+                    const { first_name, last_name, email: userEmail, phone } = userResponse;
+                    const fullName =`${first_name} ${last_name}`;
+                    localStorage.setItem('user_name', fullName);
+                    localStorage.setItem('user_email', userEmail);
+                    localStorage.setItem('user_phone', phone);
+
+                    if (role_id === 1) {
+                        navigate('/admin/dashboard');
+                    } else if (role_id === 4) {
+                        navigate('/home');
+                    } else {
+                        setError("Không xác định được loại người dùng.");
+                    }
                 } else {
-                    setError("Phản hồi không hợp lệ từ API.");
+                    setError("Không thể lấy thông tin người dùng.");
+                    console.error("Phản hồi lỗi từ API:", userResponse);
                 }
-            } else if (response.message === "Login successful" && is_send_code === false && access) {
-                navigate(`/home?p=${encodeURIComponent(access)}`);
             } else {
                 setError("Sai email hoặc mật khẩu!");
-                console.error("Phản hồi không thành công từ API:", response);
             }
-        } catch (error) {
-            console.error("Phản hồi lỗi từ API:", error);
-        
-            if (error.response) {
-                const errorData = error.response.data;
-                const emailError = errorData.email ? `Email: ${errorData.email.join(", ")}` : "";
-                const passwordError = errorData.password ? `Mật khẩu: ${errorData.password.join(", ")}` : "";
-        
-                setError([emailError, passwordError].filter(Boolean).join(". "));
-            } else if (error.request) {
-                setError("Không nhận được phản hồi từ server. Vui lòng kiểm tra kết nối mạng.");
-            } else {
-                setError("Đã xảy ra lỗi trong quá trình kết nối với API. Vui lòng thử lại sau.");
-            }
+        } catch (err) {
+            console.error("Phản hồi lỗi từ API:", err);
+            setError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+        } finally {
+            setIsLoading(false);
         }
-    };        
+    };
 
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
-    const eyeIcon = isPasswordVisible ? require('../assets/img/Eye.png') : require('../assets/img/Eye-1.png');
+
 
     return (
         <div style={styles.container}>
@@ -251,7 +257,7 @@ const LoginPage = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             <img
-                                src={eyeIcon}
+                                src={require(`../assets/img/${isPasswordVisible ? 'Eye' : 'Eye-1'}.png`)}
                                 alt={isPasswordVisible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
                                 style={styles.icon}
                                 onClick={togglePasswordVisibility}
@@ -268,18 +274,10 @@ const LoginPage = () => {
                     style={styles.button}
                     onClick={handleLogin}
                     disabled={isLoading}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#0056b3';
-                        e.currentTarget.style.transform = 'scale(1.05)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#1f2b6c';
-                        e.currentTarget.style.transform = 'scale(1)';
-                    }}
                 >
                     <span style={styles.buttonLabel}>{isLoading ? 'Đang xử lý...' : 'Đăng nhập'}</span>
                 </button>
-                {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
             </div>
         </div>
     );

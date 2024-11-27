@@ -13,7 +13,7 @@ $font-family: 'Arial', sans-serif;
 
   .notification-list {
     flex: 1;
-    max-width: 600px;
+    max-width: calc(100% - 250px);
     margin: $container-padding;
     background-color: #fff;
     border-radius: 8px;

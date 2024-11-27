@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import AuthRepository from '../api/index';
+import AuthRepository from '../api/auth';
 const styles = {
     container: {
         display: 'flex',

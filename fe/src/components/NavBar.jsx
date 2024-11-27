@@ -18,14 +18,12 @@ const Navbar = () => {
             setShowInput(false);
         }
     };
-    const handleLogout = async () => {
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (!refreshToken) {
-            console.error("No refresh token found!");
-            navigate("/login");
-            return;
-        }
+
+    const handleLogout = () => {
+        localStorage.removeItem('auth_token');
+        window.location.href = '/login'; 
     };
+
     const handleAvatarClick = () => {
         setShowDropdown(!showDropdown);
     };
@@ -59,7 +57,6 @@ const Navbar = () => {
         fontFamily: "'Work Sans', sans-serif",
         fontWeight: 400,
         fontSize: "18px",
-        lineHeight: "21.11px",
         color: "#fcfefeff",
         textDecoration: "none",
         padding: "10px",
@@ -97,6 +94,21 @@ const Navbar = () => {
         display: showDropdown ? 'block' : 'none',
     };
 
+    const navbarTagStyle = {
+        listStyle: "none",
+        display: "flex",
+        gap: "20px",
+        margin: 0,
+        padding: 0,
+    };
+
+    const navbarTagHoverStyle = (isHovered) => ({
+        backgroundColor: isHovered ? "#92A5D0" : "transparent", 
+        color: isHovered ? "white" : "#fcfefeff",  
+        padding: "10px",
+        borderRadius: "10px",
+    });
+
     const dropdownItemStyle = (isHovered) => ({
         padding: "10px",
         fontSize: "16px",
@@ -105,6 +117,7 @@ const Navbar = () => {
         backgroundColor: isHovered ? "#1f2b6c" : "white",
         textDecoration: "none",
         display: "block",
+        cursor: "pointer",
         transition: "background-color 0.3s, color 0.3s",
     });
 
@@ -122,12 +135,42 @@ const Navbar = () => {
 
     return (
         <nav style={navbarStyle}>
-            <ul style={{ display: "flex", listStyle: "none", gap: "20px", margin: 0, padding: 0 }}>
-                <li><a href={APP_ROUTER.HOME} style={navLinkStyle}>Trang chủ</a></li>
-                <li><a href={APP_ROUTER.SERVICE} style={navLinkStyle}>Dịch vụ</a></li>
-                <li><a href={APP_ROUTER.DOCTOR} style={navLinkStyle}>Đội ngũ</a></li>
-                <li><a href={APP_ROUTER.BLOG} style={navLinkStyle}>Tin tức</a></li>
-                <li><a href={APP_ROUTER.CONTACT} style={navLinkStyle}>Liên hệ</a></li>
+            <ul style={navbarTagStyle}>
+                <li 
+                    style={navbarTagHoverStyle(hoveredItem === "home")} 
+                    onMouseEnter={() => setHoveredItem("home")} 
+                    onMouseLeave={() => setHoveredItem(null)}
+                >
+                    <a href={APP_ROUTER.HOME} style={navLinkStyle}>Trang chủ</a>
+                </li>
+                <li 
+                    style={navbarTagHoverStyle(hoveredItem === "service")} 
+                    onMouseEnter={() => setHoveredItem("service")} 
+                    onMouseLeave={() => setHoveredItem(null)}
+                >
+                    <a href={APP_ROUTER.SERVICE} style={navLinkStyle}>Dịch vụ</a>
+                </li>
+                <li 
+                    style={navbarTagHoverStyle(hoveredItem === "doctor")} 
+                    onMouseEnter={() => setHoveredItem("doctor")} 
+                    onMouseLeave={() => setHoveredItem(null)}
+                >
+                    <a href={APP_ROUTER.DOCTOR} style={navLinkStyle}>Đội ngũ</a>
+                </li>
+                <li 
+                    style={navbarTagHoverStyle(hoveredItem === "blog")} 
+                    onMouseEnter={() => setHoveredItem("blog")} 
+                    onMouseLeave={() => setHoveredItem(null)}
+                >
+                    <a href={APP_ROUTER.BLOG} style={navLinkStyle}>Tin tức</a>
+                </li>
+                <li 
+                    style={navbarTagHoverStyle(hoveredItem === "contact")} 
+                    onMouseEnter={() => setHoveredItem("contact")} 
+                    onMouseLeave={() => setHoveredItem(null)}
+                >
+                    <a href={APP_ROUTER.CONTACT} style={navLinkStyle}>Liên hệ</a>
+                </li>
             </ul>
 
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -173,7 +216,7 @@ const Navbar = () => {
                         style={{ width: "40px", height: "40px", borderRadius: "50%", cursor: "pointer" }}
                         onClick={handleAvatarClick}
                     />
-                    {showDropdown && (
+                     {showDropdown && (
                         <div style={dropdownMenuStyle}>
                             <div style={arrowStyle}></div>
                             <div
@@ -191,6 +234,14 @@ const Navbar = () => {
                                 onClick={() => handleLinkClick(APP_ROUTER.SCHEDULE)}
                             >
                                 Lịch khám bệnh
+                            </div>
+                            <div
+                                style={dropdownItemStyle(hoveredItem === "medical-records")}
+                                onMouseEnter={() => setHoveredItem("medical-records")}
+                                onMouseLeave={() => setHoveredItem(null)}
+                                onClick={() => handleLinkClick(APP_ROUTER.MEDICALRECORD)}
+                            >
+                                Hồ sơ bệnh án
                             </div>
                             <div
                                 style={dropdownItemStyle(hoveredItem === "notifications")}

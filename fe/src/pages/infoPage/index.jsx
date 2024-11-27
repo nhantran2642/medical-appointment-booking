@@ -6,17 +6,16 @@ import avatarUser from '../../assets/img/avatar-user.png';
 const ProfileInfo = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
-        name: 'Sally Trần',
-        phone: '0931915108',
-        email: 'hgiang140302@gmail.com',
-        birthDate: '31/05/2011',
-        gender: 'Nữ',
+        name: localStorage.getItem('user_name')||'--',
+        phone: localStorage.getItem('user_phone')||'--',
+        email: localStorage.getItem('user_email')||'--',
+        birthDate: '--',
+        gender: '--',
         address: '--',
         insuranceCode: '--',
         idCard: '--',
-        ethnicity: 'Kinh',
+        ethnicity: '--',
         occupation: '--',
-        email: '--',
     });
 
     const handleEditClick = () => {
@@ -43,7 +42,6 @@ const ProfileInfo = () => {
                     </div>
                     <div className="profile-details">
                         <h2 className="profile-name">{formData.name}</h2>
-                        <p className="profile-id">Mã BN: YMP241922906</p>
                     </div>
                 </div>
 

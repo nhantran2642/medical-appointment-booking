@@ -1,0 +1,114 @@
+$primary-color: #1F2B6C;
+$secondary-color: #f0f0f0;
+$highlight-color: #ffcc00;
+$text-color: #333;
+$font-family: 'Arial', sans-serif;
+
+.container {
+    display: flex;
+    padding: 20px;
+}
+
+.navigation-sidebar {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding-top: 200px;
+    justify-content: flex-start;
+}
+
+.profile {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-left: 20px;
+    background-color: $secondary-color;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: calc(100% - 250px);
+    width: 90%;
+
+    h2 {
+        font-size: 24px;
+        color: $primary-color;
+        margin-bottom: 20px;
+    }
+
+    .error {
+        color: red;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .medical-records-list {
+        width: 100%;
+        margin-top: 20px;
+
+        .medical-record {
+            background-color: $secondary-color;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+            .medical-record-title {
+                font-size: 18px;
+                font-weight: bold;
+                color: $primary-color;
+                margin-bottom: 15px;
+            }
+
+            .profile-section {
+                margin-bottom: 15px;
+                .profile-row {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 8px 0;
+                    border-bottom: 1px solid #ddd;
+
+                    span {
+                        font-size: 14px;
+
+                        &:first-child {
+                            font-weight: bold;
+                            color: $text-color;
+                        }
+                    }
+                }
+            }
+
+            h4 {
+                font-size: 16px;
+                color: $primary-color;
+                margin-bottom: 10px;
+            }
+
+            hr {
+                margin-top: 20px;
+                border: none;
+                border-top: 1px solid #ddd;
+            }
+        }
+    }
+
+    .back-btn {
+        background-color: $primary-color;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+}

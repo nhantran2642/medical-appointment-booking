@@ -33,7 +33,7 @@ const ServicesPage = () => {
                     </div>
 
                     <div className="services-content">
-                        <img src={require('../../assets/img/doctor_consulting.png')} alt="Service Icon" />
+                        <img src={require('../../assets/img/service-1.png')} alt="Service Icon" />
                         <div className="points">
                             <h2>Niềm đam mê đặt bệnh nhân lên hàng đầu</h2>
                             <ul className="list-points">

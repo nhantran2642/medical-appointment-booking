@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import AuthRepository from '../api/index';
+import AuthRepository from '../api/auth';
 
 const styles = {
     container: {
@@ -9,22 +9,22 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        backgroundColor: '#F4F7FC', 
+        backgroundColor: '#F4F7FC',
         padding: '20px',
     },
     box: {
         width: '100%',
         maxWidth: '400px',
-        backgroundColor: '#fff', 
+        backgroundColor: '#fff',
         borderRadius: '8px',
         padding: '20px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', 
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
         textAlign: 'center',
         fontFamily: 'Arial, sans-serif',
     },
     title: {
         fontSize: '24px',
-        color: '#1F2B6C', 
+        color: '#1F2B6C',
         marginBottom: '20px',
     },
     input: {
@@ -39,7 +39,7 @@ const styles = {
         width: '20%',
         padding: '12px',
         margin: '10px 0',
-        backgroundColor: '#1F2B6C', 
+        backgroundColor: '#1F2B6C',
         color: '#fff',
         fontSize: '16px',
         fontWeight: 'bold',
@@ -49,15 +49,15 @@ const styles = {
         transition: 'background-color 0.3s ease',
     },
     buttonHover: {
-        backgroundColor: '#14204A', 
+        backgroundColor: '#14204A',
     },
     successMessage: {
-        color: '#28a745', 
+        color: '#28a745',
         fontSize: '14px',
         marginTop: '10px',
     },
     errorMessage: {
-        color: '#D9534F', 
+        color: '#D9534F',
         fontSize: '14px',
         marginTop: '10px',
     },
@@ -77,13 +77,13 @@ const PasswordReset = () => {
         try {
             const response = await AuthRepository.resetPassword({ password, uidb64, token });
             if (response.success) {
-                setMessage( 'Mật khẩu đã được thay đổi thành công.');
+                setMessage('Mật khẩu đã được thay đổi thành công.');
                 setError('');
                 setTimeout(() => {
-                    navigate('/login'); 
-                }, 1000); 
+                    navigate('/login');
+                }, 1000);
             } else {
-                setError( 'Đã xảy ra lỗi khi đặt lại mật khẩu. Vui lòng thử lại.');
+                setError('Đã xảy ra lỗi khi đặt lại mật khẩu. Vui lòng thử lại.');
             }
         } catch (err) {
             setError('Đã xảy ra lỗi khi đặt lại mật khẩu. Vui lòng thử lại.');

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { menuItems } from '../mock';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const NavigationSidebar = () => {
     const location = useLocation();
     const [hoveredIndex, setHoveredIndex] = useState(null);
+    const navigate = useNavigate();
 
     const styles = {
         sidebar: {
@@ -48,11 +49,13 @@ const NavigationSidebar = () => {
                             ...styles.li,
                             ...(location.pathname === item.route ? styles.active : {}),
                             ...(hoveredIndex === index ? styles.hover : {}),
+                            textDecoration: 'none',
                         }}
+                        onClick={() => navigate(item.route)}
                     >
-                        <Link to={item.route} style={{ textDecoration: 'none', color: 'inherit' }}>
-                            {item.label}
-                        </Link>
+                        {/* <Link to={item.route} style={{ textDecoration: 'none', color: 'inherit' }}> */}
+                        {item.label}
+                        {/* </Link> */}
                     </li>
                 ))}
             </ul>
