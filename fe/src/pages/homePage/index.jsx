@@ -29,7 +29,7 @@ const HeroSection = () => {
     const [hover, setHover] = useState(false);
     return (
         <section className="hero-section" id="home">
-            <div className="content">
+            <div className="content-home">
                 <h1>Sự Lựa Chọn Hàng Đầu</h1>
                 <p>Chúng Tôi Quan Tâm Đến Sức Khỏe Và Hạnh Phúc Của Bạn!</p>
                 <button
@@ -74,7 +74,7 @@ const Services = () => {
                 <h2 className="heading">Dịch vụ của chúng tôi</h2>
             </div>
             <div className="main-service">
-                <div className="sidebar">
+                <div className="sidebar-home">
                     <ul className="list">
                         {["Khám miễn phí", "Điện tâm đồ", "Xét nghiệm DNA", "Ngân hàng máu"].map((text, index) => (
                             <li

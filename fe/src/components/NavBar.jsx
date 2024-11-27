@@ -155,7 +155,7 @@ const Navbar = () => {
                     onMouseEnter={() => setHoveredItem("doctor")} 
                     onMouseLeave={() => setHoveredItem(null)}
                 >
-                    <a href={APP_ROUTER.DOCTOR} style={navLinkStyle}>Đội ngũ</a>
+                    <a href={APP_ROUTER.DOCTORS} style={navLinkStyle}>Đội ngũ</a>
                 </li>
                 <li 
                     style={navbarTagHoverStyle(hoveredItem === "blog")} 
