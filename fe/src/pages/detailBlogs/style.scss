@@ -48,10 +48,11 @@
         }
     }
 
-    .content {
+    .content-detail-blog {
         width: 100%;
         display: flex;
         padding: 20px 0;
+        flex-direction: row;
 
         .main-content {
             flex: 3;
