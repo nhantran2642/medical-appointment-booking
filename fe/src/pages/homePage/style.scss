@@ -261,10 +261,15 @@
 .main-service {
     display: flex;
     padding: 20px;
+    .content{
+    display: flex;
+    flex-direction: row;
+    }
 }
 
 .sidebar-home {
     width: 20%;
+    height: 100%;
     background-color: #f0f2f5;
     padding: 20px;
     display: flex;
