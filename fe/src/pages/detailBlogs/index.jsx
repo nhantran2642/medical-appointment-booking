@@ -44,7 +44,7 @@ const BlogPostDetail = () => {
                     <span><img src={require('../../assets/img/like.png')} alt="Likes" /> {currentPost.likes}</span>
                 </p>
             </div>
-            <div className="content">
+            <div className="content-detail-blog">
                 <div className="main-content">
                     <img src={currentPost.image} alt="Main Post" className="main-image" />
                     <p>{currentPost.description}</p>
