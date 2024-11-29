@@ -5,7 +5,7 @@ import { categories, recentPosts } from '../../mock';
 
 const BlogSidebar = () => {
     return (
-        <div className="sidebar">
+        <div className="sidebar-blog">
             <div className="search-bar">
                 <div className="input-group">
                     <input type="text" placeholder="Search" />
