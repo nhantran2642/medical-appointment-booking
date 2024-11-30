@@ -1,12 +1,9 @@
-import datetime
-
-from api import constants
 from appointment.models import Appointment
 from appointment.serializers import AppointmentSerializer, AppointmentDetailSerializer
 from doctor.models import Doctor
 from payment.utils import generate_vnpay_payment_url
 from rest_framework import status, viewsets
-from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.response import Response
 from utilities.permission import *
 
@@ -88,8 +85,3 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
