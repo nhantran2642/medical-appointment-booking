@@ -17,9 +17,9 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return []
 
     def get_serializer_class(self):
-        if self.action in ["create", "retrieve"]:
+        if self.action == "create":
             return AppointmentSerializer
-        if self.action == "list":
+        if self.action in ["list", "retrieve"]:
             return AppointmentDetailSerializer
         return super().get_serializer_class()
 
