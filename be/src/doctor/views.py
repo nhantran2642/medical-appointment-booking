@@ -1,6 +1,6 @@
 from rest_framework import status, viewsets
 from rest_framework.response import Response
-from utilities.permission import IsAdmin, IsDoctor
+from utilities.permission import *
 
 from .models import Doctor
 from .serializers import DoctorRegisterSerializer, DoctorSerializer
@@ -13,7 +13,7 @@ class DoctorViewSet(viewsets.ModelViewSet):
         if self.action in ["create", "destroy"]:
             return [IsAdmin()]
         if self.action == "update":
-            return [IsDoctor()]
+            return [IsAdminDoctor()]
         return []
 
     def get_serializer_class(self):
