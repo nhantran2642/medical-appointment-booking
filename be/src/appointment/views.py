@@ -45,6 +45,20 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serialize = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serialize.data)
+        return Response(
+            self.get_serializer(
+                queryset,
+                many=True,
+            ).data,
+            status=status.HTTP_200_OK,
+        )
+
     def create(self, request, *args, **kwargs):
         data = request.data
         serializer = self.get_serializer(
