@@ -2,7 +2,7 @@ import datetime
 
 from api import constants
 from appointment.models import Appointment
-from appointment.serializers import AppointmentSerializer
+from appointment.serializers import AppointmentSerializer, AppointmentDetailSerializer
 from doctor.models import Doctor
 from payment.utils import generate_vnpay_payment_url
 from rest_framework import status, viewsets
@@ -20,8 +20,10 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return []
 
     def get_serializer_class(self):
-        if self.action in ["create", "list", "retrieve"]:
+        if self.action in ["create", "retrieve"]:
             return AppointmentSerializer
+        if self.action == "list":
+            return AppointmentDetailSerializer
         return super().get_serializer_class()
 
     def get_queryset(self):
@@ -39,7 +41,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             queryset = Appointment.objects.filter(doctor_id=doctor_id)
         elif role_id == constants.USER_ROLE["USER"]:
             queryset = Appointment.objects.filter(user_id=user_id)
-        elif role_id == constants.USER_ROLE["ADMIN"]:
+        elif role_id == constants.USER_ROLE["ADMIN"] or role_id == constants.USER_ROLE["STAFF"]:
             queryset = Appointment.objects.all()
         else:
             raise PermissionDenied("Invalid role_id.")
@@ -86,3 +88,8 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)

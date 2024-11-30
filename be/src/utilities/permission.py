@@ -15,6 +15,23 @@ class IsAdminUser(permissions.BasePermission):
         ]
 
 
+class IsAdminDoctor(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.role_id in [
+            constants.USER_ROLE["ADMIN"],
+            constants.USER_ROLE["DOCTOR"],
+        ]
+
+
+class IsAdminDoctorStaff(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.role_id in [
+            constants.USER_ROLE["ADMIN"],
+            constants.USER_ROLE["DOCTOR"],
+            constants.USER_ROLE["STAFF"],
+        ]
+
+
 class IsStaff(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.role_id == constants.USER_ROLE["STAFF"]

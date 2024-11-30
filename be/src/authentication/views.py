@@ -39,10 +39,12 @@ from .serializers import (
 
 class UserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
-        if self.action in ["create", "destroy", "list"]:
+        if self.action in ["create", "destroy"]:
             return [IsAdmin()]
         if self.action == "update":
             return [IsAdminUser()]
+        if self.action == "list":
+            return [IsAdminDoctorStaff()]
         return []
 
     def get_serializer_class(self, *args, **kwargs):
