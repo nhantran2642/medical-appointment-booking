@@ -3,7 +3,6 @@ from doctor.models import Doctor
 from doctor.serializers import DoctorSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import NotFound
-from datetime import timezone, timedelta
 from .models import Appointment
 
 
@@ -28,9 +27,25 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 
 class AppointmentDetailSerializer(serializers.ModelSerializer):
-    doctor = DoctorSerializer(read_only=True)
-    user = UserSerializer(read_only=True)
+    # user = UserSerializer(read_only=True)
+    user_id = serializers.IntegerField(source="user.id", read_only=True)
+    # patient_first_name = serializers.CharField(source="user.first_name", read_only=True)
+    # patient_last_name = serializers.CharField(source="user.last_name", read_only=True)
+    doctor_id = serializers.IntegerField(source="doctor.id", read_only=True)
+    # doctor_first_name = serializers.CharField(source="doctor.user.first_name", read_only=True)
+    # doctor_last_name = serializers.CharField(source="doctor.user.last_name", read_only=True)
 
     class Meta:
         model = Appointment
-        fields = "__all__"
+        fields = [
+            "id",
+            "appointment_date",
+            "status",
+            "updated_at",
+            "user_id",
+            # "patient_first_name",
+            # "patient_last_name",
+            "doctor_id",
+            # "doctor_first_name",
+            # "doctor_last_name",
+        ]
