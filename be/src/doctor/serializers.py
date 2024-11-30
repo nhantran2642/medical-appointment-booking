@@ -20,6 +20,11 @@ class DoctorRegisterSerializer(serializers.ModelSerializer):
         user_serializer = RegisterSerializer(data=user_data)
         user_serializer.is_valid(raise_exception=True)
         user = user_serializer.save()
+
+        user.is_verified = True
+        user.last_login = user.created_at
+        user.save()
+
         doctor = Doctor.objects.create(user=user, **validated_data)
 
         return doctor
