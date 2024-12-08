@@ -36,7 +36,7 @@ class MedicalRecordRepository extends BaseRepository {
 
     async updateMedical(medicalId, medicalData) {
         try {
-            const response = await this.put(`/${medicalId}`, medicalData);
+            const response = await this.put(`/${medicalId}/`, medicalData);
             return response;
         } catch (error) {
             throw error.response?.data?.message || 'Unable to update medical record';
@@ -45,7 +45,7 @@ class MedicalRecordRepository extends BaseRepository {
 
     async deleteMedical(medicalId) {
         try {
-            const response = await this.delete(`/${medicalId}`);
+            const response = await this.delete(`/${medicalId}/`);
             return response;
         } catch (error) {
             throw error.response?.data?.message || 'Unable to delete medical record';

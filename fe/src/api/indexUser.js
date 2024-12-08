@@ -16,6 +16,18 @@ class UserRepository extends BaseRepository {
             throw error;
         }
     }
+
+    // Lấy thông tin người dùng theo ID
+    async getUserById(id) {
+        try {
+            const response = await this.get(`/${id}/`);
+            console.log("response:", response);
+            return response;
+        } catch (error) {
+            console.error(`Error fetching user with ID ${id}:`, error);
+            throw error;
+        }
+    }
 }
 
 export default UserRepository;

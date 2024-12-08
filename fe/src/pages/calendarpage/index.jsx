@@ -1,112 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import AppointmentRepository from '../../api/apiAppointment';
 import './styles.scss';
 
-const appointments = [
-    {
-        id: 1,
-        type: 'Molars Surgery',
-        time: '3:00 PM - 4:00 PM',
-        patient: 'Jonas Muller',
-        details: {
-            title: 'Molars Surgery',
-            note: 'I have pain in my molars that needs surgery.',
-            date: 'Mon, 11 Dec 2023',
-            time: '3:00 PM',
-            patientName: 'Jonas Muller',
-            visits: 3,
-        },
-    },
-    {
-        id: 2,
-        type: 'Teeth Cleaning',
-        time: '10:00 AM - 11:00 AM',
-        patient: 'Koman Manurung',
-        details: {
-            title: 'Teeth Cleaning',
-            note: 'I have a complaint about tartar on my lower molars. I want it to be cleaned thoroughly.',
-            date: 'Tue, 12 Dec 2023',
-            time: '10:00 AM',
-            patientName: 'Koman Manurung',
-            visits: 8,
-        },
-    },
-    {
-        id: 3,
-        type: 'Cavity Filling',
-        time: '4:30 PM - 6:00 PM',
-        patient: 'Alice Johnson',
-        details: {
-            title: 'Cavity Filling',
-            note: 'I have a cavity that needs filling.',
-            date: 'Wed, 13 Dec 2023',
-            time: '4:30 PM',
-            patientName: 'Alice Johnson',
-            visits: 5,
-        },
-    },
-    {
-        id: 4,
-        type: 'Root Canal Treatment',
-        time: '1:00 PM - 2:30 PM',
-        patient: 'Mark Lee',
-        details: {
-            title: 'Root Canal Treatment',
-            note: 'I need a root canal treatment for my infected tooth.',
-            date: 'Thu, 14 Dec 2023',
-            time: '1:00 PM',
-            patientName: 'Mark Lee',
-            visits: 2,
-        },
-    },
-    {
-        id: 5,
-        type: 'Orthodontic Consultation',
-        time: '9:00 AM - 10:00 AM',
-        patient: 'Sarah Connor',
-        details: {
-            title: 'Orthodontic Consultation',
-            note: 'I would like a consultation for braces.',
-            date: 'Fri, 15 Dec 2023',
-            time: '9:00 AM',
-            patientName: 'Sarah Connor',
-            visits: 1,
-        },
-    },
-    {
-        id: 6,
-        type: 'Wisdom Teeth Extraction',
-        time: '11:00 AM - 12:00 PM',
-        patient: 'Tom Hardy',
-        details: {
-            title: 'Wisdom Teeth Extraction',
-            note: 'I need my wisdom teeth extracted.',
-            date: 'Sat, 16 Dec 2023',
-            time: '11:00 AM',
-            patientName: 'Tom Hardy',
-            visits: 4,
-        },
-    },
-
+const hours = [
+    '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM',
+    '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM'
 ];
 
+// Hàm này sẽ trả về chỉ số của ngày trong tuần (1-6 cho thứ 2 đến thứ 7, 0 cho chủ nhật)
 const getDayIndex = (date) => {
     const day = new Date(date).getDay();
-    if (day === 0) return null;
-    return day - 1;
+    if (day === 0) return null; // Chủ nhật không bao gồm
+    return day - 1; // Chuyển Chủ nhật (0) thành null và các ngày khác từ 1 đến 6
 };
 
 const DashboardLayout = () => {
+    const [appointments, setAppointments] = useState([]);
+    const [scheduleGrid, setScheduleGrid] = useState(Array(6).fill(Array(12).fill(null)));
     const [hoveredAppointment, setHoveredAppointment] = useState(null);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
     const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
+    useEffect(() => {
+        // Fetch appointments from API
+        const fetchAppointments = async () => {
+            try {
+                const response = await AppointmentRepository.getAppointments();
+                setAppointments(response.results); // Lưu danh sách cuộc hẹn từ API
+            } catch (error) {
+                console.error("Error fetching appointments:", error);
+            }
+        };
+
+        fetchAppointments();
+    }, []);
+
+    useEffect(() => {
+        // Cập nhật lại lịch sau khi đã lấy cuộc hẹn
+        const newScheduleGrid = Array(6).fill().map(() => Array(12).fill(null)); // Khởi tạo mảng lịch trống
+
+        appointments.forEach((appointment) => {
+            const dayIndex = getDayIndex(appointment.appointment_date); // Lấy chỉ số ngày trong tuần từ ngày cuộc hẹn
+            if (dayIndex !== null) {
+                // Chuyển thời gian cuộc hẹn thành giờ và phút
+                const appointmentDate = new Date(appointment.appointment_date);
+                const appointmentStartTime = appointmentDate.getHours(); // Lấy giờ từ thời gian cuộc hẹn
+
+                // Tìm vị trí trong mảng giờ (mỗi giờ tương ứng với 1 dòng trong bảng)
+                const hourIndex = hours.findIndex(hour => parseInt(hour.split(':')[0], 10) === appointmentStartTime);
+                if (hourIndex !== -1) {
+                    newScheduleGrid[dayIndex][hourIndex] = appointment; // Điền cuộc hẹn vào đúng vị trí trong bảng
+                }
+            }
+        });
+
+        setScheduleGrid(newScheduleGrid); // Cập nhật lại state để render lịch
+    }, [appointments]);
+
     const handleMouseEnter = (event, appointmentDetails) => {
         if (!selectedAppointment) {
             const { clientX, clientY } = event;
-            setPopupPosition({ top: clientY + 10, left: clientX + 10 });
-            setHoveredAppointment(appointmentDetails);
+            const popupWidth = 200;  // Chiều rộng của popup
+            const popupHeight = 150; // Chiều cao của popup (có thể thay đổi)
+            const windowWidth = window.innerWidth;  // Chiều rộng cửa sổ trình duyệt
+            const windowHeight = window.innerHeight; // Chiều cao cửa sổ trình duyệt
+            const popupMargin = 10;  // Khoảng cách từ chuột đến popup
+
+            // Kiểm tra vị trí bên phải của popup
+            let adjustedLeft = clientX + popupMargin;
+            if (clientX + popupWidth + popupMargin > windowWidth) {
+                // Nếu popup vượt ra ngoài cửa sổ, điều chỉnh sang trái
+                adjustedLeft = clientX - popupWidth - popupMargin;
+            }
+
+            // Kiểm tra vị trí phía dưới của popup
+            let adjustedTop = clientY + popupMargin;
+            if (clientY + popupHeight + popupMargin > windowHeight) {
+                // Nếu popup vượt ra ngoài dưới của màn hình, điều chỉnh lên trên
+                adjustedTop = clientY - popupHeight - popupMargin;
+            }
+
+            setPopupPosition({
+                top: adjustedTop,
+                left: adjustedLeft,
+            });
+
+            setHoveredAppointment(appointmentDetails);  // Cập nhật cuộc hẹn khi hover
         }
     };
+
+
+
 
     const handleMouseLeave = () => {
         if (!selectedAppointment) {
@@ -124,23 +108,6 @@ const DashboardLayout = () => {
     const closePopup = () => {
         setSelectedAppointment(null);
     };
-
-    const scheduleGrid = Array.from({ length: 6 }, () => Array(12).fill(null));
-    const hours = [
-        '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM',
-        '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM'
-    ];
-
-    appointments.forEach((appointment) => {
-        const dayIndex = getDayIndex(appointment.details.date);
-        if (dayIndex !== null) {
-            const appointmentStartTime = parseInt(appointment.details.time.split(':')[0], 10);
-            const hourIndex = hours.findIndex(hour => hour.includes(appointmentStartTime));
-            if (hourIndex !== -1) {
-                scheduleGrid[dayIndex][hourIndex] = appointment;
-            }
-        }
-    });
 
     return (
         <div className="dashboard">
@@ -217,14 +184,15 @@ const DashboardLayout = () => {
                                                 appointment ? (
                                                     <td
                                                         key={dayIndex}
-                                                        className={`appointment ${appointment.type.toLowerCase().replace(' ', '-')}`}
-                                                        onMouseEnter={(e) => handleMouseEnter(e, appointment.details)}
+                                                        className={`appointment ${appointment.status.toLowerCase().replace(' ', '-')}`}
+                                                        onMouseEnter={(e) => handleMouseEnter(e, appointment)}
                                                         onMouseLeave={handleMouseLeave}
+                                                        onClick={(e) => handleClick(e, appointment)}
                                                     >
                                                         <div className="appointment-content">
-                                                            <p>{appointment.details.date}</p>
-                                                            <p>{appointment.details.time}</p>
-                                                            <span>{appointment.patient}</span>
+                                                            <p>{appointment.appointment_date}</p>
+                                                            <p>{hour}</p>
+                                                            <span>{appointment.user_id}</span>
                                                         </div>
                                                     </td>
                                                 ) : (
@@ -236,33 +204,28 @@ const DashboardLayout = () => {
                                 ))}
                             </tbody>
                         </table>
-
-                        {/* {hoveredAppointment && (
-                            <div
-                                className="popup"
-                                style={{
-                                    top: `${popupPosition.top}px`,
-                                    left: `${popupPosition.left}px`
-                                }}
-                            >
-                                <h4>{hoveredAppointment.title}</h4>
-                                <p className="patient-note"><strong>Patient's Note:</strong> {hoveredAppointment.note}</p>
-                                <div className="attendance-time">
-                                    <span>🗓️ {hoveredAppointment.date}</span>
-                                    <span>⏰ {hoveredAppointment.time}</span>
-                                </div>
-                                <div className="patient-name">
-                                    <img src="https://via.placeholder.com/24" alt="Patient" />
-                                    <span>{hoveredAppointment.patientName}</span>
-                                    <span>Visited {hoveredAppointment.visits} Times</span>
-                                </div>
-                                <div className="button-group">
-                                    <button className="button accept">Accept</button>
-                                    <button className="button reschedule">Reschedule</button>
-                                </div>
-                            </div>
-                        )} */}
                     </div>
+
+                    {hoveredAppointment && (
+                        <div
+                            className="popup"
+                            style={{
+                                top: `${popupPosition.top}px`,
+                                left: `${popupPosition.left}px`
+                            }}
+                        >
+                            <h4>{hoveredAppointment.title}</h4>
+                            <p><strong>Patient's Note:</strong> {hoveredAppointment.note}</p>
+                            <div className="attendance-time">
+                                <span>🗓️ {hoveredAppointment.appointment_date}</span>
+                                <span>⏰ {hoveredAppointment.time}</span>
+                            </div>
+                            <div className="patient-name">
+                                <img src="https://via.placeholder.com/24" alt="Patient" />
+                                <span>{hoveredAppointment.patientName}</span>
+                            </div>
+                        </div>
+                    )}
                 </section>
             </main>
         </div>

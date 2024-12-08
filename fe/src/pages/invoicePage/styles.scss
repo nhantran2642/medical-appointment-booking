@@ -1,0 +1,116 @@
+.invoice-container {
+    width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    font-family: "Arial", sans-serif;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+
+    .invoice-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #d3d3d3;
+        padding-bottom: 20px;
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0056b3;
+        }
+
+        .contact-info {
+            text-align: left;
+
+            p {
+                margin: 5px 0;
+                font-size: 14px;
+
+                span {
+                    display: inline-block;
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+
+    .invoice-title {
+        text-align: center;
+        font-size: 28px;
+        margin: 20px 0;
+        color: #1f2b6c;
+    }
+
+    .patient-info,
+    .service-description,
+    .payment-summary,
+    .payment-info,
+    .terms {
+        margin: 20px 0;
+
+        h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+    }
+
+    .service-description .service-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        color: #1f2b6c;
+
+        th,
+        td {
+            border: 1px solid #d3d3d3;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+    }
+
+    .payment-summary .summary-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin: 5px 0;
+
+        &.total {
+            font-weight: bold;
+            color: #0056b3;
+        }
+    }
+
+    .export-pdf-button {
+        float: right;
+        margin-top: 20px;
+        width: 150px;
+        height: 40px;
+        background-color: #0056b3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        line-height: 40px;
+        font-size: 14px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #003d80;
+        }
+    }
+}

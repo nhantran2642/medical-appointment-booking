@@ -1,0 +1,40 @@
+.patient-profile {
+    .patient-profile__card {
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
+
+    .patient-profile__treatment-history {
+        margin-bottom: 20px;
+    }
+
+    .patient-profile__treatment-history .ant-table {
+        background-color: #fff;
+        border-radius: 8px;
+    }
+
+    .ant-table-thead>tr>th {
+        background-color: #1f2d5e;
+        color: #fff;
+    }
+
+    .ant-table-tbody>tr>td {
+        font-size: 14px;
+    }
+
+    .ant-btn {
+        background-color: #1f2d5e;
+        color: white;
+        border-radius: 6px;
+    }
+
+    .ant-btn:hover {
+        background-color: #ffbb33;
+        color: white;
+    }
+
+    .ant-divider {
+        margin: 20px 0;
+    }
+}

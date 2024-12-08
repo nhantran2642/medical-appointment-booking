@@ -68,7 +68,7 @@ const PatientRecords = () => {
                                         <th>Bệnh (Chẩn đoán)</th>
                                         <th>Ngày Hẹn</th>
                                         <th>Bác Sĩ</th>
-                                        <th>Hành Động</th> 
+                                        <th>Hành Động</th>
                                     </tr>
                                 </thead>
                                 <tbody>

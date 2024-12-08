@@ -8,6 +8,8 @@ import {
     ProfileOutlined,
     MedicineBoxOutlined,
     DollarOutlined,
+    IdcardOutlined,
+
 } from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { APP_ROUTER } from '../constants/appRouter';
@@ -37,7 +39,7 @@ const Sidebar = () => {
     const location = useLocation();
     const selectedKey = location.pathname;
     const navigate = useNavigate(); // Thay useHistory bằng useNavigate
-
+    const roleId = parseInt(localStorage.getItem('role_id'), 10);
     // Phương thức đăng xuất
     const onLogout = () => {
         // Xóa token từ localStorage
@@ -51,24 +53,41 @@ const Sidebar = () => {
         <Sider style={sidebarStyles} collapsible>
             <div style={sidebarStyles.logo}>MEDDICAL</div>
             <Menu theme="light" mode="vertical" selectedKeys={[selectedKey]} style={sidebarStyles.menu}>
+                {roleId === 2 && (
+                    <Menu.Item key={APP_ROUTER.PROFILEDOCTOR} icon={<UserOutlined />}>
+                        <Link to={APP_ROUTER.PROFILEDOCTOR}>Cá nhân</Link>
+                    </Menu.Item>
+                )}
                 <Menu.Item key={APP_ROUTER.ADDASHBOARD} icon={<HomeOutlined />}>
                     <Link to={APP_ROUTER.ADDASHBOARD}>Dashboard</Link>
                 </Menu.Item>
+
                 <Menu.Item key={APP_ROUTER.CALENDAR} icon={<CalendarOutlined />}>
                     <Link to={APP_ROUTER.CALENDAR}>Lịch Khám</Link>
                 </Menu.Item>
-                <Menu.Item key={APP_ROUTER.DOCTOR} icon={<UserOutlined />}>
-                    <Link to={APP_ROUTER.DOCTOR}>Bác Sĩ</Link>
-                </Menu.Item>
+                {roleId === 1 && (
+                    <Menu.Item key={APP_ROUTER.DOCTOR} icon={<UserOutlined />}>
+                        <Link to={APP_ROUTER.DOCTORLIST}>Bác Sĩ</Link>
+                    </Menu.Item>
+                )}
+
                 <Menu.Item key={APP_ROUTER.DEPARTMENT} icon={<ProfileOutlined />}>
                     <Link to={APP_ROUTER.DEPARTMENT}>Khoa</Link>
                 </Menu.Item>
                 <Menu.Item key={APP_ROUTER.PATIENT} icon={<MedicineBoxOutlined />}>
                     <Link to={APP_ROUTER.PATIENT}>Bệnh Nhân</Link>
                 </Menu.Item>
-                <Menu.Item key={APP_ROUTER.PAYMENT} icon={<DollarOutlined />}>
-                    <Link to={APP_ROUTER.PAYMENT}>Thanh Toán</Link>
-                </Menu.Item>
+                {(roleId === 1 || roleId === 2) && (
+                    <Menu.Item key={APP_ROUTER.ADMEDICALRECORD} icon={<IdcardOutlined />}>
+                        <Link to={APP_ROUTER.ADMEDICALRECORD}>Bệnh Án</Link>
+                    </Menu.Item>
+                )}
+
+                {roleId === 1 && (
+                    <Menu.Item key={APP_ROUTER.PAYMENT} icon={<DollarOutlined />}>
+                        <Link to={APP_ROUTER.PAYMENT}>Thanh Toán</Link>
+                    </Menu.Item>
+                )}
                 <Menu.Divider />
                 <Menu.Item key={APP_ROUTER.LOGIN} icon={<LogoutOutlined />} onClick={onLogout} style={sidebarStyles.logout}>
                     <Link to={APP_ROUTER.LOGIN}>Đăng Xuất</Link>

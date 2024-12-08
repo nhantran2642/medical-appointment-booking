@@ -42,6 +42,10 @@ import NewPassword from "./components/NewPassword";
 import SuccessBooking from "./components/SuccessBooking";
 import MedicalRecord from "./pages/medicalRecords";
 import MedicalRecordDetail from "./pages/detailMedicalRecords";
+import InvoicePage from "./pages/invoicePage";
+import ProfilePage from "./pages/profileDoctorPage";
+import RecordsPatient from "./pages/medicalrecordpage";
+
 const Main = () => {
   return (
     <Router>
@@ -65,14 +69,19 @@ const Main = () => {
           {/* Default Layout */}
           <Route path={APP_ROUTER.LOGIN} element={<LoginPage />} />
           <Route path="/calendar" element={<CalendarLayout />} />
-          <Route path="/admin" element={<ProtectedRoute role={1} > <AdLayout /></ProtectedRoute>}>
-            <Route path="/admin/calendar" element={<ProtectedRoute role={1}><DashboardLayout /></ProtectedRoute>} />
-            <Route path="/admin/doctor" element={<ProtectedRoute role={1}><DoctorListAdmin /></ProtectedRoute>} />
-            <Route path="/admin/dashboard" element={<ProtectedRoute role={1}><Dashboard /></ProtectedRoute>} />
-            <Route path="/admin/department" element={<ProtectedRoute role={1}><DepartmentList /></ProtectedRoute>} />
-            <Route path="/admin/patientlist" element={<ProtectedRoute role={1}><PatientList /></ProtectedRoute>} />
-            <Route path="/admin/paymentpage" element={<ProtectedRoute role={1}><PaymentPage /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute allowedRoles={[1, 2, 3]}><AdLayout /></ProtectedRoute>}>
+            <Route path="/admin/calendar" element={<ProtectedRoute allowedRoles={[1, 2, 3]}><DashboardLayout /></ProtectedRoute>} />
+            <Route path="/admin/doctor" element={<ProtectedRoute allowedRoles={[1, 3]}><DoctorListAdmin /></ProtectedRoute>} />
+            <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1, 2, 3]}><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin/department" element={<ProtectedRoute allowedRoles={[1, 2, 3]}><DepartmentList /></ProtectedRoute>} />
+            <Route path="/admin/patientlist" element={<ProtectedRoute allowedRoles={[1, 2, 3]}><PatientList /></ProtectedRoute>} />
+            <Route path="/admin/invoice" element={<ProtectedRoute allowedRoles={[1]}><InvoicePage /></ProtectedRoute>} />
+            <Route path="/admin/paymentpage" element={<ProtectedRoute allowedRoles={[1]}><PaymentPage /></ProtectedRoute>} />
+            <Route path="/admin/doctor/:doctorId" element={<ProtectedRoute allowedRoles={[2]}><ProfilePage /></ProtectedRoute>} />
+            <Route path="/admin/medical-record" element={<ProtectedRoute allowedRoles={[1, 2]}><RecordsPatient /></ProtectedRoute>} />
           </Route>
+
+
           <Route path="/" element={<HomeLayout />}>
             <Route path="/contact" element={<AboutPage />} />
             <Route path="/home" element={<HomePage />} />

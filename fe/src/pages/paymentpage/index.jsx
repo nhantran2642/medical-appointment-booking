@@ -4,6 +4,7 @@ import { DownloadOutlined, CalendarOutlined, PrinterOutlined } from '@ant-design
 import * as XLSX from 'xlsx';
 import mockData from '../paymentpage/data.json';
 import './styles.scss';
+import { useNavigate } from 'react-router-dom';
 
 const PaymentPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -15,6 +16,7 @@ const PaymentPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedInvoice, setSelectedInvoice] = useState(null);
     const [pageSize, setPageSize] = useState(10);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -62,7 +64,7 @@ const PaymentPage = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text) => (
-                <div className="patient-name">
+                <div className="patient-name" onClick={() => navigate('/admin/invoice')}>
                     <CalendarOutlined />
                     <span>{text}</span>
                 </div>

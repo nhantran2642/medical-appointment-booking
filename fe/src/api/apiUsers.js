@@ -8,7 +8,7 @@ class UserRepository extends BaseRepository {
     // Lấy danh sách người dùng
     async users(data) {
         try {
-            const response = await this.get('', data);
+            const response = await this.get('/', data);
             return response.data;
         } catch (error) {
             console.error('Error fetching users:', error);

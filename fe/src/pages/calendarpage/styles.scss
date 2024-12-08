@@ -241,48 +241,24 @@
 
         .popup {
             position: absolute;
-            background-color: #ffffff;
-            color: #333;
-            padding: 15px;
-            width: 250px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            /* Đảm bảo popup không bị che khuất */
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 200px;
+            /* Chiều rộng của popup */
+            height: 150px;
+            /* Chiều cao của popup */
             border-radius: 8px;
-            font-size: 12px;
-            pointer-events: none;
+            pointer-events: auto;
+            /* Đảm bảo popup có thể nhận sự kiện */
+            transition: transform 0.1s ease;
+            /* Thêm hiệu ứng chuyển động */
         }
 
-        .popup h4 {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
 
-        .popup .patient-note {
-            color: #666;
-            font-size: 12px;
-            margin-bottom: 12px;
-        }
-
-        .popup .attendance-time,
-        .popup .patient-name {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-bottom: 8px;
-            font-size: 12px;
-        }
-
-        .popup .patient-name img {
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-        }
-
-        .popup .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-        }
 
         .button {
             padding: 6px 12px;

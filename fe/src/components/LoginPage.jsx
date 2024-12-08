@@ -195,17 +195,21 @@ const LoginPage = () => {
                 const decodedToken = jwtDecode(access);
                 const { role_id, user_id } = decodedToken;
                 localStorage.setItem('auth_token', access);
+                localStorage.setItem('role_id', role_id);
+                localStorage.setItem('user_id', user_id);
+
 
                 const userResponse = await UsersRepository.getUserById(user_id);
 
                 if (userResponse && userResponse.first_name && userResponse.last_name) {
-                    const { first_name, last_name, email: userEmail, phone } = userResponse;
+                    const { first_name, last_name, email: userEmail, phone, address } = userResponse;
                     const fullName = `${first_name} ${last_name}`;
                     localStorage.setItem('user_name', fullName);
                     localStorage.setItem('user_email', userEmail);
                     localStorage.setItem('user_phone', phone);
+                    localStorage.setItem('user_address', address);
 
-                    if (role_id === 1) {
+                    if ([1, 2, 3].includes(role_id)) {
                         navigate('/admin/dashboard');
                     } else if (role_id === 4) {
                         navigate('/home');

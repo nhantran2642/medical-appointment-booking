@@ -14,9 +14,11 @@ export const APP_ROUTER = {
     BLOG: '/blogspage',
     ADDASHBOARD: '/admin/dashboard',
     CALENDAR: '/admin/calendar',
-    DOCTOR: '/admin/doctor',
+    DOCTORLIST: '/admin/doctor',
     DEPARTMENT: '/admin/department',
     PATIENT: '/admin/patientlist',
     PAYMENT: '/admin/paymentpage',
     MEDICALRECORD: '/medical-record',
+    PROFILEDOCTOR: '/admin/doctor/:doctorId',
+    ADMEDICALRECORD: '/admin/medical-record'
 };
