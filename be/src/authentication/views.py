@@ -31,7 +31,7 @@ from .serializers import (
     SetNewPasswordSerializer,
     UserSerializer,
     VerifyCodeSerializer,
-    VerifyEmailSerializer,
+    VerifyEmailSerializer, ListUserSerializer,
 )
 
 # Create your views here.
@@ -48,8 +48,10 @@ class UserViewSet(viewsets.ModelViewSet):
         return []
 
     def get_serializer_class(self, *args, **kwargs):
-        if self.action in ["create", "retrieve", "list"]:
+        if self.action in ["create", "retrieve"]:
             return RegisterSerializer
+        if self.action == "list":
+            return ListUserSerializer
         if self.action == "update":
             return UserSerializer
         return super().get_serializer(*args, **kwargs)
