@@ -32,10 +32,23 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ListUserSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=True)
+    role_id = serializers.IntegerField(required=True)
 
     class Meta:
-        fields = "__all__"
+        model = User
+        fields = (
+            "id",
+            "email",
+            "password",
+            "first_name",
+            "last_name",
+            "address",
+            "phone",
+            "role_id",
+        )
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
 
 
 class RegisterSerializer(serializers.ModelSerializer):
